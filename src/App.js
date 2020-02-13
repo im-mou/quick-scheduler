@@ -1,26 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import ControlBar from './ControlBar';
+import Item from './Item';
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      tasks: [],
+    }
+
+    this.createTask = this.createTask.bind(this)
+  }
+
+  createTask(task) {
+    const newTasks = { ...this.state.tasks, task };
+    this.setState({
+      tasks: newTasks
+    })
+  }
+
+  render() {
+    return (
+      <>
+        <ControlBar createTask={this.createTask} />
+        <Item tasks={this.state.tasks} />
+      </>
+    )
+  }
 }
 
 export default App;
