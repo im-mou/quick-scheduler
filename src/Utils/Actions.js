@@ -1,40 +1,47 @@
 import { TASK_STATES } from "./Constants";
 function more() {}
-function play(state) {
+function play(taskId, state) {
   return {
     ...state,
-    ...{ state: TASK_STATES.ACTIVE, isPaused: false }
+    ...{status: TASK_STATES.ACTIVE, isPaused: false },
+    ...getItembyId(taskId,state.tasks)
   };
 }
-function pause(state) {
+function pause(taskId, state) {
   return {
     ...state,
     ...{ state: TASK_STATES.PENDNING, isPaused: true }
   };
 }
-function done(state) {
+function done(taskId, state) {
   return {
     ...state,
     ...{ state: TASK_STATES.FINISHED, isPaused: false }
   };
 }
-function restart(state) {
+function restart(taskId, state) {
   return {
     ...state,
     ...{ state: TASK_STATES.ACTIVE, isPaused: false, timeElapsed: 0 }
   };
 }
-function remove(task) {
+function remove(taskId, state) {
     // user filter to remove the task
 }
 
-const Actions = {
+function getItembyId(id,object){
+  return object.filter(item => {
+    return item.id === id
+  })
+}
+
+const Actions = [
   more,
   play,
   pause,
   done,
   restart,
   remove
-};
+];
 
 export default Actions;

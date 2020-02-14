@@ -1,10 +1,9 @@
 import React from "react";
 import { TASK_STATES } from "../Utils/Constants";
-import Actions from '../Utils/Actions';
 
 const Items = function(props) {
-  return (props.tasks || []).map((task, index) => (
-    <div key={index} className={"item " + props.type}>
+  return (props.tasks || []).map(task => (
+    <div key={task.id} className={"item " + props.status}>
       <div className="pre-header">{task.timer / 60 / 60 + "h"}</div>
       <div className="title">{task.title}</div>
       <div className="row footer">
@@ -12,7 +11,7 @@ const Items = function(props) {
           <div className="timer">{task.timer / 60}</div>
         </div>
         <div className="col right">
-          <Controls type={props.type} />
+          <Controls status={props.status} action={props.action} taskId={task.id} />
         </div>
       </div>
     </div>
@@ -21,7 +20,7 @@ const Items = function(props) {
 
 const Controls = function(props) {
   let controlItems = [];
-  switch (props.type) {
+  switch (props.status) {
     case TASK_STATES.PENDNING:
       controlItems = ["more", "play"];
       break;
@@ -36,6 +35,10 @@ const Controls = function(props) {
       break;
   }
 
-  return controlItems.map((item, index) => <button onClick={()=>Actions.item()} key={index}>{item}</button>);
+  return controlItems.map((actionType, index) => (
+    <button onClick={() => props.action({...props,actionType})} key={index}>
+      {actionType}
+    </button>
+  ));
 };
 export default Items;

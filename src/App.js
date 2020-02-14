@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import "./App.css";
 
 import ControlBar from "./ControlBar";
@@ -11,9 +12,10 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      tasks: [],
-      activeTask: [],
-      finishedTasks: []
+      tasks: this.props.tasks,
+      pending: this.props.pending,
+      active: this.props.active,
+      finished: this.props.finished
     };
     this.createTask = this.createTask.bind(this);
   }
@@ -22,21 +24,23 @@ class App extends React.Component {
     this.createTask();
   }
 
-  action = (action) => {
-    this.updateState(Actions.action(this.state));
+  _action = ({taskId, status, actionType}) => {
+    console.log(taskId, status, actionType)
+    this.updateState(Actions[actionType](taskId, this.state));
   };
 
   updateState = newState => {
     this.setState(newState);
-  }
+  };
 
   createTask(task) {
     // add new task in to the pending list
     const _task = {
       //...task,
+      id: Date.now(),
       title: "task name",
       timer: Number(60 * 60),
-      state: TASK_STATES.PENDNING,
+      status: TASK_STATES.PENDNING,
       timeElapsed: 0,
       isPaused: false
     };
@@ -44,14 +48,6 @@ class App extends React.Component {
     this.setState(state => {
       const newTasks = [...state.tasks, _task];
       return { tasks: newTasks };
-    });
-    this.setState(state => {
-      const newTasks = [...state.activeTask, _task];
-      return { activeTask: newTasks };
-    });
-    this.setState(state => {
-      const newTasks = [...state.finishedTasks, _task];
-      return { finishedTasks: newTasks };
     });
   }
 
@@ -61,22 +57,39 @@ class App extends React.Component {
         <ControlBar createTask={this.createTask} />
         <Tasks
           header="Active Task"
-          tasks={this.state.activeTask}
-          type={TASK_STATES.ACTIVE}
+          tasks={this.state.tasks}
+          status={TASK_STATES.ACTIVE}
+          action={this._action}
         />
         <Tasks
           header="Pending"
           tasks={this.state.tasks}
-          type={TASK_STATES.PENDNING}
+          status={TASK_STATES.PENDNING}
+          action={this._action}
         />
         <Tasks
           header="Completed"
-          tasks={this.state.finishedTasks}
-          type={TASK_STATES.FINISHED}
+          tasks={this.state.tasks}
+          status={TASK_STATES.FINISHED}
+          action={this._action}
         />
       </div>
     );
   }
 }
+
+App.defaultProps = {
+  tasks: [],
+  active: {},
+  pending: [],
+  finished: []
+};
+
+App.propTypes = {
+  tasks: PropTypes.array,
+  active: PropTypes.object,
+  pending: PropTypes.array,
+  finished: PropTypes.array
+};
 
 export default App;
