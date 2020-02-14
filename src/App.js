@@ -1,14 +1,10 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
 
-import ControlBar from './ControlBar';
-import Tasks from './Tasks';
-
-const TASK_STATES = {
-  ACTIVE: 'active',
-  PENDNING: 'pending',
-  FINISHED: 'finished',
-}
+import ControlBar from "./ControlBar";
+import Tasks from "./Tasks";
+import { TASK_STATES } from "./Utils/Constants";
+import Actions from "./Utils/Actions";
 
 class App extends React.Component {
   constructor(props) {
@@ -18,23 +14,44 @@ class App extends React.Component {
       tasks: [],
       activeTask: [],
       finishedTasks: []
-    }
+    };
+    this.createTask = this.createTask.bind(this);
+  }
 
-    this.createTask = this.createTask.bind(this)
+  componentDidMount() {
+    this.createTask();
+  }
+
+  action = (action) => {
+    this.updateState(Actions.action(this.state));
+  };
+
+  updateState = newState => {
+    this.setState(newState);
   }
 
   createTask(task) {
-    // add new task to pending bulk
+    // add new task in to the pending list
     const _task = {
-      ...task,
+      //...task,
+      title: "task name",
+      timer: Number(60 * 60),
       state: TASK_STATES.PENDNING,
       timeElapsed: 0,
-      isPaused: false,
-    }
+      isPaused: false
+    };
 
-    this.setState((state) => {
+    this.setState(state => {
       const newTasks = [...state.tasks, _task];
-      return { tasks: newTasks }
+      return { tasks: newTasks };
+    });
+    this.setState(state => {
+      const newTasks = [...state.activeTask, _task];
+      return { activeTask: newTasks };
+    });
+    this.setState(state => {
+      const newTasks = [...state.finishedTasks, _task];
+      return { finishedTasks: newTasks };
     });
   }
 
@@ -58,7 +75,7 @@ class App extends React.Component {
           type={TASK_STATES.FINISHED}
         />
       </div>
-    )
+    );
   }
 }
 

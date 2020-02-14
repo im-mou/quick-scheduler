@@ -31,7 +31,7 @@ const ControlBar = function (props) {
                 <input onChange={customTimer} type="number" placeholder="Minutes..." />
             </div>
             <div>
-                <button onClick={() => createTask()}>Create</button>
+                <button onClick={createTask}>Create</button>
             </div>
         </div>
     )

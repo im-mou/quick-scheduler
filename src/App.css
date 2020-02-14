@@ -2,6 +2,23 @@ body {
   font-family: Helvetica, Arial, sans-serif;
 }
 
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.col.right {
+  align-items: flex-end;
+}
+
 .App {
   width: 400px;
   margin: 0 auto;
@@ -28,41 +45,42 @@ body {
   border: 1px solid #ccc;
 }
 
-.item .pre-header{
+.item .pre-header {
   font-size: 12px;
   text-align: right;
 }
 
-.item .title{
+.item .title {
   font-size: 16px;
   font-weight: bold;
   margin-top: 5px;
   margin-bottom: 20px;
 }
 
-.item .footer{
+.item .footer {
   margin-bottom: 5px;
 }
-
-.item .footer .timer{
+.item .footer .timer {
   font-size: 18px;
-  font-weight:100;
+  font-weight: 100;
 }
-.item .footer .controls{
-  
-}
-
-.item .progress{
-  
+.item .footer .controls {
+ 
 }
 
-.item.active{
+.item .footer button {
+  display: inline-block;
+}
+
+
+.item .progress {
+}
+
+.item.active {
   color: #666666;
 }
-.item.pending{
-
+.item.pending {
 }
 
-.item.finished{
-
+.item.finished {
 }
