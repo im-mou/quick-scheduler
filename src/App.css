@@ -1,7 +1,3 @@
-body {
-  font-family: Helvetica, Arial, sans-serif;
-}
-
 .row {
   display: flex;
   flex-direction: row;
@@ -61,26 +57,31 @@ body {
   margin-bottom: 5px;
 }
 .item .footer .timer {
-  font-size: 18px;
-  font-weight: 100;
+  font-size: 20px;
+  font-weight: normal;
+  color: #4d4d4d;
 }
 .item .footer .controls {
- 
+  
 }
-
-.item .footer button {
-  display: inline-block;
-}
-
 
 .item .progress {
 }
 
 .item.active {
   color: #666666;
+  background-color: #dbffcb;
+  border: none;
 }
 .item.pending {
 }
 
 .item.finished {
+  background-color: #ffffff;
+  color: #c5c5c5;
+}
+
+.item.finished .controls {
+  background-color: #ffffff;
+  color: #c5c5c5;
 }

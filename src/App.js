@@ -6,7 +6,7 @@ import ControlBar from "./ControlBar";
 import Items from "./Items";
 import Tasks from "./Tasks";
 import { TASK_STATES } from "./Utils/Constants";
-import {Actions, FilterTasks} from "./Utils/Actions";
+import { Actions, FilterTasks } from "./Utils/Actions";
 
 class App extends React.Component {
   constructor(props) {
@@ -25,9 +25,9 @@ class App extends React.Component {
     this.createTask();
   }
 
-  _action = ({ taskId, status, actionType }) => {
-    console.log(taskId, status, actionType);
-    this.updateState(Actions[actionType](taskId, this.state));
+  _action = ({ taskId, actionType }) => {
+    const newState = Actions[actionType](taskId, this.state);
+    this.updateState(newState);
   };
 
   updateState = newState => {
@@ -70,6 +70,7 @@ class App extends React.Component {
     });
   }
 
+  // TODO: Use React Context API to render the items and share state.
   render() {
     return (
       <div className="App">

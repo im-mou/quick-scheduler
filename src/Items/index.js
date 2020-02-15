@@ -1,5 +1,9 @@
 import React from "react";
-import { TASK_STATES } from "../Utils/Constants";
+import {
+  TASK_ACTIONS_LIST as ACTIONS,
+  TASK_ACTIONS_ICONS as ICON
+} from "../Utils/Constants";
+import { Button } from "antd";
 
 const Items = function(props) {
   return (props.tasks || []).map(task => (
@@ -10,35 +14,38 @@ const Items = function(props) {
         <div className="col">
           <div className="timer">{task.timer / 60}</div>
         </div>
-        <div className="col right">
-          <Controls status={props.status} action={props.action} taskId={task.id} />
-        </div>
+          <Controls
+            status={props.status}
+            action={props.action}
+            taskId={task.id}
+          />
       </div>
     </div>
   ));
 };
 
-const Controls = function(props) {
-  let controlItems = [];
-  switch (props.status) {
-    case TASK_STATES.PENDNING:
-      controlItems = ["more", "play"];
-      break;
-    case TASK_STATES.ACTIVE:
-      controlItems = ["more", "pause", "done"];
-      break;
-    case TASK_STATES.FINISHED:
-      controlItems = ["restat", "remove"];
-      break;
-    default:
-      controlItems = [];
-      break;
-  }
+const Timer = function(props) {};
 
-  return controlItems.map((actionType, index) => (
-    <button onClick={() => props.action({...props,actionType})} key={index}>
-      {actionType}
-    </button>
+const Controls = function(props) {
+  let controlItems = ACTIONS[props.status];
+  console.log(controlItems)
+
+  const ControlButtons = controlItems.map((actionType, index) => (
+    <Button
+      type="link"
+      icon={ICON[actionType]}
+      style={{ fontSize: "20px", color: "#8a8a8a" }}
+      onClick={() => props.action({ ...props, actionType })}
+      key={index}
+    />
   ));
+
+  return (
+    <div className="col right">
+      <div className="controls">
+        {ControlButtons}
+      </div>
+    </div>
+  );
 };
 export default Items;

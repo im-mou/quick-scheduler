@@ -1,59 +1,78 @@
 import { TASK_STATES } from "./Constants";
-function more() {}
-function play(taskId, state) {
 
-  const newObj = {
-    ...getItembyId(taskId, state.tasks),
+function play(taskId, state) {
+  let newTasks = updateItem(taskId, state.tasks, {
     status: TASK_STATES.ACTIVE,
     isPaused: false
-  };
-  // return {
-  //   ...state,
-  //   ...{ status: TASK_STATES.ACTIVE, isPaused: false },
-  //   ...getItembyId(taskId, state.tasks)
-  // };
+  });
 
-  console.log(getItembyId(taskId, state.tasks))
-}
-function pause(taskId, state) {
   return {
     ...state,
-    ...{ state: TASK_STATES.PENDNING, isPaused: true }
+    tasks: newTasks
+  };
+}
+function pause(taskId, state) {
+  let newTasks = updateItem(taskId, state.tasks, {
+    isPaused: true,
+    status: TASK_STATES.PENDNING
+  });
+
+  return {
+    ...state,
+    tasks: newTasks
   };
 }
 function done(taskId, state) {
+  let newTasks = updateItem(taskId, state.tasks, {
+    isPaused: false,
+    status: TASK_STATES.FINISHED
+  });
+
   return {
     ...state,
-    ...{ state: TASK_STATES.FINISHED, isPaused: false }
+    tasks: newTasks
   };
 }
 function restart(taskId, state) {
+  let newTasks = updateItem(taskId, state.tasks, {
+    isPaused: false,
+    timeElapsed: 0,
+    status: TASK_STATES.ACTIVE
+  });
+
   return {
     ...state,
-    ...{ state: TASK_STATES.ACTIVE, isPaused: false, timeElapsed: 0 }
+    tasks: newTasks
   };
 }
 function remove(taskId, state) {
-  // user filter to remove the task
+  return {
+    ...state,
+    tasks: state.tasks.filter(item => {
+      return item.id !== taskId;
+    })
+  };
 }
 
-function getItembyId(id, object) {
-  return object.filter(item => {
-    return item.id === id;
+function updateItem(id, object, data) {
+  return object.map(item => {
+    if (item.id === id) {
+      return { ...item, ...data };
+    }
+    return item;
   });
 }
-
-export const Actions = {
-  more,
-  play,
-  pause,
-  done,
-  restart,
-  remove
-};
 
 export const FilterTasks = (tasks, status) => {
   return tasks.filter(item => {
     return item.status === status;
   });
+};
+
+export const Actions = {
+  play,
+  pause,
+  done,
+  restart,
+  remove
 };
