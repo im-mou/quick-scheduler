@@ -6,13 +6,14 @@ import ControlBar from "./ControlBar";
 import Items from "./Items";
 import Tasks from "./Tasks";
 import { TASK_STATES } from "./Utils/Constants";
-import { Actions, FilterTasks } from "./Utils/Actions";
+import Util from "./Utils";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      timers: this.props.timers,
       tasks: this.props.tasks,
       pending: this.props.pending,
       active: this.props.active,
@@ -20,55 +21,109 @@ class App extends React.Component {
     };
     this.createTask = this.createTask.bind(this);
   }
+  timer = [];
 
   componentDidMount() {
-    this.createTask();
+    //this.createTask();
   }
 
   _action = ({ taskId, actionType }) => {
-    const newState = Actions[actionType](taskId, this.state);
-    this.updateState(newState);
+    this[actionType](taskId);
+    //this.updateState(newState);
   };
 
-  updateState = newState => {
-    this.setState(newState);
-  };
-
-  createTask(task) {
+  createTask = task => {
     // add new task in to the pending list
     const _task = {
-      //...task,
-      id: Date.now(),
-      title: "task name",
-      timer: Number(60 * 60),
+      id: Math.floor(Date.now()),
+      ...task, // { title, totalTime }
       status: TASK_STATES.PENDNING,
-      timeElapsed: 0,
-      isPaused: false
+      isPaused: false,
+      startTime: null,
+      elapsedTime: null
     };
-    const _task2 = {
-      //...task,
-      id: Date.now() + 2,
-      title: "task name",
-      timer: Number(60 * 60),
-      status: TASK_STATES.ACTIVE,
-      timeElapsed: 0,
-      isPaused: false
-    };
-    const _task3 = {
-      //...task,
-      id: Date.now() + 1,
-      title: "task name",
-      timer: Number(60 * 60),
-      status: TASK_STATES.FINISHED,
-      timeElapsed: 0,
-      isPaused: false
-    };
-
     this.setState(state => {
-      const newTasks = [...state.tasks, _task3, _task2, _task];
+      const newTasks = [...state.tasks, _task];
       return { tasks: newTasks };
     });
+  };
+
+  async updateState(newTasks) {
+    this.setState({
+      tasks: newTasks
+    });
   }
+
+  tick = taskId => {
+    const currItem = Util.GetItem(taskId, this.state.tasks);
+    const filtereditem = Util.FilterItem(taskId, this.state.tasks);
+
+    const interval = setInterval(() => {
+      const newTasks = [
+        ...filtereditem,
+        {
+          ...currItem,
+          elapsedTime: Date.now() - currItem.startTime
+        }
+      ];
+      this.setState({
+        tasks: newTasks
+      });
+    }, 1000);
+
+    this.timer.push({taskId:interval})
+    this.setState(state=>{
+      return {timers : state.timers.push(interval)}
+    })
+  };
+
+  play = taskId => {
+    if (Util.GetItem(taskId, this.state.tasks).status === TASK_STATES.ACTIVE) {
+      return;
+    }
+
+    let newTasks = Util.UpdateItem(taskId, this.state.tasks, {
+      status: TASK_STATES.ACTIVE,
+      isPaused: false,
+      startTime: Date.now()
+    });
+
+    this.updateState(newTasks).then(() => {
+      this.tick(taskId);
+    });
+  };
+  pause = taskId => {
+    let newTasks = Util.UpdateItem(taskId, this.state.tasks, {
+      isPaused: true,
+      status: TASK_STATES.PENDNING
+    });
+
+    this.updateState(newTasks);
+  };
+  done = taskId => {
+    let newTasks = Util.UpdateItem(taskId, this.state.tasks, {
+      isPaused: false,
+      status: TASK_STATES.FINISHED
+    });
+
+    this.updateState(newTasks);
+  };
+  restart = taskId => {
+    let newTasks = Util.UpdateItem(taskId, this.state.tasks, {
+      isPaused: false,
+      suspended: 0,
+      status: TASK_STATES.ACTIVE
+    });
+
+    this.updateState(newTasks);
+  };
+  remove = taskId => {
+    this.updateState(
+      this.state.tasks.filter(item => {
+        return item.id !== taskId;
+      })
+    );
+  };
 
   // TODO: Use React Context API to render the items and share state.
   render() {
@@ -77,21 +132,21 @@ class App extends React.Component {
         <ControlBar createTask={this.createTask} />
         <Tasks header="Active Task">
           <Items
-            tasks={FilterTasks(this.state.tasks, TASK_STATES.ACTIVE)}
+            tasks={Util.FilterTasks(this.state.tasks, TASK_STATES.ACTIVE)}
             status={TASK_STATES.ACTIVE}
             action={this._action}
           />
         </Tasks>
         <Tasks header="Pending">
           <Items
-            tasks={FilterTasks(this.state.tasks, TASK_STATES.PENDNING)}
+            tasks={Util.FilterTasks(this.state.tasks, TASK_STATES.PENDNING)}
             status={TASK_STATES.PENDNING}
             action={this._action}
           />
         </Tasks>
         <Tasks header="Completed">
           <Items
-            tasks={FilterTasks(this.state.tasks, TASK_STATES.FINISHED)}
+            tasks={Util.FilterTasks(this.state.tasks, TASK_STATES.FINISHED)}
             status={TASK_STATES.FINISHED}
             action={this._action}
           />
@@ -102,6 +157,7 @@ class App extends React.Component {
 }
 
 App.defaultProps = {
+  timers: [],
   tasks: [],
   active: {},
   pending: [],
@@ -109,6 +165,7 @@ App.defaultProps = {
 };
 
 App.propTypes = {
+  timers: PropTypes.array,
   tasks: PropTypes.array,
   active: PropTypes.object,
   pending: PropTypes.array,

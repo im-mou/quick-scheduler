@@ -36,9 +36,13 @@
 
 .item {
   color: #808080;
-  padding: 10px 15px;
   background-color: #f9f9f9;
   border: 1px solid #ccc;
+  position: relative;
+}
+.item-content {
+  width: 100%;
+  padding: 10px 15px;
 }
 
 .item .pre-header {
@@ -50,13 +54,13 @@
   font-size: 16px;
   font-weight: bold;
   margin-top: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .item .footer {
   margin-bottom: 5px;
 }
-.item .footer .timer {
+.item .timer {
   font-size: 20px;
   font-weight: normal;
   color: #4d4d4d;
@@ -65,7 +69,23 @@
   
 }
 
-.item .progress {
+
+.item .ant-progress{
+  height: 3px;
+}
+
+.item .ant-progress-inner {
+  border-radius: 0px;
+  background-color: transparent;
+  vertical-align: top;
+}
+
+.item  .ant-progress-bg{
+  border-radius: 0px;
+}
+
+.item.active .ant-progress-bg{
+  background-color: #56d056;
 }
 
 .item.active {
@@ -73,12 +93,18 @@
   background-color: #dbffcb;
   border: none;
 }
-.item.pending {
+
+.item.pending .ant-progress-bg{
+  /* background-color: #ddd; */
 }
 
 .item.finished {
   background-color: #ffffff;
   color: #c5c5c5;
+}
+
+.item.finished  .ant-progress-bg{
+  background-color: #dedede;
 }
 
 .item.finished .controls {
