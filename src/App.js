@@ -13,7 +13,7 @@ import {
   TASK_ACTIONS as ACTIONS
 } from "./Utils/Constants";
 
-import { Modal, Input } from "antd";
+import { Modal, Input, Empty } from "antd";
 import "./App.css";
 
 class App extends React.Component {
@@ -262,21 +262,31 @@ class App extends React.Component {
           ""
         )}
         <ControlBar createTask={this.createTask} />
-        <Tasks header="Active Task">
+        <EmptyState {...this.state} />
+        <Tasks
+          className={!this.state.active.length ? "hidden" : ""}
+          header="Active Task"
+        >
           <Items
             tasks={Util.FilterTasks(this.state.active, TASK_STATES.ACTIVE)}
             status={TASK_STATES.ACTIVE}
             action={this._action}
           />
         </Tasks>
-        <Tasks header="Pending">
+        <Tasks
+          className={!this.state.tasks.length ? "hidden" : ""}
+          header="Pending"
+        >
           <Items
             tasks={Util.FilterTasks(this.state.tasks, TASK_STATES.PENDNING)}
             status={TASK_STATES.PENDNING}
             action={this._action}
           />
         </Tasks>
-        <Tasks header="Completed">
+        <Tasks
+          className={!this.state.finished.length ? "hidden" : ""}
+          header="Completed"
+        >
           <Items
             tasks={Util.FilterTasks(this.state.finished, TASK_STATES.FINISHED)}
             status={TASK_STATES.FINISHED}
@@ -337,4 +347,18 @@ const RenameModal = props => {
       </p>
     </Modal>
   );
+};
+
+// Todo: Create separate file for this method
+const EmptyState = props => {
+  if (!props.tasks.length && !props.active.length && !props.finished.length) {
+    return (
+      <Empty
+        image={Empty.PRESENTED_IMAGE_SIMPLE}
+        description={<span>No tasks for now</span>}
+      />
+    );
+  } else {
+    return null;
+  }
 };

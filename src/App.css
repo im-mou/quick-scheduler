@@ -11,6 +11,10 @@
   flex: 1;
 }
 
+.hidden{
+  display: none;
+}
+
 .col.right {
   align-items: flex-end;
 }
