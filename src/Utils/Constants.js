@@ -10,7 +10,9 @@ export const TASK_ACTIONS = {
   PAUSE: "pause",
   DONE: "done",
   RESTART: "restart",
-  REMOVE: "remove"
+  REMOVE: "remove",
+  RENAME: "rename",
+  NEW: "new",
 };
 
 export const TASK_ACTIONS_ICONS = {
@@ -19,12 +21,22 @@ export const TASK_ACTIONS_ICONS = {
   [TASK_ACTIONS.PAUSE]: "pause",
   [TASK_ACTIONS.DONE]: "check",
   [TASK_ACTIONS.RESTART]: "undo",
-  [TASK_ACTIONS.REMOVE]: "delete"
+  [TASK_ACTIONS.REMOVE]: "delete",
+  [TASK_ACTIONS.NEW]: "download"
+};
+
+export const TASK_ACTIONS_NAMES = {
+  [TASK_ACTIONS.MORE]: "Options",
+  [TASK_ACTIONS.PLAY]: "Start",
+  [TASK_ACTIONS.PAUSE]: "Pause",
+  [TASK_ACTIONS.DONE]: "Mark as completed",
+  [TASK_ACTIONS.RESTART]: "Restart",
+  [TASK_ACTIONS.REMOVE]: "Remove",
+  [TASK_ACTIONS.RENAME]: "Rename",
 };
 
 export const TASK_ACTIONS_LIST = {
   [TASK_STATES.ACTIVE]: [
-    TASK_ACTIONS.MORE,
     TASK_ACTIONS.PAUSE,
     TASK_ACTIONS.DONE
   ],
@@ -33,8 +45,14 @@ export const TASK_ACTIONS_LIST = {
     TASK_ACTIONS.PLAY
   ],
   [TASK_STATES.FINISHED]: [
-    TASK_ACTIONS.MORE,
     TASK_ACTIONS.RESTART,
-    TASK_ACTIONS.REMOVE
+    TASK_ACTIONS.REMOVE,
   ]
+};
+
+export const TASK_ACTIONS_MORE_OPTIONS = {
+  [TASK_STATES.PENDNING]: [
+    TASK_ACTIONS.RENAME,
+    TASK_ACTIONS.REMOVE
+  ],
 };

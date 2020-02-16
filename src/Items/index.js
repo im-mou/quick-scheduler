@@ -1,10 +1,13 @@
 import React from "react";
 import {
   TASK_STATES as STATUS,
+  TASK_ACTIONS as ACTION,
   TASK_ACTIONS_LIST as ACTIONS,
-  TASK_ACTIONS_ICONS as ICON
+  TASK_ACTIONS_ICONS as ICON,
+  TASK_ACTIONS_NAMES as ACTION_NAME,
+  TASK_ACTIONS_MORE_OPTIONS as MORE_OPTIONS
 } from "../Utils/Constants";
-import { Button, Progress } from "antd";
+import { Button, Progress, Tooltip, Menu, Dropdown } from "antd";
 
 const Items = function(props) {
   const isActive = props.status === STATUS.ACTIVE;
@@ -37,19 +40,42 @@ const Timer = function(props) {
   return <div className="col timer">{props.timer}</div>;
 };
 
-// const Progress = function(props) {
-//   return <div style={{flex: props.width}} className="progress"></div>;
-// };
+const menu = props => {
+
+  const optionsButtons = MORE_OPTIONS[props.status].map((option, index) => (
+      <Menu.Item key={index} onClick={()=>props.action({ ...props, actionType:option})}>
+        <span>{ACTION_NAME[option]}</span>
+      </Menu.Item>
+  ));
+
+  return (
+    <Menu>
+      {optionsButtons}
+    </Menu>
+  );
+};
 
 const Controls = function(props) {
   const ControlButtons = ACTIONS[props.status].map((actionType, index) => (
-    <Button
-      type="link"
-      icon={ICON[actionType]}
-      style={{ fontSize: "20px", color: "#8a8a8a" }}
-      onClick={() => props.action({ ...props, actionType })}
-      key={index}
-    />
+    <Tooltip placement="top" title={ACTION_NAME[actionType]} key={index}>
+      {actionType !== ACTION.MORE ? (
+        <Button
+          type="link"
+          icon={ICON[actionType]}
+          style={{ fontSize: "20px", color: "#8a8a8a" }}
+          onClick={() => props.action({ ...props, actionType })}
+        />
+      ) : (
+        // if the control item is "MORE"
+        <Dropdown overlay={menu(props)} trigger={["click"]}>
+          <Button
+            type="link"
+            icon={ICON[actionType]}
+            style={{ fontSize: "20px", color: "#8a8a8a" }}
+          />
+        </Dropdown>
+      )}
+    </Tooltip>
   ));
 
   return (

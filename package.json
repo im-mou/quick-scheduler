@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "antd": "^3.26.9",
     "react": "^16.12.0",
+    "react-addons-update": "^15.6.2",
     "react-dom": "^16.12.0",
     "react-scripts": "3.3.1"
   },

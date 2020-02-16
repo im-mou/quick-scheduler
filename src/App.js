@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
+import update from "react-addons-update";
 import PropTypes from "prop-types";
+import { Modal, Input } from "antd";
 import "./App.css";
 
 import ControlBar from "./ControlBar";
 import Items from "./Items";
 import Tasks from "./Tasks";
-import { TASK_STATES } from "./Utils/Constants";
+import {
+  TASK_STATES,
+  TASK_ACTIONS_ICONS as ICON,
+  TASK_ACTIONS as ACTIONS
+} from "./Utils/Constants";
 import Util from "./Utils";
 
 class App extends React.Component {
@@ -17,15 +23,54 @@ class App extends React.Component {
       tasks: this.props.tasks,
       pending: this.props.pending,
       active: this.props.active,
-      finished: this.props.finished
+      finished: this.props.finished,
+      renameModal: this.props.renameModal,
+      renameTask: {}
     };
     this.createTask = this.createTask.bind(this);
   }
-  timer = [];
 
   componentDidMount() {
     //this.createTask();
   }
+
+  startTimer = taskId => {
+    let interval = setInterval(() => {
+      let currItem = Util.GetItemWithIndex(taskId, this.state.active);
+
+      // clear timer of timer has completed
+      if (currItem.elapsedTime >= currItem.totalTime) {
+        return this.done(taskId);
+      }
+
+      // update elapsed time
+      this.setState(state => {
+        return {
+          active: update(state.active, {
+            [currItem.index]: {
+              elapsedTime: { $set: Date.now() - currItem.startTime }
+            }
+          })
+        };
+      });
+    }, 1000);
+
+    //push interval -> state.timers[]
+    this.setState(state => {
+      return { timers: [...state.timers, { id: taskId, interval: interval }] };
+    });
+  };
+
+  stopTimer = taskId => {
+    const timer = Util.GetItemWithIndex(taskId, this.state.timers);
+    clearInterval(timer.interval);
+
+    this.setState({
+      timers: update(this.state.timers, {
+        $splice: [[timer.index, 1]]
+      })
+    });
+  };
 
   _action = ({ taskId, actionType }) => {
     this[actionType](taskId);
@@ -39,100 +84,191 @@ class App extends React.Component {
       ...task, // { title, totalTime }
       status: TASK_STATES.PENDNING,
       isPaused: false,
-      startTime: null,
-      elapsedTime: null
+      startTime: 0,
+      elapsedTime: 0
     };
     this.setState(state => {
-      const newTasks = [...state.tasks, _task];
-      return { tasks: newTasks };
+      const updatedTasks = [...state.tasks, _task];
+      return { tasks: updatedTasks };
     });
-  };
-
-  async updateState(newTasks) {
-    this.setState({
-      tasks: newTasks
-    });
-  }
-
-  tick = taskId => {
-    const currItem = Util.GetItem(taskId, this.state.tasks);
-    const filtereditem = Util.FilterItem(taskId, this.state.tasks);
-
-    const interval = setInterval(() => {
-      const newTasks = [
-        ...filtereditem,
-        {
-          ...currItem,
-          elapsedTime: Date.now() - currItem.startTime
-        }
-      ];
-      this.setState({
-        tasks: newTasks
-      });
-    }, 1000);
-
-    this.timer.push({taskId:interval})
-    this.setState(state=>{
-      return {timers : state.timers.push(interval)}
-    })
+    // show message
+    Util.Notificacion(task.title + " has been created", ICON[ACTIONS.NEW]);
   };
 
   play = taskId => {
-    if (Util.GetItem(taskId, this.state.tasks).status === TASK_STATES.ACTIVE) {
-      return;
-    }
+    let currItem = Util.GetItemWithIndex(taskId, this.state.tasks);
 
-    let newTasks = Util.UpdateItem(taskId, this.state.tasks, {
+    const updatedTask = {
+      ...currItem,
       status: TASK_STATES.ACTIVE,
       isPaused: false,
-      startTime: Date.now()
-    });
+      startTime: currItem.isPaused
+        ? Date.now() - currItem.elapsedTime
+        : Date.now(),
+      elapsedTime:
+        currItem.status === TASK_STATES.FINISHED ? 0 : currItem.elapsedTime // if restart -> 0
+    };
 
-    this.updateState(newTasks).then(() => {
-      this.tick(taskId);
-    });
-  };
-  pause = taskId => {
-    let newTasks = Util.UpdateItem(taskId, this.state.tasks, {
-      isPaused: true,
-      status: TASK_STATES.PENDNING
-    });
-
-    this.updateState(newTasks);
-  };
-  done = taskId => {
-    let newTasks = Util.UpdateItem(taskId, this.state.tasks, {
-      isPaused: false,
-      status: TASK_STATES.FINISHED
-    });
-
-    this.updateState(newTasks);
-  };
-  restart = taskId => {
-    let newTasks = Util.UpdateItem(taskId, this.state.tasks, {
-      isPaused: false,
-      suspended: 0,
-      status: TASK_STATES.ACTIVE
-    });
-
-    this.updateState(newTasks);
-  };
-  remove = taskId => {
-    this.updateState(
-      this.state.tasks.filter(item => {
-        return item.id !== taskId;
-      })
+    // move task from pending -> active
+    this.setState(
+      {
+        tasks: update(this.state.tasks, {
+          $splice: [[currItem.index, 1]]
+        }),
+        active: update(this.state.active, { $push: [updatedTask] })
+      },
+      () => {
+        // callback
+        this.startTimer(taskId);
+      }
     );
+    // show message
+    Util.Notificacion(currItem.title + " has been started", ICON[ACTIONS.PLAY]);
+  };
+
+  pause = taskId => {
+    // clear interval
+    this.stopTimer(taskId);
+
+    // update task
+    const currItem = Util.GetItemWithIndex(taskId, this.state.active);
+    const updatedTask = {
+      ...currItem,
+      status: TASK_STATES.PENDNING,
+      isPaused: true
+    };
+
+    // move task from active -> pending
+    this.setState({
+      tasks: update(this.state.tasks, { $push: [updatedTask] }),
+      active: update(this.state.active, {
+        $splice: [[currItem.index, 1]]
+      })
+    });
+
+    // show message
+    Util.Notificacion(currItem.title + " has been paused", ICON[ACTIONS.PAUSE]);
+  };
+
+  done = taskId => {
+    // clear interval
+    this.stopTimer(taskId);
+
+    let currItem = Util.GetItemWithIndex(taskId, this.state.active);
+    const updatedTask = {
+      ...currItem,
+      status: TASK_STATES.FINISHED
+    };
+
+    // move task from active -> finished
+    this.setState({
+      active: update(this.state.active, {
+        $splice: [[currItem.index, 1]]
+      }),
+      finished: update(this.state.finished, { $push: [updatedTask] })
+    });
+
+    // show message
+    Util.Notificacion(
+      currItem.title + " has been marked as completed",
+      ICON[ACTIONS.DONE]
+    );
+  };
+
+  restart = taskId => {
+    let currItem = Util.GetItemWithIndex(taskId, this.state.finished);
+
+    // move task from finished -> pending
+    this.setState(
+      {
+        finished: update(this.state.finished, {
+          $splice: [[currItem.index, 1]]
+        }),
+        tasks: update(this.state.tasks, { $push: [currItem] })
+      },
+      () => {
+        this.play(taskId);
+      }
+    );
+    // show message
+    Util.Notificacion(
+      currItem.title + " has been restarted",
+      ICON[ACTIONS.RESTART]
+    );
+  };
+
+  // Dirty approach
+  // Todo: re-write this method
+  remove = taskId => {
+    let currItem = Util.FindItem(taskId, this.state);
+
+    // remove task from state[tasks|active|finished]
+    this.setState({
+      active: update(this.state.active, {
+        $splice: [[currItem.index, 1]]
+      }),
+      tasks: update(this.state.tasks, {
+        $splice: [[currItem.index, 1]]
+      }),
+      finished: update(this.state.finished, {
+        $splice: [[currItem.index, 1]]
+      })
+    });
+
+    // show message
+    Util.Notificacion(
+      currItem.title + " has been removed",
+      ICON[ACTIONS.REMOVE]
+    );
+  };
+
+  rename = param => {
+    // show modal
+    if (typeof param === "number") {
+      this.setState({
+        renameModal: true,
+        renameTask: Util.GetItemWithIndex(param, this.state.tasks)
+      });
+    }
+    // hide modal
+    if (typeof param === "boolean" && !param) {
+      this.setState({ renameModal: false, renameTask: {} });
+    }
+  };
+
+  updateName = newTitle => {
+    let updatedtask = { ...this.state.renameTask, title: newTitle };
+    this.setState({
+      tasks: update(this.state.tasks, {
+        [this.state.renameTask.index]: { $set: updatedtask }
+      }),
+      renameModal: false,
+      renameTask: {}
+    });
+
+    // hide modal and update task name
+    this.setState({ renameModal: false, renameTaskId: null });
   };
 
   // TODO: Use React Context API to render the items and share state.
   render() {
     return (
       <div className="App">
+        {this.state.renameModal ? (
+          <RenameModal
+            tasks={this.state.tasks}
+            visible={this.state.renameModal}
+            task={this.state.renameTask}
+            save={this.updateName}
+            hide={this.rename}
+          />
+        ) : (
+          ""
+        )}
         <ControlBar createTask={this.createTask} />
         <Tasks header="Active Task">
           <Items
-            tasks={Util.FilterTasks(this.state.tasks, TASK_STATES.ACTIVE)}
+            tasks={Util.FilterTasks(this.state.active, TASK_STATES.ACTIVE)}
             status={TASK_STATES.ACTIVE}
             action={this._action}
           />
@@ -146,7 +282,7 @@ class App extends React.Component {
         </Tasks>
         <Tasks header="Completed">
           <Items
-            tasks={Util.FilterTasks(this.state.tasks, TASK_STATES.FINISHED)}
+            tasks={Util.FilterTasks(this.state.finished, TASK_STATES.FINISHED)}
             status={TASK_STATES.FINISHED}
             action={this._action}
           />
@@ -159,17 +295,50 @@ class App extends React.Component {
 App.defaultProps = {
   timers: [],
   tasks: [],
-  active: {},
+  active: [],
   pending: [],
-  finished: []
+  finished: [],
+  renameModal: false
 };
 
 App.propTypes = {
   timers: PropTypes.array,
   tasks: PropTypes.array,
-  active: PropTypes.object,
+  active: PropTypes.array,
   pending: PropTypes.array,
-  finished: PropTypes.array
+  finished: PropTypes.array,
+  renameModal: PropTypes.bool
 };
 
 export default App;
+
+// Todo: Create separate file for this method
+const RenameModal = props => {
+  //get task
+
+  const [title, setTitle] = useState(props.task.title);
+  const handleInputChange = function(e) {
+    setTitle(e.currentTarget.value);
+  };
+
+  // return if no task is selected for rename
+  if (props.task === {}) return;
+
+  return (
+    <Modal
+      title={"Rename task: " + props.task.title}
+      centered
+      visible={props.visible}
+      onOk={() => props.save(title)}
+      onCancel={() => props.hide(false)} // hide modal
+    >
+      <p>
+        <Input
+          placeholder="Task title..."
+          onChange={handleInputChange}
+          value={title}
+        />
+      </p>
+    </Modal>
+  );
+};
