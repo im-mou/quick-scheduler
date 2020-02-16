@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import update from "react-addons-update";
 import PropTypes from "prop-types";
-import { Modal, Input } from "antd";
-import "./App.css";
 
 import ControlBar from "./ControlBar";
 import Items from "./Items";
 import Tasks from "./Tasks";
+
+import Util from "./Utils";
 import {
   TASK_STATES,
   TASK_ACTIONS_ICONS as ICON,
   TASK_ACTIONS as ACTIONS
 } from "./Utils/Constants";
-import Util from "./Utils";
+
+import { Modal, Input } from "antd";
+import "./App.css";
 
 class App extends React.Component {
   constructor(props) {
@@ -25,56 +27,12 @@ class App extends React.Component {
       active: this.props.active,
       finished: this.props.finished,
       renameModal: this.props.renameModal,
-      renameTask: {}
+      renameTask: this.props.renameTask
     };
-    this.createTask = this.createTask.bind(this);
   }
-
-  componentDidMount() {
-    //this.createTask();
-  }
-
-  startTimer = taskId => {
-    let interval = setInterval(() => {
-      let currItem = Util.GetItemWithIndex(taskId, this.state.active);
-
-      // clear timer of timer has completed
-      if (currItem.elapsedTime >= currItem.totalTime) {
-        return this.done(taskId);
-      }
-
-      // update elapsed time
-      this.setState(state => {
-        return {
-          active: update(state.active, {
-            [currItem.index]: {
-              elapsedTime: { $set: Date.now() - currItem.startTime }
-            }
-          })
-        };
-      });
-    }, 1000);
-
-    //push interval -> state.timers[]
-    this.setState(state => {
-      return { timers: [...state.timers, { id: taskId, interval: interval }] };
-    });
-  };
-
-  stopTimer = taskId => {
-    const timer = Util.GetItemWithIndex(taskId, this.state.timers);
-    clearInterval(timer.interval);
-
-    this.setState({
-      timers: update(this.state.timers, {
-        $splice: [[timer.index, 1]]
-      })
-    });
-  };
 
   _action = ({ taskId, actionType }) => {
     this[actionType](taskId);
-    //this.updateState(newState);
   };
 
   createTask = task => {
@@ -250,6 +208,44 @@ class App extends React.Component {
     this.setState({ renameModal: false, renameTaskId: null });
   };
 
+  startTimer = taskId => {
+    let interval = setInterval(() => {
+      let currItem = Util.GetItemWithIndex(taskId, this.state.active);
+
+      // clear timer if target is reached
+      if (currItem.elapsedTime >= currItem.totalTime) {
+        return this.done(taskId);
+      }
+
+      // update elapsed time
+      this.setState(state => {
+        return {
+          active: update(state.active, {
+            [currItem.index]: {
+              elapsedTime: { $set: Date.now() - currItem.startTime }
+            }
+          })
+        };
+      });
+    }, 1000);
+
+    //push interval -> state.timers[]
+    this.setState(state => {
+      return { timers: [...state.timers, { id: taskId, interval: interval }] };
+    });
+  };
+
+  stopTimer = taskId => {
+    const timer = Util.GetItemWithIndex(taskId, this.state.timers);
+    clearInterval(timer.interval);
+
+    this.setState({
+      timers: update(this.state.timers, {
+        $splice: [[timer.index, 1]]
+      })
+    });
+  };
+
   // TODO: Use React Context API to render the items and share state.
   render() {
     return (
@@ -298,7 +294,8 @@ App.defaultProps = {
   active: [],
   pending: [],
   finished: [],
-  renameModal: false
+  renameModal: false,
+  renameTask: {}
 };
 
 App.propTypes = {
@@ -307,15 +304,14 @@ App.propTypes = {
   active: PropTypes.array,
   pending: PropTypes.array,
   finished: PropTypes.array,
-  renameModal: PropTypes.bool
+  renameModal: PropTypes.bool,
+  renameMorenameTaskdal: PropTypes.object
 };
 
 export default App;
 
 // Todo: Create separate file for this method
 const RenameModal = props => {
-  //get task
-
   const [title, setTitle] = useState(props.task.title);
   const handleInputChange = function(e) {
     setTitle(e.currentTarget.value);
