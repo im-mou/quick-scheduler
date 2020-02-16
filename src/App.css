@@ -23,7 +23,12 @@
   width: 400px;
   margin: 0 auto;
 }
-
+.logo {
+  height: 120px;
+}
+.logo img {
+  margin-top: 60px;
+}
 .section {
   margin-bottom: 50px;
 }
@@ -61,9 +66,11 @@
   margin-bottom: 10px;
 }
 
-.item .footer {
-  margin-bottom: 5px;
+.item .footer,
+.footer .col{
+  align-self: flex-end;
 }
+
 .item .timer {
   font-size: 20px;
   font-weight: normal;
@@ -114,4 +121,35 @@
 .item.finished .controls {
   background-color: #ffffff;
   color: #c5c5c5;
+}
+
+
+
+.control-bar {
+  margin-bottom: 50px;
+  border: 1px solid #ccc;
+}
+
+.control-bar  .ant-input{
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.control-bar  .ant-input,
+.control-bar  .ant-input-number  {
+  border: none;
+  border-radius: 0;
+}
+
+.control-bar  .ant-input-number-input{
+  padding:0 10px !important;
+}
+
+.control-bar  .ant-menu-item-selected:not(:last-child){
+  border-bottom: 2px solid transparent;
+  font-weight: bold;
+}
+
+.control-bar  .ant-menu-item-active:not(:last-child) {
+  border-bottom: 2px solid transparent;
 }

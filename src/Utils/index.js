@@ -43,7 +43,7 @@ const FindItem = (taskId,object) => {
   let currItem = Util.GetItemWithIndex(taskId, object.active);
   currItem = currItem
     ? currItem
-    : Util.GetItemWithIndex(taskId, object.tasks);
+    : Util.GetItemWithIndex(taskId, object.pending);
   currItem = currItem
     ? currItem
     : Util.GetItemWithIndex(taskId, object.finished);

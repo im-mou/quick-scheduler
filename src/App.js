@@ -22,7 +22,6 @@ class App extends React.Component {
 
     this.state = {
       timers: this.props.timers,
-      tasks: this.props.tasks,
       pending: this.props.pending,
       active: this.props.active,
       finished: this.props.finished,
@@ -43,23 +42,25 @@ class App extends React.Component {
       status: TASK_STATES.PENDNING,
       isPaused: false,
       startTime: 0,
-      elapsedTime: 0
+      elapsedTime: 0,
+      hasInterval: false
     };
     this.setState(state => {
-      const updatedTasks = [...state.tasks, _task];
-      return { tasks: updatedTasks };
+      const updatedTasks = [...state.pending, _task];
+      return { pending: updatedTasks };
     });
     // show message
     Util.Notificacion(task.title + " has been created", ICON[ACTIONS.NEW]);
   };
 
   play = taskId => {
-    let currItem = Util.GetItemWithIndex(taskId, this.state.tasks);
+    let currItem = Util.GetItemWithIndex(taskId, this.state.pending);
 
     const updatedTask = {
       ...currItem,
       status: TASK_STATES.ACTIVE,
       isPaused: false,
+      hasInterval: true,
       startTime: currItem.isPaused
         ? Date.now() - currItem.elapsedTime
         : Date.now(),
@@ -70,7 +71,7 @@ class App extends React.Component {
     // move task from pending -> active
     this.setState(
       {
-        tasks: update(this.state.tasks, {
+        pending: update(this.state.pending, {
           $splice: [[currItem.index, 1]]
         }),
         active: update(this.state.active, { $push: [updatedTask] })
@@ -80,8 +81,6 @@ class App extends React.Component {
         this.startTimer(taskId);
       }
     );
-    // show message
-    Util.Notificacion(currItem.title + " has been started", ICON[ACTIONS.PLAY]);
   };
 
   pause = taskId => {
@@ -98,7 +97,7 @@ class App extends React.Component {
 
     // move task from active -> pending
     this.setState({
-      tasks: update(this.state.tasks, { $push: [updatedTask] }),
+      pending: update(this.state.pending, { $push: [updatedTask] }),
       active: update(this.state.active, {
         $splice: [[currItem.index, 1]]
       })
@@ -142,33 +141,25 @@ class App extends React.Component {
         finished: update(this.state.finished, {
           $splice: [[currItem.index, 1]]
         }),
-        tasks: update(this.state.tasks, { $push: [currItem] })
+        pending: update(this.state.pending, { $push: [currItem] })
       },
       () => {
         this.play(taskId);
       }
     );
-    // show message
-    Util.Notificacion(
-      currItem.title + " has been restarted",
-      ICON[ACTIONS.RESTART]
-    );
   };
 
-  // Dirty approach
-  // Todo: re-write this method
   remove = taskId => {
     let currItem = Util.FindItem(taskId, this.state);
 
-    // remove task from state[tasks|active|finished]
+    // clear interval
+    if (!currItem.hasInterval) {
+      this.stopTimer(taskId);
+    }
+
+    // remove task from state[pending|active|finished]
     this.setState({
-      active: update(this.state.active, {
-        $splice: [[currItem.index, 1]]
-      }),
-      tasks: update(this.state.tasks, {
-        $splice: [[currItem.index, 1]]
-      }),
-      finished: update(this.state.finished, {
+      [currItem.status]: update(this.state[currItem.status], {
         $splice: [[currItem.index, 1]]
       })
     });
@@ -185,7 +176,7 @@ class App extends React.Component {
     if (typeof param === "number") {
       this.setState({
         renameModal: true,
-        renameTask: Util.GetItemWithIndex(param, this.state.tasks)
+        renameTask: Util.GetItemWithIndex(param, this.state.pending)
       });
     }
     // hide modal
@@ -197,7 +188,7 @@ class App extends React.Component {
   updateName = newTitle => {
     let updatedtask = { ...this.state.renameTask, title: newTitle };
     this.setState({
-      tasks: update(this.state.tasks, {
+      pending: update(this.state.pending, {
         [this.state.renameTask.index]: { $set: updatedtask }
       }),
       renameModal: false,
@@ -252,7 +243,7 @@ class App extends React.Component {
       <div className="App">
         {this.state.renameModal ? (
           <RenameModal
-            tasks={this.state.tasks}
+            tasks={this.state.pending}
             visible={this.state.renameModal}
             task={this.state.renameTask}
             save={this.updateName}
@@ -261,11 +252,12 @@ class App extends React.Component {
         ) : (
           ""
         )}
+        <Logo />
         <ControlBar createTask={this.createTask} />
         <EmptyState {...this.state} />
         <Tasks
           className={!this.state.active.length ? "hidden" : ""}
-          header="Active Task"
+          header="Active Tasks"
         >
           <Items
             tasks={Util.FilterTasks(this.state.active, TASK_STATES.ACTIVE)}
@@ -274,11 +266,11 @@ class App extends React.Component {
           />
         </Tasks>
         <Tasks
-          className={!this.state.tasks.length ? "hidden" : ""}
+          className={!this.state.pending.length ? "hidden" : ""}
           header="Pending"
         >
           <Items
-            tasks={Util.FilterTasks(this.state.tasks, TASK_STATES.PENDNING)}
+            tasks={Util.FilterTasks(this.state.pending, TASK_STATES.PENDNING)}
             status={TASK_STATES.PENDNING}
             action={this._action}
           />
@@ -300,7 +292,6 @@ class App extends React.Component {
 
 App.defaultProps = {
   timers: [],
-  tasks: [],
   active: [],
   pending: [],
   finished: [],
@@ -310,12 +301,11 @@ App.defaultProps = {
 
 App.propTypes = {
   timers: PropTypes.array,
-  tasks: PropTypes.array,
   active: PropTypes.array,
   pending: PropTypes.array,
   finished: PropTypes.array,
   renameModal: PropTypes.bool,
-  renameMorenameTaskdal: PropTypes.object
+  renameTask: PropTypes.object
 };
 
 export default App;
@@ -351,14 +341,24 @@ const RenameModal = props => {
 
 // Todo: Create separate file for this method
 const EmptyState = props => {
-  if (!props.tasks.length && !props.active.length && !props.finished.length) {
+  if (!props.pending.length && !props.active.length && !props.finished.length) {
     return (
       <Empty
+        style={{ marginTop: 130 }}
         image={Empty.PRESENTED_IMAGE_SIMPLE}
-        description={<span>No tasks for now</span>}
+        description={<span>No tasks at the moment</span>}
       />
     );
   } else {
     return null;
   }
+};
+
+// Todo: Create separate file for this method
+const Logo = () => {
+  return (
+    <div className="logo">
+      <img alt="Quick Scheduler" src="logo.png" width={120} />
+    </div>
+  );
 };
