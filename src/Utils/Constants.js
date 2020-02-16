@@ -25,7 +25,7 @@ export const TASK_ACTIONS_ICONS = {
   [TASK_ACTIONS.NEW]: "download"
 };
 
-export const TASK_ACTIONS_NAMES = {
+export const TASK_ACTIONS_DESC = {
   [TASK_ACTIONS.MORE]: "Options",
   [TASK_ACTIONS.PLAY]: "Start",
   [TASK_ACTIONS.PAUSE]: "Pause",

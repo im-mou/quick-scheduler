@@ -186,6 +186,7 @@ class App extends React.Component {
   };
 
   updateName = newTitle => {
+    // hide modal and update task name
     let updatedtask = { ...this.state.renameTask, title: newTitle };
     this.setState({
       pending: update(this.state.pending, {
@@ -194,9 +195,6 @@ class App extends React.Component {
       renameModal: false,
       renameTask: {}
     });
-
-    // hide modal and update task name
-    this.setState({ renameModal: false, renameTaskId: null });
   };
 
   startTimer = taskId => {

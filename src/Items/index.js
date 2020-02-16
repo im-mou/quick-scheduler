@@ -5,7 +5,7 @@ import {
   TASK_ACTIONS as ACTION,
   TASK_ACTIONS_LIST as ACTIONS,
   TASK_ACTIONS_ICONS as ICON,
-  TASK_ACTIONS_NAMES as ACTION_NAME,
+  TASK_ACTIONS_DESC as ACTION_NAME,
   TASK_ACTIONS_MORE_OPTIONS as MORE_OPTIONS
 } from "../Utils/Constants";
 import { Button, Progress, Tooltip, Menu, Dropdown, Statistic } from "antd";
