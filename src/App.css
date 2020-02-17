@@ -19,15 +19,24 @@
   align-items: flex-end;
 }
 
+small.muted {
+  color: #aaaaaa;
+}
+.right {
+  text-align: right;
+}
+
 .App {
-  width: 400px;
+  max-width: 450px;
   margin: 0 auto;
+  padding: 0 10px;
 }
 .logo {
   height: 120px;
 }
 .logo img {
-  margin-top: 60px;
+  position: relative;
+  top: 45%;
 }
 .section {
   margin-bottom: 50px;
@@ -126,7 +135,7 @@
 
 
 .control-bar {
-  margin-bottom: 50px;
+  margin-bottom: 5px;
   border: 1px solid #ccc;
 }
 
@@ -152,4 +161,34 @@
 
 .control-bar  .ant-menu-item-active:not(:last-child) {
   border-bottom: 2px solid transparent;
+}
+
+.task-wrapper{
+  margin-top: 50px;
+}
+
+.mobile-create-button {
+  margin: 10px;
+}
+
+.hide-on-mobile {
+  display: inherit;
+}
+
+.show-on-mobile {
+  display: none;
+}
+
+@media only screen and (max-width: 600px){
+  .hide-on-mobile {
+    display: none;
+  }
+  
+  .show-on-mobile {
+    display: inherit;
+  }
+
+  .logo {
+    height: 80px;
+  }
 }

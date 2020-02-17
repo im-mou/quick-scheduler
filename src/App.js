@@ -43,14 +43,13 @@ class App extends React.Component {
       isPaused: false,
       startTime: 0,
       elapsedTime: 0,
-      hasInterval: false
     };
     this.setState(state => {
       const updatedTasks = [...state.pending, _task];
       return { pending: updatedTasks };
     });
     // show message
-    Util.Notificacion(task.title + " has been created", ICON[ACTIONS.NEW]);
+    //Util.Notificacion(task.title + " has been created", ICON[ACTIONS.NEW]);
   };
 
   play = taskId => {
@@ -60,7 +59,6 @@ class App extends React.Component {
       ...currItem,
       status: TASK_STATES.ACTIVE,
       isPaused: false,
-      hasInterval: true,
       startTime: currItem.isPaused
         ? Date.now() - currItem.elapsedTime
         : Date.now(),
@@ -151,11 +149,6 @@ class App extends React.Component {
 
   remove = taskId => {
     let currItem = Util.FindItem(taskId, this.state);
-
-    // clear interval
-    if (!currItem.hasInterval) {
-      this.stopTimer(taskId);
-    }
 
     // remove task from state[pending|active|finished]
     this.setState({
@@ -252,37 +245,39 @@ class App extends React.Component {
         )}
         <Logo />
         <ControlBar createTask={this.createTask} />
-        <EmptyState {...this.state} />
-        <Tasks
-          className={!this.state.active.length ? "hidden" : ""}
-          header="Active Tasks"
-        >
-          <Items
-            tasks={Util.FilterTasks(this.state.active, TASK_STATES.ACTIVE)}
-            status={TASK_STATES.ACTIVE}
-            action={this._action}
-          />
-        </Tasks>
-        <Tasks
-          className={!this.state.pending.length ? "hidden" : ""}
-          header="Pending"
-        >
-          <Items
-            tasks={Util.FilterTasks(this.state.pending, TASK_STATES.PENDNING)}
-            status={TASK_STATES.PENDNING}
-            action={this._action}
-          />
-        </Tasks>
-        <Tasks
-          className={!this.state.finished.length ? "hidden" : ""}
-          header="Completed"
-        >
-          <Items
-            tasks={Util.FilterTasks(this.state.finished, TASK_STATES.FINISHED)}
-            status={TASK_STATES.FINISHED}
-            action={this._action}
-          />
-        </Tasks>
+        <div className="task-wrapper">
+          <EmptyState {...this.state} />
+          <Tasks
+            className={!this.state.active.length ? "hidden" : ""}
+            header="Active Tasks"
+          >
+            <Items
+              tasks={Util.FilterTasks(this.state.active, TASK_STATES.ACTIVE)}
+              status={TASK_STATES.ACTIVE}
+              action={this._action}
+            />
+          </Tasks>
+          <Tasks
+            className={!this.state.pending.length ? "hidden" : ""}
+            header="Pending"
+          >
+            <Items
+              tasks={Util.FilterTasks(this.state.pending, TASK_STATES.PENDNING)}
+              status={TASK_STATES.PENDNING}
+              action={this._action}
+            />
+          </Tasks>
+          <Tasks
+            className={!this.state.finished.length ? "hidden" : ""}
+            header="Completed"
+          >
+            <Items
+              tasks={Util.FilterTasks(this.state.finished, TASK_STATES.FINISHED)}
+              status={TASK_STATES.FINISHED}
+              action={this._action}
+            />
+          </Tasks>
+        </div>
       </div>
     );
   }

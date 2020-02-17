@@ -33,6 +33,13 @@ const ControlBar = function(props) {
     chooseTime(1);
     setselectedTime("1h");
   };
+
+  // create task if "enter" is pressed
+  const handleKeyDown = function(e) {
+    if (e.key === "Enter") {
+      createTask();
+    }
+  };
   return (
     <>
       <div className="control-bar">
@@ -41,6 +48,7 @@ const ControlBar = function(props) {
             size="large"
             value={title}
             onChange={handleTitleChange}
+            onKeyDown={handleKeyDown}
             type="text"
             placeholder="Create a new task"
           />
@@ -65,18 +73,23 @@ const ControlBar = function(props) {
             </Menu.Item>
             <Menu.Item style={{ padding: 0 }} key="custom">
               <InputNumber
-                style={{ width: 80 }}
-                placeholder="...min"
+                style={{ width: 100 }}
+                placeholder="...minutes"
                 min={1}
                 max={1440}
                 onChange={handleCustomTimer}
               />
             </Menu.Item>
-            <Menu.Item style={{ padding: 0 ,paddingLeft: 10}}>
+            {/* <Menu.Item style={{ padding: 0, paddingLeft: 40 }}>
               <Button onClick={createTask}>Create</Button>
-            </Menu.Item>
+            </Menu.Item> */}
           </Menu>
+          
+          <Button className="mobile-create-button show-on-mobile" onClick={createTask}>Create</Button>
         </div>
+      </div>
+      <div className="hide-on-mobile right">
+        <small className="muted">Press enter to create task</small>
       </div>
     </>
   );
