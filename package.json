@@ -1,5 +1,6 @@
 {
   "name": "quick-scedule",
+  "homepage": "http://quick-scedule.mohsinriaz.es",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
