@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import OptionsPanel from './OptionsPanel';
 import { Button, Menu, InputNumber, Input } from "antd";
 import Util from "../Utils";
 
@@ -84,6 +85,8 @@ const ControlBar = function(props) {
               <Button onClick={createTask}>Create</Button>
             </Menu.Item> */}
           </Menu>
+
+            <OptionsPanel />
           
           <Button className="mobile-create-button show-on-mobile" onClick={createTask}>Create</Button>
         </div>
