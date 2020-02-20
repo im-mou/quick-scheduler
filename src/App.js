@@ -16,7 +16,7 @@ import {
 import { Modal, Input, Empty } from "antd";
 import "./App.css";
 
-import {Beep1} from './Assets/Sounds/Beep';
+import { Beep1 } from "./Assets/Sounds/Beep";
 
 class App extends React.Component {
   constructor(props) {
@@ -44,7 +44,7 @@ class App extends React.Component {
       status: TASK_STATES.PENDNING,
       isPaused: false,
       startTime: 0,
-      elapsedTime: 0,
+      elapsedTime: 0
     };
     this.setState(state => {
       const updatedTasks = [...state.pending, _task];
@@ -126,7 +126,7 @@ class App extends React.Component {
     });
 
     // play sound
-    Beep1.play()
+    Beep1.play();
 
     // show message
     Util.Notificacion(
@@ -277,7 +277,10 @@ class App extends React.Component {
             header="Completed"
           >
             <Items
-              tasks={Util.FilterTasks(this.state.finished, TASK_STATES.FINISHED)}
+              tasks={Util.FilterTasks(
+                this.state.finished,
+                TASK_STATES.FINISHED
+              )}
               status={TASK_STATES.FINISHED}
               action={this._action}
             />
