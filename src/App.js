@@ -16,6 +16,8 @@ import {
 import { Modal, Input, Empty } from "antd";
 import "./App.css";
 
+import {Beep1} from './Assets/Sounds/Beep';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -122,6 +124,9 @@ class App extends React.Component {
       }),
       finished: update(this.state.finished, { $push: [updatedTask] })
     });
+
+    // play sound
+    Beep1.play()
 
     // show message
     Util.Notificacion(
