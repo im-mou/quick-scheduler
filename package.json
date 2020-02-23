@@ -4,9 +4,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.4.0",
-    "@testing-library/user-event": "^7.2.1",
     "antd": "^3.26.9",
     "immutability-helper": "^3.0.1",
     "moment": "^2.24.0",
@@ -36,6 +33,6 @@
     ]
   },
   "devDependencies": {
-    "eslint-plugin-react-hooks": "^2.3.0"
+    "prettier-eslint": "^9.0.1"
   }
 }
