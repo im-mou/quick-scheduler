@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import update from "immutability-helper";
-import PropTypes from "prop-types";
+import React, {useState} from 'react';
+import update from 'immutability-helper';
+import PropTypes from 'prop-types';
 
-import ControlBar from "./ControlBar";
-import Items from "./Items";
-import Tasks from "./Tasks";
+import ControlBar from './ControlBar';
+import Items from './Items';
+import Tasks from './Tasks';
 
-import Util from "./Utils";
+import Util from './Utils';
 import {
   TASK_STATES,
   TASK_ACTIONS_ICONS as ICON,
-  TASK_ACTIONS as ACTIONS
-} from "./Utils/Constants";
+  TASK_ACTIONS as ACTIONS,
+} from './Utils/Constants';
 
-import { Modal, Input, Empty } from "antd";
-import "./App.css";
+import {Modal, Input, Empty} from 'antd';
+import './App.css';
 
 import {Beep1} from './Assets/Sounds/Beep';
 
@@ -28,11 +28,11 @@ class App extends React.Component {
       active: this.props.active,
       finished: this.props.finished,
       renameModal: this.props.renameModal,
-      renameTask: this.props.renameTask
+      renameTask: this.props.renameTask,
     };
   }
 
-  _action = ({ taskId, actionType }) => {
+  _action = ({taskId, actionType}) => {
     this[actionType](taskId);
   };
 
@@ -48,7 +48,7 @@ class App extends React.Component {
     };
     this.setState(state => {
       const updatedTasks = [...state.pending, _task];
-      return { pending: updatedTasks };
+      return {pending: updatedTasks};
     });
     // show message
     //Util.Notificacion(task.title + " has been created", ICON[ACTIONS.NEW]);
@@ -62,24 +62,24 @@ class App extends React.Component {
       status: TASK_STATES.ACTIVE,
       isPaused: false,
       startTime: currItem.isPaused
-        ? Date.now() - currItem.elapsedTime
-        : Date.now(),
+          ? Date.now() - currItem.elapsedTime
+          : Date.now(),
       elapsedTime:
-        currItem.status === TASK_STATES.FINISHED ? 0 : currItem.elapsedTime // if restart -> 0
+          currItem.status === TASK_STATES.FINISHED ? 0 : currItem.elapsedTime, // if restart -> 0
     };
 
     // move task from pending -> active
     this.setState(
-      {
-        pending: update(this.state.pending, {
-          $splice: [[currItem.index, 1]]
-        }),
-        active: update(this.state.active, { $push: [updatedTask] })
-      },
-      () => {
-        // callback
-        this.startTimer(taskId);
-      }
+        {
+          pending: update(this.state.pending, {
+            $splice: [[currItem.index, 1]],
+          }),
+          active: update(this.state.active, {$push: [updatedTask]}),
+        },
+        () => {
+          // callback
+          this.startTimer(taskId);
+        },
     );
   };
 
@@ -92,19 +92,19 @@ class App extends React.Component {
     const updatedTask = {
       ...currItem,
       status: TASK_STATES.PENDNING,
-      isPaused: true
+      isPaused: true,
     };
 
     // move task from active -> pending
     this.setState({
-      pending: update(this.state.pending, { $push: [updatedTask] }),
+      pending: update(this.state.pending, {$push: [updatedTask]}),
       active: update(this.state.active, {
-        $splice: [[currItem.index, 1]]
-      })
+        $splice: [[currItem.index, 1]],
+      }),
     });
 
     // show message
-    Util.Notificacion(currItem.title + " has been paused", ICON[ACTIONS.PAUSE]);
+    Util.Notificacion(currItem.title + ' has been paused', ICON[ACTIONS.PAUSE]);
   };
 
   done = taskId => {
@@ -114,24 +114,24 @@ class App extends React.Component {
     let currItem = Util.GetItemWithIndex(taskId, this.state.active);
     const updatedTask = {
       ...currItem,
-      status: TASK_STATES.FINISHED
+      status: TASK_STATES.FINISHED,
     };
 
     // move task from active -> finished
     this.setState({
       active: update(this.state.active, {
-        $splice: [[currItem.index, 1]]
+        $splice: [[currItem.index, 1]],
       }),
-      finished: update(this.state.finished, { $push: [updatedTask] })
+      finished: update(this.state.finished, {$push: [updatedTask]}),
     });
 
     // play sound
-    Beep1.play()
+    Beep1.play();
 
     // show message
     Util.Notificacion(
-      currItem.title + " has been marked as completed",
-      ICON[ACTIONS.DONE]
+        currItem.title + ' has been marked as completed',
+        ICON[ACTIONS.DONE],
     );
   };
 
@@ -140,15 +140,15 @@ class App extends React.Component {
 
     // move task from finished -> pending
     this.setState(
-      {
-        finished: update(this.state.finished, {
-          $splice: [[currItem.index, 1]]
-        }),
-        pending: update(this.state.pending, { $push: [currItem] })
-      },
-      () => {
-        this.play(taskId);
-      }
+        {
+          finished: update(this.state.finished, {
+            $splice: [[currItem.index, 1]],
+          }),
+          pending: update(this.state.pending, {$push: [currItem]}),
+        },
+        () => {
+          this.play(taskId);
+        },
     );
   };
 
@@ -158,40 +158,40 @@ class App extends React.Component {
     // remove task from state[pending|active|finished]
     this.setState({
       [currItem.status]: update(this.state[currItem.status], {
-        $splice: [[currItem.index, 1]]
-      })
+        $splice: [[currItem.index, 1]],
+      }),
     });
 
     // show message
     Util.Notificacion(
-      currItem.title + " has been removed",
-      ICON[ACTIONS.REMOVE]
+        currItem.title + ' has been removed',
+        ICON[ACTIONS.REMOVE],
     );
   };
 
   rename = param => {
     // show modal
-    if (typeof param === "number") {
+    if (typeof param === 'number') {
       this.setState({
         renameModal: true,
-        renameTask: Util.GetItemWithIndex(param, this.state.pending)
+        renameTask: Util.GetItemWithIndex(param, this.state.pending),
       });
     }
     // hide modal
-    if (typeof param === "boolean" && !param) {
-      this.setState({ renameModal: false, renameTask: {} });
+    if (typeof param === 'boolean' && !param) {
+      this.setState({renameModal: false, renameTask: {}});
     }
   };
 
   updateName = newTitle => {
     // hide modal and update task name
-    let updatedtask = { ...this.state.renameTask, title: newTitle };
+    let updatedtask = {...this.state.renameTask, title: newTitle};
     this.setState({
       pending: update(this.state.pending, {
-        [this.state.renameTask.index]: { $set: updatedtask }
+        [this.state.renameTask.index]: {$set: updatedtask},
       }),
       renameModal: false,
-      renameTask: {}
+      renameTask: {},
     });
   };
 
@@ -209,16 +209,16 @@ class App extends React.Component {
         return {
           active: update(state.active, {
             [currItem.index]: {
-              elapsedTime: { $set: Date.now() - currItem.startTime }
-            }
-          })
+              elapsedTime: {$set: Date.now() - currItem.startTime},
+            },
+          }),
         };
       });
     }, 1000);
 
     //push interval -> state.timers[]
     this.setState(state => {
-      return { timers: [...state.timers, { id: taskId, interval: interval }] };
+      return {timers: [...state.timers, {id: taskId, interval: interval}]};
     });
   };
 
@@ -228,62 +228,62 @@ class App extends React.Component {
 
     this.setState({
       timers: update(this.state.timers, {
-        $splice: [[timer.index, 1]]
-      })
+        $splice: [[timer.index, 1]],
+      }),
     });
   };
 
   // TODO: Use React Context API to render the items and share state.
   render() {
     return (
-      <div className="App">
-        {this.state.renameModal ? (
-          <RenameModal
-            tasks={this.state.pending}
-            visible={this.state.renameModal}
-            task={this.state.renameTask}
-            save={this.updateName}
-            hide={this.rename}
-          />
-        ) : (
-          ""
-        )}
-        <Logo />
-        <ControlBar createTask={this.createTask} />
-        <div className="task-wrapper">
-          <EmptyState {...this.state} />
-          <Tasks
-            className={!this.state.active.length ? "hidden" : ""}
-            header="Active Tasks"
-          >
-            <Items
-              tasks={Util.FilterTasks(this.state.active, TASK_STATES.ACTIVE)}
-              status={TASK_STATES.ACTIVE}
-              action={this._action}
-            />
-          </Tasks>
-          <Tasks
-            className={!this.state.pending.length ? "hidden" : ""}
-            header="Pending"
-          >
-            <Items
-              tasks={Util.FilterTasks(this.state.pending, TASK_STATES.PENDNING)}
-              status={TASK_STATES.PENDNING}
-              action={this._action}
-            />
-          </Tasks>
-          <Tasks
-            className={!this.state.finished.length ? "hidden" : ""}
-            header="Completed"
-          >
-            <Items
-              tasks={Util.FilterTasks(this.state.finished, TASK_STATES.FINISHED)}
-              status={TASK_STATES.FINISHED}
-              action={this._action}
-            />
-          </Tasks>
+        <div className="App">
+          {this.state.renameModal ? (
+              <RenameModal
+                  tasks={this.state.pending}
+                  visible={this.state.renameModal}
+                  task={this.state.renameTask}
+                  save={this.updateName}
+                  hide={this.rename}
+              />
+          ) : (
+              ''
+          )}
+          <Logo/>
+          <ControlBar createTask={this.createTask}/>
+          <div className="task-wrapper">
+            <EmptyState {...this.state} />
+            <Tasks
+                className={!this.state.active.length ? 'hidden' : ''}
+                header="Active Tasks"
+            >
+              <Items
+                  tasks={Util.FilterTasks(this.state.active, TASK_STATES.ACTIVE)}
+                  status={TASK_STATES.ACTIVE}
+                  action={this._action}
+              />
+            </Tasks>
+            <Tasks
+                className={!this.state.pending.length ? 'hidden' : ''}
+                header="Pending"
+            >
+              <Items
+                  tasks={Util.FilterTasks(this.state.pending, TASK_STATES.PENDNING)}
+                  status={TASK_STATES.PENDNING}
+                  action={this._action}
+              />
+            </Tasks>
+            <Tasks
+                className={!this.state.finished.length ? 'hidden' : ''}
+                header="Completed"
+            >
+              <Items
+                  tasks={Util.FilterTasks(this.state.finished, TASK_STATES.FINISHED)}
+                  status={TASK_STATES.FINISHED}
+                  action={this._action}
+              />
+            </Tasks>
+          </div>
         </div>
-      </div>
     );
   }
 }
@@ -294,7 +294,7 @@ App.defaultProps = {
   pending: [],
   finished: [],
   renameModal: false,
-  renameTask: {}
+  renameTask: {},
 };
 
 App.propTypes = {
@@ -303,7 +303,7 @@ App.propTypes = {
   pending: PropTypes.array,
   finished: PropTypes.array,
   renameModal: PropTypes.bool,
-  renameTask: PropTypes.object
+  renameTask: PropTypes.object,
 };
 
 export default App;
@@ -319,21 +319,21 @@ const RenameModal = props => {
   if (props.task === {}) return;
 
   return (
-    <Modal
-      title={"Rename task: " + props.task.title}
-      centered
-      visible={props.visible}
-      onOk={() => props.save(title)}
-      onCancel={() => props.hide(false)} // hide modal
-    >
-      <p>
-        <Input
-          placeholder="Task title..."
-          onChange={handleInputChange}
-          value={title}
-        />
-      </p>
-    </Modal>
+      <Modal
+          title={'Rename task: ' + props.task.title}
+          centered
+          visible={props.visible}
+          onOk={() => props.save(title)}
+          onCancel={() => props.hide(false)} // hide modal
+      >
+        <p>
+          <Input
+              placeholder="Task title..."
+              onChange={handleInputChange}
+              value={title}
+          />
+        </p>
+      </Modal>
   );
 };
 
@@ -341,11 +341,11 @@ const RenameModal = props => {
 const EmptyState = props => {
   if (!props.pending.length && !props.active.length && !props.finished.length) {
     return (
-      <Empty
-        style={{ marginTop: 130 }}
-        image={Empty.PRESENTED_IMAGE_SIMPLE}
-        description={<span>No tasks at the moment</span>}
-      />
+        <Empty
+            style={{marginTop: 130}}
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description={<span>No tasks at the moment</span>}
+        />
     );
   } else {
     return null;
@@ -355,8 +355,8 @@ const EmptyState = props => {
 // Todo: Create separate file for this method
 const Logo = () => {
   return (
-    <div className="logo">
-      <img alt="Quick Scheduler" src="logo.png" width={120} />
-    </div>
+      <div className="logo">
+        <img alt="Quick Scheduler" src="logo.png" width={120}/>
+      </div>
   );
 };
