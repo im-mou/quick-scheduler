@@ -1,29 +1,27 @@
 import React from 'react';
-import { notification, Icon } from 'antd';
+import {notification, Icon} from 'antd';
 
 const UpdateItem = (id, object, data) => {
   return object.map(item => {
     if (item.id === id) {
-      return { ...item, ...data };
+      return {...item, ...data};
     }
     return item;
   });
 };
 
 const GetItem = (id, object) => {
-  return object.filter((item,index) => {
+  return object.filter((item, index) => {
     return (item.id === id);
   })[0];
 };
 
 const GetItemWithIndex = (id, object) => {
-  return object
-    .map((item, i) => {
-      return { ...item, index: i };
-    })
-    .filter(item => {
-      return item.id === id;
-    })[0];
+  return object.map((item, i) => {
+    return {...item, index: i};
+  }).filter(item => {
+    return item.id === id;
+  })[0];
 };
 
 const FilterItem = (id, object) => {
@@ -38,23 +36,22 @@ const FilterTasks = (tasks, status) => {
   });
 };
 
-
-const FindItem = (taskId,object) => {
+const FindItem = (taskId, object) => {
   let currItem = Util.GetItemWithIndex(taskId, object.active);
   currItem = currItem
-    ? currItem
-    : Util.GetItemWithIndex(taskId, object.pending);
+      ? currItem
+      : Util.GetItemWithIndex(taskId, object.pending);
   currItem = currItem
-    ? currItem
-    : Util.GetItemWithIndex(taskId, object.finished);
+      ? currItem
+      : Util.GetItemWithIndex(taskId, object.finished);
 
   return currItem;
 };
 
-const Notificacion = (message,icon) => {
+const Notificacion = (message, icon) => {
   notification.open({
     message: message,
-    icon: <Icon type={icon} style={{ color: '#108ee9' }} />,
+    icon: <Icon type={icon} style={{color: '#108ee9'}}/>,
   });
 };
 
@@ -65,7 +62,7 @@ const Util = {
   FilterItem,
   FilterTasks,
   FindItem,
-  Notificacion
+  Notificacion,
 };
 
 export default Util;
