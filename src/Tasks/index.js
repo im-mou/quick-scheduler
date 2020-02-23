@@ -1,14 +1,18 @@
 import React from 'react';
+import Task from '../Task';
 
 const Tasks = function(props) {
-  return (
-      <div className={'section ' + props.className}>
-        <div className="header">{props.header}</div>
-        <div className="items">
-          {props.children}
+    // generate tasks
+    const tasks = (props.tasks || []).map((task, key) => (
+        <Task key={key} task={task} status={props.status} action={props.action} />
+    ));
+
+    return (
+        <div className={'section ' + (!props.tasks.length ? 'hidden' : '')}>
+            <div className="header">{props.header}</div>
+            <div className="items">{tasks}</div>
         </div>
-      </div>
-  );
+    );
 };
 
 export default Tasks;

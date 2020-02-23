@@ -3,7 +3,6 @@ import update from 'immutability-helper';
 import PropTypes from 'prop-types';
 
 import ControlBar from './ControlBar';
-import Items from './Items';
 import Tasks from './Tasks';
 
 import Util from './Utils';
@@ -50,8 +49,6 @@ class App extends React.Component {
             const updatedTasks = [...state.pending, _task];
             return {pending: updatedTasks};
         });
-        // show message
-        // Util.Notificacion(task.title + " has been created", ICON[ACTIONS.NEW]);
     };
 
     play = taskId => {
@@ -130,8 +127,6 @@ class App extends React.Component {
             finished: update(this.state.finished, {$push: [updatedTask]}),
         });
 
-        // play sound
-        Beep1.play();
 
         // show message
         Util.Notificacion(
@@ -206,6 +201,9 @@ class App extends React.Component {
 
             // clear timer if target is reached
             if (currItem.elapsedTime >= currItem.totalTime) {
+                // play sound
+                Beep1.play();
+
                 return this.done(taskId);
             }
 
@@ -242,7 +240,6 @@ class App extends React.Component {
         });
     };
 
-    // TODO: Use React Context API to render the items and share state.
     render() {
         return (
             <div className="App">
@@ -262,44 +259,23 @@ class App extends React.Component {
                 <div className="task-wrapper">
                     <EmptyState {...this.state} />
                     <Tasks
-                        className={!this.state.active.length ? 'hidden' : ''}
                         header="Active Tasks"
-                    >
-                        <Items
-                            tasks={Util.FilterTasks(
-                                this.state.active,
-                                TASK_STATES.ACTIVE
-                            )}
-                            status={TASK_STATES.ACTIVE}
-                            action={this._action}
-                        />
-                    </Tasks>
+                        tasks={this.state.active}
+                        status={TASK_STATES.ACTIVE}
+                        action={this._action}
+                    />
                     <Tasks
-                        className={!this.state.pending.length ? 'hidden' : ''}
                         header="Pending"
-                    >
-                        <Items
-                            tasks={Util.FilterTasks(
-                                this.state.pending,
-                                TASK_STATES.PENDNING
-                            )}
-                            status={TASK_STATES.PENDNING}
-                            action={this._action}
-                        />
-                    </Tasks>
+                        tasks={this.state.pending}
+                        status={TASK_STATES.PENDNING}
+                        action={this._action}
+                    />
                     <Tasks
-                        className={!this.state.finished.length ? 'hidden' : ''}
                         header="Completed"
-                    >
-                        <Items
-                            tasks={Util.FilterTasks(
-                                this.state.finished,
-                                TASK_STATES.FINISHED
-                            )}
-                            status={TASK_STATES.FINISHED}
-                            action={this._action}
-                        />
-                    </Tasks>
+                        tasks={this.state.finished}
+                        status={TASK_STATES.FINISHED}
+                        action={this._action}
+                    />
                 </div>
             </div>
         );

@@ -1,68 +1,80 @@
 import React from 'react';
+import moment from 'moment';
 import {notification, Icon} from 'antd';
 
 const UpdateItem = (id, object, data) => {
-  return object.map(item => {
-    if (item.id === id) {
-      return {...item, ...data};
-    }
-    return item;
-  });
+    return object.map(item => {
+        if (item.id === id) {
+            return {...item, ...data};
+        }
+        return item;
+    });
 };
 
 const GetItem = (id, object) => {
-  return object.filter((item, index) => {
-    return (item.id === id);
-  })[0];
+    return object.filter((item, index) => {
+        return item.id === id;
+    })[0];
 };
 
 const GetItemWithIndex = (id, object) => {
-  return object.map((item, i) => {
-    return {...item, index: i};
-  }).filter(item => {
-    return item.id === id;
-  })[0];
+    return object
+        .map((item, i) => {
+            return {...item, index: i};
+        })
+        .filter(item => {
+            return item.id === id;
+        })[0];
 };
 
 const FilterItem = (id, object) => {
-  return object.filter(item => {
-    return item.id !== id;
-  });
+    return object.filter(item => {
+        return item.id !== id;
+    });
 };
 
 const FilterTasks = (tasks, status) => {
-  return tasks.filter(item => {
-    return item.status === status;
-  });
+    return tasks.filter(item => {
+        return item.status === status;
+    });
 };
 
 const FindItem = (taskId, object) => {
-  let currItem = Util.GetItemWithIndex(taskId, object.active);
-  currItem = currItem
-      ? currItem
-      : Util.GetItemWithIndex(taskId, object.pending);
-  currItem = currItem
-      ? currItem
-      : Util.GetItemWithIndex(taskId, object.finished);
+    let currItem = Util.GetItemWithIndex(taskId, object.active);
+    currItem = currItem
+        ? currItem
+        : Util.GetItemWithIndex(taskId, object.pending);
+    currItem = currItem
+        ? currItem
+        : Util.GetItemWithIndex(taskId, object.finished);
 
-  return currItem;
+    return currItem;
 };
 
 const Notificacion = (message, icon) => {
-  notification.open({
-    message: message,
-    icon: <Icon type={icon} style={{color: '#108ee9'}}/>,
-  });
+    notification.open({
+        message: message,
+        icon: <Icon type={icon} style={{color: '#108ee9'}} />,
+    });
+};
+
+const getTime = time => {
+    if (time >= 3600000) {
+        return moment(time - 1).toObject().hours + 'h';
+    } else {
+        return moment(time).toObject().minutes + 'm';
+    }
 };
 
 const Util = {
-  UpdateItem,
-  GetItem,
-  GetItemWithIndex,
-  FilterItem,
-  FilterTasks,
-  FindItem,
-  Notificacion,
+    UpdateItem,
+    GetItem,
+    GetItemWithIndex,
+    FilterItem,
+    FilterTasks,
+    FindItem,
+    Notificacion,
+    getTime,
 };
 
 export default Util;

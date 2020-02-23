@@ -1,24 +1,19 @@
 export const getAllTasks = () => {
-
-  return {};
+    return {};
 };
 
-export const getTask = (taskId) => {
-
-  return {};
+export const getTask = taskId => {
+    return {};
 };
 
-export const createTask = (task) => {
-
-  return true;
+export const createTask = task => {
+    return true;
 };
 
 export const updateTask = (taskId, task) => {
-
-  return {};
+    return {};
 };
 
-export const deleteTask = (taskId) => {
-
-  return true;
+export const deleteTask = taskId => {
+    return true;
 };
