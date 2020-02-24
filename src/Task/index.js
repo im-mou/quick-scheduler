@@ -33,7 +33,7 @@ const Task = function({task, status, action}) {
                                 value={
                                     Date.now() +
                                     task.totalTime -
-                                    task.elapsedTime
+                                    task.elapsedTime + 1000 // add an extra second
                                 }
                             />
                         </div>

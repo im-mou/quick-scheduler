@@ -27,7 +27,7 @@ small.muted {
 }
 
 .App {
-    max-width: 450px;
+    max-width: 500px;
     margin: 0 auto;
     padding: 0 10px;
 }
@@ -133,6 +133,12 @@ small.muted {
 .control-bar {
     margin-bottom: 5px;
     border: 1px solid #ccc;
+    border-bottom-right-radius: 25px;
+
+    overflow: hidden;
+}
+.control-bar .ant-menu {
+    border-bottom-color:transparent;
 }
 
 .control-bar .ant-input {
@@ -150,13 +156,26 @@ small.muted {
     padding: 0 10px !important;
 }
 
-.control-bar .ant-menu-item-selected:not(:last-child) {
+/* .control-bar .ant-menu-item-selected:not(:last-child) */
+.control-bar .ant-menu-item-selected {
     border-bottom: 2px solid transparent;
     font-weight: bold;
 }
 
-.control-bar .ant-menu-item-active:not(:last-child) {
+.control-bar .ant-menu-item.ant-menu-item-selected.numberInput {
+    border-bottom: 2px solid #1890ff;
+}
+
+/* .control-bar .ant-menu-item-active:not(:last-child) {
     border-bottom: 2px solid transparent;
+} */
+
+.control-bar .ant-menu-item:hover {
+    border-bottom: 2px solid transparent;
+}
+
+.control-bar .mobile-create-button-main .anticon {
+    margin: auto;
 }
 
 .task-wrapper {
@@ -165,6 +184,7 @@ small.muted {
 
 .mobile-create-button {
     margin: 10px;
+    float: right;
 }
 
 .hide-on-mobile {
@@ -186,5 +206,14 @@ small.muted {
 
     .logo {
         height: 80px;
+    }
+
+    .hide-on-mobile.mobile-create-button-main {
+        padding-left: 0px !important;
+        display: none;
+    }
+    
+    .control-bar .ant-menu {
+        border-bottom-color:#e8e8e8;
     }
 }

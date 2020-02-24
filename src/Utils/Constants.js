@@ -13,6 +13,7 @@ export const TASK_ACTIONS = {
     REMOVE: 'remove',
     RENAME: 'rename',
     NEW: 'new',
+    CREATE: 'create',
 };
 
 export const TASK_ACTIONS_ICONS = {
@@ -23,6 +24,7 @@ export const TASK_ACTIONS_ICONS = {
     [TASK_ACTIONS.RESTART]: 'undo',
     [TASK_ACTIONS.REMOVE]: 'delete',
     [TASK_ACTIONS.NEW]: 'download',
+    [TASK_ACTIONS.CREATE]: 'download',
 };
 
 export const TASK_ACTIONS_DESC = {
@@ -33,6 +35,7 @@ export const TASK_ACTIONS_DESC = {
     [TASK_ACTIONS.RESTART]: 'Restart',
     [TASK_ACTIONS.REMOVE]: 'Remove',
     [TASK_ACTIONS.RENAME]: 'Rename',
+    [TASK_ACTIONS.CREATE]: 'Create',
 };
 
 export const TASK_ACTIONS_LIST = {
