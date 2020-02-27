@@ -1,5 +1,6 @@
 import React from 'react';
 import Controls from './Controls';
+import TimeSlider from '../TimeSlider';
 import {TASK_STATES as STATUS} from '../Utils/Constants';
 import {Progress, Statistic} from 'antd';
 
@@ -49,11 +50,24 @@ const Task = function({task, status, action}) {
                         </div>
                     </div>
                 </div>
-                <Progress
-                    strokeWidth={3}
-                    percent={(task.elapsedTime / task.time.total) * 100}
-                    showInfo={false}
-                />
+                {
+                    !task.editMode ? 
+                    (
+                        <Progress
+                            strokeWidth={3}
+                            percent={(task.elapsedTime / task.time.total) * 100}
+                            showInfo={false}
+                        />
+                    )
+                    :
+                    (
+                        <TimeSlider
+                            value={task.time.m}
+                            //onChange={setMinutes}
+                            visible={true}
+                        />
+                    )
+                }
             </div>
         </div>
     );

@@ -186,6 +186,11 @@ small.muted {
     margin: auto;
 }
 
+.control-bar .ant-btn {
+    line-height: 1.5;
+}
+
+
 
 /**
  * Time Slider

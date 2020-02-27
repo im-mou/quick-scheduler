@@ -14,6 +14,7 @@ export const TASK_ACTIONS = {
     RENAME: 'rename',
     NEW: 'new',
     CREATE: 'create',
+    EDIT: 'edit',
 };
 
 export const TASK_ACTIONS_ICONS = {
@@ -36,6 +37,7 @@ export const TASK_ACTIONS_DESC = {
     [TASK_ACTIONS.REMOVE]: 'Remove',
     [TASK_ACTIONS.RENAME]: 'Rename',
     [TASK_ACTIONS.CREATE]: 'Create',
+    [TASK_ACTIONS.EDIT]: 'Edit',
 };
 
 export const TASK_ACTIONS_LIST = {
@@ -45,5 +47,5 @@ export const TASK_ACTIONS_LIST = {
 };
 
 export const TASK_ACTIONS_MORE_OPTIONS = {
-    [TASK_STATES.PENDNING]: [TASK_ACTIONS.RENAME, TASK_ACTIONS.REMOVE],
+    [TASK_STATES.PENDNING]: [TASK_ACTIONS.RENAME, TASK_ACTIONS.REMOVE, TASK_ACTIONS.EDIT],
 };

@@ -44,6 +44,7 @@ class App extends React.Component {
             isPaused: false,
             startTime: 0,
             elapsedTime: 0,
+            editMode: false,
         };
         this.setState(state => {
             const updatedTasks = [...state.pending, _task];
@@ -192,6 +193,11 @@ class App extends React.Component {
             renameModal: false,
             renameTask: {},
         });
+    };
+
+    edit = id => {
+        // hide modal and update task name
+        console.log('edit has been invocked')
     };
 
     startTimer = taskId => {
