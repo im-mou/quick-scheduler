@@ -1,5 +1,4 @@
 import React from 'react';
-import Util from '../Utils';
 import Controls from './Controls';
 import {TASK_STATES as STATUS} from '../Utils/Constants';
 import {Progress, Statistic} from 'antd';
@@ -23,7 +22,7 @@ const Task = function({task, status, action}) {
             <div className="row">
                 <div className="item-content">
                     <div className="row pre-header">
-                        {Util.getTime(task.totalTime)}
+                        {task.time.h+'h '+task.time.m+'m'}
                     </div>
                     <div className="row">
                         <div className="col title">{task.title}</div>
@@ -33,7 +32,7 @@ const Task = function({task, status, action}) {
                                     visible={isActive}
                                     value={
                                         Date.now() +
-                                        task.totalTime -
+                                        task.time.total -
                                         task.elapsedTime +
                                         1000 // add an extra second
                                     }
@@ -51,7 +50,7 @@ const Task = function({task, status, action}) {
                 </div>
                 <Progress
                     strokeWidth={3}
-                    percent={(task.elapsedTime / task.totalTime) * 100}
+                    percent={(task.elapsedTime / task.time.total) * 100}
                     showInfo={false}
                 />
             </div>

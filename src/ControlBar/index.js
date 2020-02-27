@@ -5,47 +5,63 @@ import Util from '../Utils';
 import Anim from '../Utils/animations';
 import {TASK_ACTIONS_ICONS, TASK_ACTIONS} from '../Utils/Constants';
 
+const menuItems = [1, 2, 3, 5];
 
 const ControlBar = function(props) {
-    const [title, setTitle] = useState('');
-    const [timer, setTimer] = useState(Math.pow(60, 2) * 1000); // 1hour by default
-    const [selectedTime, setselectedTime] = useState('1h');
-    const [minutes, setMinutes] = useState(15);
-    const [optionsVisibility, setOptionsVisibility] = useState(false);
+    const [title, setTitle] = useState(props.title || 'title');
+    const [hours, setHours] = useState(props.hours || 1); // 1hour by default
+    const [selectedHour, setselectedHour] = useState('1h');
+    const [minutes, setMinutes] = useState(props.minutes || 15);
+    const [optionsVisibility, setOptionsVisibility] = useState(
+        props.visible || false
+    );
 
     const handleTitleChange = function(e) {
         setTitle(e.currentTarget.value);
     };
 
-    const handleCustomTimer = function(value) {
-        //setMinutes(Math.floor(value * 60 * 1000)); /* mili seconds */
-        setMinutes(value); /* mili seconds */
+    const chooseMinutes = function(time) {
+        setMinutes(time);
     };
 
-    const chooseTime = function(e, time) {
-        //setTimer(time * Math.pow(60, 2) * 1000); /* mili seconds */
-        setTimer(time);
+    const chooseHour = function(e, time) {
+        setHours(time);
         if (e) {
             animate(e.domEvent, '#F64040');
         }
     };
 
-    const handleHoursClick = function(e) {
-        setselectedTime(e.key);
+    const selectHoursMenuItem = function(e) {
+        setselectedHour(e.key);
     };
+
     const createTask = function(e) {
-        if (title === '' || timer === '') {
+        if (title === '' || hours + minutes <= 0) {
             // show message
             Util.Notificacion(
-                'Title or Timer cannot be empty',
+                'Title or hours cannot be empty',
                 'exclamation-circle'
             );
             return;
         }
-        props.createTask({title: title, totalTime: timer + minutes});
+
+        // execute method -> miliseconds
+        const _minutes = Math.floor(minutes * 60 * 1000);
+        const _hours = hours * Math.pow(60, 2) * 1000;
+        props.createTask({
+            title: title,
+            time: {total: _hours + _minutes, h: hours, m: minutes},
+        });
+
+        // reset state
+        reset();
+    };
+
+    const reset = function() {
         setTitle('');
-        chooseTime(null, 1);
-        setselectedTime('1h');
+        setHours(1);
+        setselectedHour('1h');
+        setMinutes(15);
     };
 
     // create task if "enter" is pressed
@@ -94,7 +110,7 @@ const ControlBar = function(props) {
                                         <Icon type="minus" />
                                     </Button>
                                     <Button type="link">
-                                        <strong>{selectedTime} </strong>{' '}
+                                        <strong>{selectedHour} </strong>{' '}
                                         <span className="muted">
                                             {minutes + ' min'}
                                         </span>
@@ -107,34 +123,18 @@ const ControlBar = function(props) {
                             </Row>
                         ) : (
                             <Menu
-                                onClick={handleHoursClick}
-                                selectedKeys={[selectedTime]}
+                                onClick={selectHoursMenuItem}
+                                selectedKeys={[selectedHour]}
                                 mode="horizontal"
                             >
-                                <Menu.Item
-                                    onClick={e => chooseTime(e, 1)}
-                                    key="1h"
-                                >
-                                    <span>1h</span>
-                                </Menu.Item>
-                                <Menu.Item
-                                    onClick={e => chooseTime(e, 2)}
-                                    key="2h"
-                                >
-                                    <span>2h</span>
-                                </Menu.Item>
-                                <Menu.Item
-                                    onClick={e => chooseTime(e, 3)}
-                                    key="3h"
-                                >
-                                    <span>3h</span>
-                                </Menu.Item>
-                                <Menu.Item
-                                    onClick={e => chooseTime(e, 5)}
-                                    key="4h"
-                                >
-                                    <span>5h</span>
-                                </Menu.Item>
+                                {menuItems.map(item => (
+                                    <Menu.Item
+                                        onClick={e => chooseHour(e, item)}
+                                        key={item + 'h'}
+                                    >
+                                        <span>{item + 'h'}</span>
+                                    </Menu.Item>
+                                ))}
                             </Menu>
                         )}
                     </Col>
@@ -176,7 +176,7 @@ const ControlBar = function(props) {
 
                 <TimeSlider
                     value={minutes}
-                    onChange={handleCustomTimer}
+                    onChange={chooseMinutes}
                     visible={optionsVisibility}
                 />
             </div>

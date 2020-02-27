@@ -39,7 +39,7 @@ class App extends React.Component {
         // add new task in to the pending list
         const _task = {
             id: Math.floor(Date.now()),
-            ...task, // { title, totalTime }
+            ...task, // { title, time : {total:(miliseconds), h:(hours), m:(minutes)} }
             status: TASK_STATES.PENDNING,
             isPaused: false,
             startTime: 0,
@@ -199,7 +199,7 @@ class App extends React.Component {
             const currItem = Util.GetItemWithIndex(taskId, this.state.active);
 
             // clear timer if target is reached
-            if (currItem.elapsedTime >= currItem.totalTime) {
+            if (currItem.elapsedTime >= currItem.time.total) {
                 // play sound
                 Beep1.play();
 
@@ -253,7 +253,7 @@ class App extends React.Component {
                 ) : (
                     ''
                 )}
-                <Row style={{marginTop:40,marginBottom:25}}>
+                <Row style={{marginTop: 40, marginBottom: 25}}>
                     <Col span={12}>
                         <Logo />
                     </Col>
@@ -361,7 +361,7 @@ const EmptyState = props => {
 const Logo = () => {
     return (
         // <div className="logo">
-            <img alt="Quick Scheduler" src="logo.png" width={120} />
+        <img alt="Quick Scheduler" src="logo.png" width={120} />
         // </div>
     );
 };

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Slider, Divider} from 'antd';
 import {motion, AnimatePresence} from 'framer-motion';
 
