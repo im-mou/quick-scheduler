@@ -8,9 +8,8 @@ import {TASK_ACTIONS_ICONS, TASK_ACTIONS} from '../Utils/Constants';
 const menuItems = [1, 2, 3, 5];
 
 const ControlBar = function(props) {
-    const [title, setTitle] = useState(props.title || 'title');
+    const [title, setTitle] = useState(props.title || '');
     const [hours, setHours] = useState(props.hours || 1); // 1hour by default
-    const [selectedHour, setselectedHour] = useState('1h');
     const [minutes, setMinutes] = useState(props.minutes || 15);
     const [optionsVisibility, setOptionsVisibility] = useState(
         props.visible || false
@@ -20,19 +19,14 @@ const ControlBar = function(props) {
         setTitle(e.currentTarget.value);
     };
 
-    const chooseMinutes = function(time) {
-        setMinutes(time);
-    };
-
     const chooseHour = function(e, time) {
-        setHours(time);
-        if (e) {
-            animate(e.domEvent, '#F64040');
+        // set min|max requirment
+        if (time >= 0 && time <= 24) {
+            setHours(time);
         }
-    };
-
-    const selectHoursMenuItem = function(e) {
-        setselectedHour(e.key);
+        if (e) {
+            animate(e, '#F64040');
+        }
     };
 
     const createTask = function(e) {
@@ -50,7 +44,7 @@ const ControlBar = function(props) {
         const _hours = hours * Math.pow(60, 2) * 1000;
         props.createTask({
             title: title,
-            time: {total: _hours + _minutes, h: hours, m: minutes},
+            time: {total: _hours + _minutes, h: hours, m: (optionsVisibility ? minutes : 0)},
         });
 
         // reset state
@@ -60,8 +54,7 @@ const ControlBar = function(props) {
     const reset = function() {
         setTitle('');
         setHours(1);
-        setselectedHour('1h');
-        setMinutes(15);
+        // setMinutes(15);
     };
 
     // create task if "enter" is pressed
@@ -72,9 +65,14 @@ const ControlBar = function(props) {
     };
 
     const toggleOptions = function(e) {
-        animate(e.domEvent);
+        if (!hours) {
+            setHours(1);
+        }
+        //setMinutes(optionsVisibility ? 0 : minutes ? minutes : 15 );
+
         // update state
         setOptionsVisibility(!optionsVisibility);
+        animate(e.domEvent);
     };
 
     const animate = function(e, color) {
@@ -106,16 +104,29 @@ const ControlBar = function(props) {
                                 gutter={[8, 8]}
                             >
                                 <Col>
-                                    <Button shape="circle" type="dashed">
+                                    <Button
+                                        disabled={hours ? false : true}
+                                        shape="circle"
+                                        type="dashed"
+                                        onClick={() =>
+                                            chooseHour(null, hours - 1)
+                                        }
+                                    >
                                         <Icon type="minus" />
                                     </Button>
                                     <Button type="link">
-                                        <strong>{selectedHour} </strong>{' '}
+                                        <strong>{hours + 'h '} </strong>
                                         <span className="muted">
                                             {minutes + ' min'}
                                         </span>
                                     </Button>
-                                    <Button shape="round" type="dashed">
+                                    <Button
+                                        shape="round"
+                                        type="dashed"
+                                        onClick={() =>
+                                            chooseHour(null, hours + 1)
+                                        }
+                                    >
                                         <Icon type="plus" />
                                         1h
                                     </Button>
@@ -123,13 +134,14 @@ const ControlBar = function(props) {
                             </Row>
                         ) : (
                             <Menu
-                                onClick={selectHoursMenuItem}
-                                selectedKeys={[selectedHour]}
+                                selectedKeys={[hours + 'h']}
                                 mode="horizontal"
                             >
                                 {menuItems.map(item => (
                                     <Menu.Item
-                                        onClick={e => chooseHour(e, item)}
+                                        onClick={e =>
+                                            chooseHour(e.domEvent, item)
+                                        }
                                         key={item + 'h'}
                                     >
                                         <span>{item + 'h'}</span>
@@ -162,6 +174,7 @@ const ControlBar = function(props) {
                                 <Button
                                     type="dashed"
                                     shape="round"
+                                    disabled={hours + minutes ? false : true}
                                     icon={
                                         TASK_ACTIONS_ICONS[TASK_ACTIONS.CREATE]
                                     }
@@ -176,7 +189,7 @@ const ControlBar = function(props) {
 
                 <TimeSlider
                     value={minutes}
-                    onChange={chooseMinutes}
+                    onChange={setMinutes}
                     visible={optionsVisibility}
                 />
             </div>

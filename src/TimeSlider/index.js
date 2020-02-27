@@ -41,13 +41,12 @@ const TimeSlider = function(props) {
                             marks={marks}
                             tipFormatter={formatter}
                             dots={true}
-                            defaultValue={15}
+                            value={props.value}
                             max={60}
                             step={5}
                             included={true}
                             tooltipPlacement="bottom"
                             onChange={props.onChange}
-                            // tooltipVisible={true}
                         />
                     </div>
                 </motion.section>

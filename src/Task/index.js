@@ -22,7 +22,8 @@ const Task = function({task, status, action}) {
             <div className="row">
                 <div className="item-content">
                     <div className="row pre-header">
-                        {task.time.h+'h '+task.time.m+'m'}
+                        {task.time.h ? task.time.h + 'h ' : ''}
+                        {task.time.m ? task.time.m + 'm' : ''}
                     </div>
                     <div className="row">
                         <div className="col title">{task.title}</div>
