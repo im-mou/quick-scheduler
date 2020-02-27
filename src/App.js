@@ -12,7 +12,7 @@ import {
     TASK_ACTIONS as ACTIONS,
 } from './Utils/Constants';
 
-import {Modal, Input, Empty} from 'antd';
+import {Modal, Input, Empty, Icon, Row, Col} from 'antd';
 import './App.css';
 
 import {Beep1} from './Assets/Sounds/Beep';
@@ -126,7 +126,6 @@ class App extends React.Component {
             }),
             finished: update(this.state.finished, {$push: [updatedTask]}),
         });
-
 
         // show message
         Util.Notificacion(
@@ -254,7 +253,14 @@ class App extends React.Component {
                 ) : (
                     ''
                 )}
-                <Logo />
+                <Row style={{marginTop:40,marginBottom:25}}>
+                    <Col span={12}>
+                        <Logo />
+                    </Col>
+                    <Col className="right" span={12}>
+                        <Icon type="menu" />
+                    </Col>
+                </Row>
                 <ControlBar createTask={this.createTask} />
                 <div className="task-wrapper">
                     <EmptyState {...this.state} />
@@ -354,8 +360,8 @@ const EmptyState = props => {
 // Todo: Create separate file for this method
 const Logo = () => {
     return (
-        <div className="logo">
+        // <div className="logo">
             <img alt="Quick Scheduler" src="logo.png" width={120} />
-        </div>
+        // </div>
     );
 };

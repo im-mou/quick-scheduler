@@ -1,11 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import TimeSlider from '../TimeSlider';
-import {Button, Menu, Icon, Input, Typography, Row, Col} from 'antd';
+import {Button, Menu, Icon, Input, Row, Col} from 'antd';
 import Util from '../Utils';
 import Anim from '../Utils/animations';
 import {TASK_ACTIONS_ICONS, TASK_ACTIONS} from '../Utils/Constants';
 
-const {Title} = Typography;
 
 const ControlBar = function(props) {
     const [title, setTitle] = useState('');
@@ -102,7 +101,7 @@ const ControlBar = function(props) {
                                     </Button>
                                     <Button shape="round" type="dashed">
                                         <Icon type="plus" />
-                                        hours
+                                        1h
                                     </Button>
                                 </Col>
                             </Row>
