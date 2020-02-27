@@ -25,6 +25,15 @@ small.muted {
 .right {
     text-align: right;
 }
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Opera and Firefox */
+  }
 
 .App {
     max-width: 500px;
@@ -133,12 +142,11 @@ small.muted {
 .control-bar {
     margin-bottom: 5px;
     border: 1px solid #ccc;
-    border-bottom-right-radius: 25px;
-
-    overflow: hidden;
+    /* border-bottom-right-radius: 25px; */
+    /* overflow: hidden; */
 }
 .control-bar .ant-menu {
-    border-bottom-color:transparent;
+    border-bottom-color: transparent;
 }
 
 .control-bar .ant-input {
@@ -174,9 +182,129 @@ small.muted {
     border-bottom: 2px solid transparent;
 }
 
-.control-bar .mobile-create-button-main .anticon {
+.control-bar .anticon {
     margin: auto;
 }
+
+
+/**
+ * Time Slider
+ *
+ * Modifies default ant.design css rules to adapt the design to our requirements.
+ */
+
+.timer-slider{
+    height: 28px;
+    position: relative;
+    /* background-color: #efefef; */
+}
+.timer-slider .ant-slider {
+    position: relative;
+    margin-bottom: 0;
+    margin-right: 25px;
+    margin-left: 25px;
+    top:18px;
+}
+
+.timer-slider .ant-slider-rail {
+    display: none;
+}
+
+.timer-slider .ant-slider-track {
+    height: 6px;
+    border-radius: 0;
+    background-color:#1890ff;
+    opacity: 0.15;
+    
+}
+
+.timer-slider .ant-slider-step {
+
+}
+
+.timer-slider .ant-slider-dot {
+    border-radius: 0;
+    border: 0;
+    width: 1px;
+    background-color: transparent;
+    margin: 0;
+}
+.timer-slider .ant-slider-dot-active {
+    background-color: #1890ff !important;
+    opacity: 0.5;
+}
+
+.timer-slider .ant-slider-dot:nth-child(-n+5) {
+    background-color: #ccc;
+    width: 1px;
+    height: 12px;
+    top: -6px;
+}
+
+.timer-slider .ant-slider-mark {
+    font-size: 10px;
+    top: -18px;
+}
+.timer-slider .ant-slider-mark-text {
+    color: #000;
+    opacity: 0.35;
+}
+.timer-slider .ant-slider-mark-text-active {
+    opacity: 0.7;
+}
+
+
+.timer-slider .ant-slider-handle {
+    border-radius: 0;
+    border: 0;
+    width: 40px; 
+    height: 50px; 
+    background-color: transparent;
+    bottom: -20px;
+}
+.timer-slider .ant-slider-handle:focus {
+    -webkit-box-shadow:none;
+    box-shadow:none;
+}
+
+.timer-slider .ant-slider-handle:after
+{
+    content: '';
+    display: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-47%);
+    width: 20px;
+    height: 5px;
+    background-color: transparent;
+    border-radius: 10px;
+    border: 1px solid #bbb;
+    bottom: 12px;
+
+    transition: all 0.2s;
+}
+.timer-slider:hover .ant-slider-handle:after {
+    display: block;
+}
+.timer-slider .ant-slider-handle:hover:after {
+    /* border: 1px solid #1890ff; */
+    width: 25px;
+}
+.timer-slider .ant-slider-handle:focus:after {
+    display: block;
+    border: 1px solid #1890ff;
+}
+.timer-slider .ant-slider-handle:active:after {
+    /* background-color: #1890ff; */
+    height: 7px;
+    /* width: 25px; */
+    bottom: 11px;
+}
+
+.ant-divider-horizontal {
+    margin: 0;
+}
+
 
 .task-wrapper {
     margin-top: 50px;
@@ -212,8 +340,12 @@ small.muted {
         padding-left: 0px !important;
         display: none;
     }
-    
-    .control-bar .ant-menu {
-        border-bottom-color:#e8e8e8;
+
+    /* .control-bar .ant-menu {
+        border-bottom-color: #e8e8e8;
+    } */
+
+    .timer-slider .ant-slider-handle:after {
+        display: block;
     }
 }

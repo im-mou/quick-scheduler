@@ -66,6 +66,18 @@ const getTime = time => {
     }
 };
 
+// calculates dom object position relative to the screen
+const getObjOffset = el => {
+    var rect = el.getBoundingClientRect(),
+        scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+        scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    return {top: rect.top + scrollTop, left: rect.left + scrollLeft};
+};
+// calculates dom object size
+const getObjSize = el => {
+    return {h: el.offsetHeight, w: el.offsetWidth};
+};
+
 const Util = {
     UpdateItem,
     GetItem,
@@ -75,6 +87,8 @@ const Util = {
     FindItem,
     Notificacion,
     getTime,
+    getObjOffset,
+    getObjSize,
 };
 
 export default Util;

@@ -4,7 +4,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mojs/core": "^0.288.2",
     "antd": "^3.26.9",
+    "framer-motion": "^1.8.4",
     "immutability-helper": "^3.0.1",
     "moment": "^2.24.0",
     "react": "^16.12.0",

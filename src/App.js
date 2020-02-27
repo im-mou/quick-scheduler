@@ -341,6 +341,7 @@ const EmptyState = props => {
         return (
             <Empty
                 style={{marginTop: 130}}
+                className="noselect"
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                 description={<span>No tasks at the moment</span>}
             />
