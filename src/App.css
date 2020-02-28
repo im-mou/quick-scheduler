@@ -27,13 +27,13 @@ small.muted {
 }
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
-      -webkit-user-select: none; /* Safari */
-       -khtml-user-select: none; /* Konqueror HTML */
-         -moz-user-select: none; /* Old versions of Firefox */
-          -ms-user-select: none; /* Internet Explorer/Edge */
-              user-select: none; /* Non-prefixed version, currently
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome, Opera and Firefox */
-  }
+}
 
 .App {
     max-width: 500px;
@@ -190,7 +190,9 @@ small.muted {
     line-height: 1.5;
 }
 
-
+.control-bar .ant-btn:not(.ant-btn-sm) > .anticon {
+    line-height: 2.5;
+}
 
 /**
  * Time Slider
@@ -198,7 +200,7 @@ small.muted {
  * Modifies default ant.design css rules to adapt the design to our requirements.
  */
 
-.timer-slider{
+.timer-slider {
     height: 28px;
     position: relative;
     /* background-color: #efefef; */
@@ -208,7 +210,7 @@ small.muted {
     margin-bottom: 0;
     margin-right: 25px;
     margin-left: 25px;
-    top:18px;
+    top: 18px;
 }
 
 .timer-slider .ant-slider-rail {
@@ -218,13 +220,12 @@ small.muted {
 .timer-slider .ant-slider-track {
     height: 6px;
     border-radius: 0;
-    background-color:#1890ff;
+    background-color: #1890ff;
     opacity: 0.15;
-    
+    transition: all 0.2s;
 }
 
 .timer-slider .ant-slider-step {
-
 }
 
 .timer-slider .ant-slider-dot {
@@ -239,7 +240,7 @@ small.muted {
     opacity: 0.5;
 }
 
-.timer-slider .ant-slider-dot:nth-child(-n+5) {
+.timer-slider .ant-slider-dot:nth-child(-n + 5) {
     background-color: #ccc;
     width: 1px;
     height: 12px;
@@ -258,22 +259,24 @@ small.muted {
     opacity: 0.7;
 }
 
-
 .timer-slider .ant-slider-handle {
     border-radius: 0;
     border: 0;
-    width: 40px; 
-    height: 50px; 
+    width: 50px;
+    height: 50px;
     background-color: transparent;
     bottom: -20px;
+    cursor: grab;
+}
+.timer-slider .ant-slider-handle:active {
+    cursor: grabbing;
 }
 .timer-slider .ant-slider-handle:focus {
-    -webkit-box-shadow:none;
-    box-shadow:none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
-.timer-slider .ant-slider-handle:after
-{
+.timer-slider .ant-slider-handle:after {
     content: '';
     display: none;
     position: absolute;
@@ -306,10 +309,33 @@ small.muted {
     bottom: 11px;
 }
 
+.pop {
+    /* transform: scale(1.2,1.2); */
+    color: #40a9ff;
+}
+
+
+
+.step-counter .ant-btn-link {
+    transition: all 0.1s !important;
+    color: #aaa;
+}
+.step-counter .ant-btn-link:hover {
+    color: #40a9ff;
+}
+.step-counter .ant-btn-link:active {
+    transform: scale(1.2,1.2);
+}
+
+.step-counter .ant-btn-link:nth-child(1) {
+    padding-left: 5px;
+}
+
+
+
 .ant-divider-horizontal {
     margin: 0;
 }
-
 
 .task-wrapper {
     margin-top: 50px;

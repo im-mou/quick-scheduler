@@ -1,6 +1,7 @@
 import mojs from '@mojs/core';
+import Util from './index';
 
-const littleOptions = function(color) {
+const pop = function(color) {
     if (color === undefined) {
         color = '#ccc';
     }
@@ -21,9 +22,18 @@ const littleOptions = function(color) {
         },
     });
 };
+const animate = function(e, color, method) {
+    const pos = Util.getObjOffset(e.currentTarget);
+    const size = Util.getObjSize(e.currentTarget);
+    method((color||undefined))
+        .tune({x: pos.left + size.w / 2, y: pos.top + size.h / 2})
+        .replay();
+};
+
 
 const Animation = {
-    littleOptions,
+    animate,
+    pop,
 };
 
 export default Animation;

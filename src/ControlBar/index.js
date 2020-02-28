@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import TimeSlider from '../TimeSlider';
 import {Button, Menu, Icon, Input, Row, Col} from 'antd';
 import Util from '../Utils';
 import Anim from '../Utils/animations';
+import StepCounter from './StepCounter';
 import {TASK_ACTIONS_ICONS, TASK_ACTIONS} from '../Utils/Constants';
 
 const menuItems = [1, 2, 3, 5];
@@ -11,7 +12,8 @@ const ControlBar = function(props) {
     const [title, setTitle] = useState(props.title || '');
     const [hours, setHours] = useState(props.hours || 1); // 1hour by default
     const [minutes, setMinutes] = useState(props.minutes || 15);
-    const [optionsVisibility, setOptionsVisibility] = useState(
+    const [pop, setPop] = useState({h: false, m: false});
+    const [optionsVisible, setOptionsVisible] = useState(
         props.visible || false
     );
 
@@ -19,14 +21,24 @@ const ControlBar = function(props) {
         setTitle(e.currentTarget.value);
     };
 
+    const handleTimeChange = minutes => {
+        setMinutes(minutes);
+
+        // animate
+        blink({h: false, m: true});
+    };
+
     const chooseHour = function(e, time) {
         // set min|max requirment
-        if (time >= 0 && time <= 24) {
+        if (time >= 0 && time <= 23) {
             setHours(time);
         }
         if (e) {
-            animate(e, '#F64040');
+            Anim.animate(e, '#F64040', Anim.pop);
         }
+
+        // animate
+        blink({h: true, m: false});
     };
 
     const createTask = function(e) {
@@ -44,7 +56,11 @@ const ControlBar = function(props) {
         const _hours = hours * Math.pow(60, 2) * 1000;
         props.createTask({
             title: title,
-            time: {total: _hours + _minutes, h: hours, m: (optionsVisibility ? minutes : 0)},
+            time: {
+                total: _hours + _minutes,
+                h: hours,
+                m: optionsVisible ? minutes : 0, // add minutes if options panel is open
+            },
         });
 
         // reset state
@@ -53,8 +69,6 @@ const ControlBar = function(props) {
 
     const reset = function() {
         setTitle('');
-        setHours(1);
-        // setMinutes(15);
     };
 
     // create task if "enter" is pressed
@@ -68,19 +82,22 @@ const ControlBar = function(props) {
         if (!hours) {
             setHours(1);
         }
-        //setMinutes(optionsVisibility ? 0 : minutes ? minutes : 15 );
+        if (optionsVisible && hours > 5) {
+            setHours(5);
+        }
 
         // update state
-        setOptionsVisibility(!optionsVisibility);
-        animate(e.domEvent);
+        setOptionsVisible(!optionsVisible);
+        Anim.animate(e.domEvent, null, Anim.pop);
     };
 
-    const animate = function(e, color) {
-        const pos = Util.getObjOffset(e.currentTarget);
-        const size = Util.getObjSize(e.currentTarget);
-        Anim.littleOptions(color)
-            .tune({x: pos.left + size.w / 2, y: pos.top + size.h / 2})
-            .replay();
+    const blink = obj => {
+        // animate
+        setPop(obj);
+        setTimeout(() => {
+            setPop({h: false, m: false});
+        }, 200);
+
     };
 
     return (
@@ -98,38 +115,34 @@ const ControlBar = function(props) {
                 </div>
                 <Row>
                     <Col span={16}>
-                        {optionsVisibility ? (
+                        {optionsVisible ? (
                             <Row
                                 style={{paddingLeft: 13, paddingTop: 7}}
                                 gutter={[8, 8]}
                             >
                                 <Col>
-                                    <Button
-                                        disabled={hours ? false : true}
-                                        shape="circle"
-                                        type="dashed"
-                                        onClick={() =>
+                                    <StepCounter
+                                        decDisabled={hours ? false : true}
+                                        onInc={() =>
+                                            chooseHour(null, hours + 1)
+                                        }
+                                        onDec={() =>
                                             chooseHour(null, hours - 1)
                                         }
                                     >
-                                        <Icon type="minus" />
-                                    </Button>
-                                    <Button type="link">
-                                        <strong>{hours + 'h '} </strong>
-                                        <span className="muted">
-                                            {minutes + ' min'}
-                                        </span>
-                                    </Button>
-                                    <Button
-                                        shape="round"
-                                        type="dashed"
-                                        onClick={() =>
-                                            chooseHour(null, hours + 1)
-                                        }
-                                    >
-                                        <Icon type="plus" />
-                                        1h
-                                    </Button>
+                                        <Button shape="round" type="dashed">
+                                            <strong
+                                                className={pop.h ? 'pop' : ''}
+                                            >
+                                                {hours + 'h '}{' '}
+                                            </strong>
+                                            <span
+                                                className={pop.m ? 'pop' : ''}
+                                            >
+                                                {minutes + ' min'}
+                                            </span>
+                                        </Button>
+                                    </StepCounter>
                                 </Col>
                             </Row>
                         ) : (
@@ -160,7 +173,7 @@ const ControlBar = function(props) {
                                 <Button shape="circle" type="dashed">
                                     <Icon
                                         type={
-                                            optionsVisibility
+                                            optionsVisible
                                                 ? 'close-circle'
                                                 : 'setting'
                                         }
@@ -189,8 +202,8 @@ const ControlBar = function(props) {
 
                 <TimeSlider
                     value={minutes}
-                    onChange={setMinutes}
-                    visible={optionsVisibility}
+                    onChange={handleTimeChange}
+                    visible={optionsVisible}
                 />
             </div>
         </>
