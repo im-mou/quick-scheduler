@@ -10,7 +10,7 @@ const Tasks = function(props) {
     return (
         <div className={'section ' + (!props.tasks.length ? 'hidden' : '')}>
             <div className="header">{props.header}</div>
-            <div className="items">{tasks}</div>
+            <div className="tasks">{tasks}</div>
         </div>
     );
 };

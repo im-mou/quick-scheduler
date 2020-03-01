@@ -57,140 +57,162 @@ small.muted {
     margin-bottom: 10px;
 }
 
-.items .item {
+.tasks .task {
     margin-bottom: 10px;
 }
 
-.item {
+.task {
     color: #808080;
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     position: relative;
 }
-.item-content {
+.task:hover {
+    border: 1px solid #b4b2b2;
+}
+
+.task-content {
     width: 100%;
     padding: 10px 15px;
 }
 
-.item .pre-header {
+.task .pre-header {
     font-size: 12px;
-    text-align: right;
+    /* text-align: right; */
 }
 
-.item .title {
+.task .title {
     font-size: 16px;
     font-weight: bold;
     margin-top: 5px;
     margin-bottom: 10px;
 }
 
-.item .footer,
+.task .footer,
 .footer .col {
     align-self: flex-end;
 }
 
-.item .timer {
-    font-size: 20px;
-    font-weight: normal;
-    color: #4d4d4d;
+.task .timer {
+
 }
-.item .footer .controls {
+.task .timer span[class$="-suffix"] {
+    color: rgba(0, 0, 0, 0.5);
+    margin-left: 8px;
+    /* font-style: italic; */
+    font-size: 12px;
 }
 
-.item .ant-progress {
+
+.task .footer .controls {
+}
+
+.task .ant-progress {
+    display: block;
+}
+.task .ant-progress,
+.task .ant-progress + div,
+.task .ant-progress-outer {
     height: 3px;
 }
 
-.item .ant-progress-inner {
-    border-radius: 0px;
+.task .ant-progress-inner {
     background-color: transparent;
     vertical-align: top;
 }
 
-.item .ant-progress-bg {
-    border-radius: 0px;
-}
-
-.item.active .ant-progress-bg {
+.task.active .ant-progress-bg {
     background-color: #56d056;
 }
 
-.item.active {
+.task.active {
     color: #666666;
     background-color: #dbffcb;
     border: none;
+
+}
+.task.edit {
+    color: #666666;
+    background-color: #FFFBE5;
+    border-color: #FFF5C2;
 }
 
-.item.pending .ant-progress-bg {
+.task.pending .ant-progress-bg {
     /* background-color: #ddd; */
 }
 
-.item.finished {
+.task.finished {
     background-color: #ffffff;
     color: #c5c5c5;
 }
 
-.item.finished .ant-progress-bg {
+.task.finished .ant-progress-bg {
     background-color: #dedede;
 }
 
-.item.finished .controls {
+.task.finished .controls {
     background-color: #ffffff;
     color: #c5c5c5;
 }
 
-.control-bar {
+/**
+ * New Task
+ *
+ * Modifies default ant.design css rules to adapt the design to our requirements.
+ */
+.new-task {
     margin-bottom: 5px;
     border: 1px solid #ccc;
     /* border-bottom-right-radius: 25px; */
-    /* overflow: hidden; */
 }
-.control-bar .ant-menu {
+.new-task .ant-menu {
     border-bottom-color: transparent;
+    background: none;
 }
 
-.control-bar .ant-input {
+.new-task .ant-input {
     padding-top: 25px;
     padding-bottom: 25px;
+    background: none;
 }
 
-.control-bar .ant-input,
-.control-bar .ant-input-number {
+.new-task .ant-input,
+.new-task .ant-input-number {
     border: none;
     border-radius: 0;
 }
 
-.control-bar .ant-input-number-input {
+.new-task .ant-input-number-input {
     padding: 0 10px !important;
 }
 
-/* .control-bar .ant-menu-item-selected:not(:last-child) */
-.control-bar .ant-menu-item-selected {
+/* .new-task .ant-menu-item-selected:not(:last-child) */
+.new-task .ant-menu-item-selected {
     border-bottom: 2px solid transparent;
     font-weight: bold;
 }
 
-.control-bar .ant-menu-item.ant-menu-item-selected.numberInput {
+.new-task .ant-menu-item.ant-menu-item-selected.numberInput {
     border-bottom: 2px solid #1890ff;
 }
 
-/* .control-bar .ant-menu-item-active:not(:last-child) {
+/* .new-task .ant-menu-item-active:not(:last-child) {
     border-bottom: 2px solid transparent;
 } */
 
-.control-bar .ant-menu-item:hover {
+.new-task .ant-menu-item:hover {
     border-bottom: 2px solid transparent;
 }
 
-.control-bar .anticon {
+.new-task .anticon {
     margin: auto;
 }
 
-.control-bar .ant-btn {
+.new-task .ant-btn {
     line-height: 1.5;
 }
 
-.control-bar .ant-btn:not(.ant-btn-sm) > .anticon {
+.new-task .ant-btn:not(.ant-btn-sm) > .anticon {
     line-height: 2.5;
 }
 
@@ -237,11 +259,12 @@ small.muted {
 }
 .timer-slider .ant-slider-dot-active {
     background-color: #1890ff !important;
-    opacity: 0.5;
+    opacity: 0.5 !important;
 }
 
 .timer-slider .ant-slider-dot:nth-child(-n + 5) {
-    background-color: #ccc;
+    background-color: #000;
+    opacity: 0.15;
     width: 1px;
     height: 12px;
     top: -6px;
@@ -278,43 +301,73 @@ small.muted {
 
 .timer-slider .ant-slider-handle:after {
     content: '';
-    display: none;
     position: absolute;
+    opacity: 0;
     left: 50%;
     transform: translateX(-47%);
-    width: 20px;
+    width: 19px;
     height: 5px;
     background-color: transparent;
     border-radius: 10px;
-    border: 1px solid #bbb;
+    border: 1px solid rgba(0, 0, 0, 0.2);
     bottom: 12px;
 
     transition: all 0.2s;
 }
 .timer-slider:hover .ant-slider-handle:after {
-    display: block;
+    opacity: 1;
 }
+
 .timer-slider .ant-slider-handle:hover:after {
-    /* border: 1px solid #1890ff; */
-    width: 25px;
+    opacity: 1;
+    border: 1px solid rgba(24, 144, 255, 0.6);
+    height: 21px;
+    width: 21px;
+    bottom: 10px;
 }
 .timer-slider .ant-slider-handle:focus:after {
-    display: block;
-    border: 1px solid #1890ff;
+    border: 1px solid rgba(24, 144, 255, 0.6);
 }
 .timer-slider .ant-slider-handle:active:after {
-    /* background-color: #1890ff; */
-    height: 7px;
-    /* width: 25px; */
-    bottom: 11px;
+    opacity: 1;
+    border: 1px solid rgba(24, 144, 255, 1);
+    /* box-shadow: 0 5px 30px rgba(24, 144, 255, 0.6); */
+}
+
+
+
+.timer-slider .ant-slider-handle:before {
+    content: '';
+    position: absolute;
+    opacity: 0;
+
+    left: 30%;
+    width: 5px;
+    height: 5px;
+    background-color: transparent;
+
+    border-radius: 10px;
+    bottom: 5px;
+    transform: scale(1, 1);
+    transition: all 0.2s;
+    border:0px solid rgba(24, 144, 255, 0.07);
+}
+
+.timer-slider .ant-slider-handle:hover:before {
+    transform: scale(3, 3);
+    border:7px solid rgba(24, 144, 255, 0.045);
+}
+.timer-slider .ant-slider-handle:active:before {
+    opacity: 1;
+    width: 21px;
+    height: 21px;
+    bottom: 10px;
 }
 
 .pop {
     /* transform: scale(1.2,1.2); */
-    color: #40a9ff;
+    color: rgba(24, 144, 255, 0.65);
 }
-
-
 
 .step-counter .ant-btn-link {
     transition: all 0.1s !important;
@@ -324,17 +377,16 @@ small.muted {
     color: #40a9ff;
 }
 .step-counter .ant-btn-link:active {
-    transform: scale(1.2,1.2);
+    transform: scale(1.2, 1.2);
 }
 
 .step-counter .ant-btn-link:nth-child(1) {
     padding-left: 5px;
 }
 
-
-
 .ant-divider-horizontal {
     margin: 0;
+    border-color: rgba(0, 0, 0, 0.1) !important;
 }
 
 .task-wrapper {
@@ -372,11 +424,11 @@ small.muted {
         display: none;
     }
 
-    /* .control-bar .ant-menu {
+    /* .new-task .ant-menu {
         border-bottom-color: #e8e8e8;
     } */
 
     .timer-slider .ant-slider-handle:after {
-        display: block;
+        opacity: 1;
     }
 }

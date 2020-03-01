@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import update from 'immutability-helper';
 import PropTypes from 'prop-types';
 
-import ControlBar from './ControlBar';
+import CreateTask from './CreateTask';
 import Tasks from './Tasks';
 
 import Util from './Utils';
@@ -44,7 +44,7 @@ class App extends React.Component {
             isPaused: false,
             startTime: 0,
             elapsedTime: 0,
-            editMode: false,
+            editMode: true,
         };
         this.setState(state => {
             const updatedTasks = [...state.pending, _task];
@@ -267,7 +267,7 @@ class App extends React.Component {
                         <Icon type="menu" />
                     </Col>
                 </Row>
-                <ControlBar createTask={this.createTask} />
+                <CreateTask createTask={this.createTask} />
                 <div className="task-wrapper">
                     <EmptyState {...this.state} />
                     <Tasks
