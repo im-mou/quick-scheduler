@@ -66,6 +66,7 @@ small.muted {
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     position: relative;
+    transition: all 0.2s;
 }
 .task:hover {
     border: 1px solid #b4b2b2;
@@ -131,11 +132,20 @@ small.muted {
     border: none;
 
 }
+.task.edit .new-task {
+    border: none;
+}
 .task.edit {
     color: #666666;
-    background-color: #FFFBE5;
-    border-color: #FFF5C2;
+    background-color: rgba(26, 144, 255, 0.096);
+    border-color: rgba(26, 144, 255, 0.199);
+    margin: 20px 0;
+    z-index: 100;
 }
+.task.edit:hover {
+    border-color: rgba(26, 144, 255, 0.26);
+}
+
 
 .task.pending .ant-progress-bg {
     /* background-color: #ddd; */
@@ -161,7 +171,7 @@ small.muted {
  * Modifies default ant.design css rules to adapt the design to our requirements.
  */
 .new-task {
-    margin-bottom: 5px;
+    /* margin-bottom: 5px; */
     border: 1px solid #ccc;
     /* border-bottom-right-radius: 25px; */
 }
@@ -355,7 +365,7 @@ small.muted {
 
 .timer-slider .ant-slider-handle:hover:before {
     transform: scale(3, 3);
-    border:7px solid rgba(24, 144, 255, 0.045);
+    border:7px solid rgba(24, 144, 255, 0.07);
 }
 .timer-slider .ant-slider-handle:active:before {
     opacity: 1;
@@ -383,6 +393,12 @@ small.muted {
 .step-counter .ant-btn-link:nth-child(1) {
     padding-left: 5px;
 }
+.step-counter strong{
+    margin-right: 3px;
+}
+
+
+
 
 .ant-divider-horizontal {
     margin: 0;

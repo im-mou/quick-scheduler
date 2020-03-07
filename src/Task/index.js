@@ -1,34 +1,69 @@
 import React from 'react';
 import Controls from './Controls';
-import TimeSlider from '../TimeSlider';
-import {TASK_STATES as STATUS} from '../Utils/Constants';
+import {TASK_STATES as STATUS, TASK_ACTIONS} from '../Utils/Constants';
 import {Progress, Statistic, Row, Col} from 'antd';
+import TaskBox from '../TaskBox';
 
 const {Countdown} = Statistic;
 
-const Timer = function(props) {
+const Timer = props => {
     return (
-        <Countdown
-            value={props.value}
-            format="HH:mm:ss"
-            suffix={props.text}
-        />
+        <Countdown value={props.value} format="HH:mm:ss" suffix={props.text} />
     );
 };
 
-const Task = function({task, status, action}) {
-    // check if it's an active task
-    const isActive = status === STATUS.ACTIVE;
+const Task = props => {
+    const {task, action} = props;
 
     return (
-        <div key={task.id} className={'task ' + status}>
+        <div key={task.id} className={'task ' + task.status + ' task_' + task.id}>
+            {task.status !== STATUS.EDITING ? (  // default body
+                <React.Fragment>
+                    <TaskBody {...props} />
+                    <Progress
+                        strokeWidth={3}
+                        percent={(task.elapsedTime / task.time.total) * 100}
+                        showInfo={false}
+                        strokeLinecap="square"
+                    />
+                </React.Fragment>
+            ) : ( // edit body
+                <TaskBox
+                    mode={STATUS.EDITING}
+                    expanded={true}
+                    save={data =>
+                        action({
+                            taskId: task.id,
+                            actionType: TASK_ACTIONS.SAVE,
+                            data: data,
+                        })
+                    }
+                    cancle={() =>
+                        action({
+                            taskId: task.id,
+                            actionType: TASK_ACTIONS.CANCLE,
+                        })
+                    }
+                    data={task}
+                />
+            )}
+        </div>
+    );
+};
+
+const TaskBody = props => {
+    const {task, action} = props;
+    const isActive = task.status === STATUS.ACTIVE;
+
+    return (
+        <React.Fragment>
             <div className="task-content">
                 <Row className="pre-header">
                     {task.time.h ? task.time.h + 'h ' : ''}
                     {task.time.m ? task.time.m + 'm' : ''}
                 </Row>
                 <Row>
-                    <Col span={24} className="title">
+                    <Col span={isActive ? 24 : 16} className="title">
                         {task.title}
                     </Col>
                     <Col hidden={!isActive} span={16} className="timer">
@@ -42,30 +77,16 @@ const Task = function({task, status, action}) {
                             text="remaining..."
                         />
                     </Col>
-                    <Col span={isActive ? 8 : 24} className="right">
+                    <Col span={8} className="right">
                         <Controls
-                            status={status}
+                            status={task.status}
                             action={action}
                             taskId={task.id}
                         />
                     </Col>
                 </Row>
             </div>
-            {task.editMode ? (
-                <Progress
-                    strokeWidth={3}
-                    percent={(task.elapsedTime / task.time.total) * 100}
-                    showInfo={false}
-                    strokeLinecap="square"
-                />
-            ) : (
-                <TimeSlider
-                    value={task.time.m}
-                    //onChange={setMinutes}
-                    visible={true}
-                />
-            )}
-        </div>
+        </React.Fragment>
     );
 };
 

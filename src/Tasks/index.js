@@ -4,7 +4,7 @@ import Task from '../Task';
 const Tasks = function(props) {
     // generate tasks
     const tasks = (props.tasks || []).map((task, key) => (
-        <Task key={key} task={task} status={props.status} action={props.action} />
+        <Task key={key} task={task} status={task.status} action={props.action} />
     ));
 
     return (

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import update from 'immutability-helper';
 import PropTypes from 'prop-types';
 
-import CreateTask from './CreateTask';
+import TaskBox from './TaskBox';
 import Tasks from './Tasks';
 
 import Util from './Utils';
@@ -28,11 +28,12 @@ class App extends React.Component {
             finished: this.props.finished,
             renameModal: this.props.renameModal,
             renameTask: this.props.renameTask,
+            editModeActive: this.props.editModeActive,
         };
     }
 
-    _action = ({taskId, actionType}) => {
-        this[actionType](taskId);
+    _action = ({taskId, actionType, data}) => {
+        this[actionType](taskId, data || {});
     };
 
     createTask = task => {
@@ -40,11 +41,10 @@ class App extends React.Component {
         const _task = {
             id: Math.floor(Date.now()),
             ...task, // { title, time : {total:(miliseconds), h:(hours), m:(minutes)} }
-            status: TASK_STATES.PENDNING,
+            status: TASK_STATES.PENDING,
             isPaused: false,
             startTime: 0,
             elapsedTime: 0,
-            editMode: true,
         };
         this.setState(state => {
             const updatedTasks = [...state.pending, _task];
@@ -91,7 +91,7 @@ class App extends React.Component {
         const currItem = Util.GetItemWithIndex(taskId, this.state.active);
         const updatedTask = {
             ...currItem,
-            status: TASK_STATES.PENDNING,
+            status: TASK_STATES.PENDING,
             isPaused: true,
         };
 
@@ -195,9 +195,77 @@ class App extends React.Component {
         });
     };
 
-    edit = id => {
-        // hide modal and update task name
-        console.log('edit has been invocked')
+    edit = taskId => {
+
+        // check if active mode is active
+        if (this.state.editModeActive) {
+            // show notification
+            Util.Notificacion(
+                'Already a task in edit mode',
+                'exclamation-circle'
+            );
+            return;
+        }
+ 
+        // get task object from id
+        const currItem = Util.GetItemWithIndex(taskId, this.state.pending);
+
+        this.setState(state => {
+            return {
+                pending: update(state.pending, {
+                    [currItem.index]: {
+                        status: {$set: TASK_STATES.EDITING},
+                    },
+                }),
+                editModeActive: true,
+            };
+        });
+    };
+
+    saveEdit = (taskId, data) => {
+ 
+        // get task object from id
+        const currItem = Util.GetItemWithIndex(taskId, this.state.pending);
+
+        // check is time is higher than the time elapsed
+        if (data.time.total < currItem.elapsedTime) {
+            // show notification
+            Util.Notificacion(
+                'New Time should be higher or equal than time elapsed',
+                'exclamation-circle'
+            );
+            return;
+        }
+
+        this.setState(state => {
+            return {
+                pending: update(state.pending, {
+                    [currItem.index]: {
+                        status: {$set: TASK_STATES.PENDING},
+                        title: {$set: data.title},
+                        time: {$set: data.time},
+                    },
+                }),
+                editModeActive: false,
+            };
+        });
+    };
+
+    cancleEdit = taskId => {
+
+        // get task object from id
+        const currItem = Util.GetItemWithIndex(taskId, this.state.pending);
+
+        this.setState(state => {
+            return {
+                pending: update(state.pending, {
+                    [currItem.index]: {
+                        status: {$set: TASK_STATES.PENDING},
+                    },
+                }),
+                editModeActive: false,
+            };
+        });
     };
 
     startTimer = taskId => {
@@ -267,25 +335,22 @@ class App extends React.Component {
                         <Icon type="menu" />
                     </Col>
                 </Row>
-                <CreateTask createTask={this.createTask} />
+                <TaskBox save={this.createTask} />
                 <div className="task-wrapper">
                     <EmptyState {...this.state} />
                     <Tasks
                         header="Active Tasks"
                         tasks={this.state.active}
-                        status={TASK_STATES.ACTIVE}
                         action={this._action}
                     />
                     <Tasks
                         header="Pending"
                         tasks={this.state.pending}
-                        status={TASK_STATES.PENDNING}
                         action={this._action}
                     />
                     <Tasks
                         header="Completed"
                         tasks={this.state.finished}
-                        status={TASK_STATES.FINISHED}
                         action={this._action}
                     />
                 </div>
@@ -301,6 +366,7 @@ App.defaultProps = {
     finished: [],
     renameModal: false,
     renameTask: {},
+    editModeActive: false,
 };
 
 App.propTypes = {
@@ -310,6 +376,7 @@ App.propTypes = {
     finished: PropTypes.array,
     renameModal: PropTypes.bool,
     renameTask: PropTypes.object,
+    editModeActive: PropTypes.bool,
 };
 
 export default App;
