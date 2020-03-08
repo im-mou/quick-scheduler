@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import update from 'immutability-helper';
 import PropTypes from 'prop-types';
 
@@ -6,13 +6,14 @@ import TaskBox from './TaskBox';
 import Tasks from './Tasks';
 
 import Util from './Utils';
+import EmptyState from './EmptyStates';
 import {
     TASK_STATES,
     TASK_ACTIONS_ICONS as ICON,
     TASK_ACTIONS as ACTIONS,
 } from './Utils/Constants';
 
-import {Modal, Input, Empty, Icon, Row, Col} from 'antd';
+import {Icon, Row, Col} from 'antd';
 import './App.css';
 
 import {Beep1} from './Assets/Sounds/Beep';
@@ -26,7 +27,6 @@ class App extends React.Component {
             pending: this.props.pending,
             active: this.props.active,
             finished: this.props.finished,
-            renameModal: this.props.renameModal,
             renameTask: this.props.renameTask,
             editModeActive: this.props.editModeActive,
         };
@@ -169,32 +169,6 @@ class App extends React.Component {
         );
     };
 
-    rename = param => {
-        // show modal
-        if (typeof param === 'number') {
-            this.setState({
-                renameModal: true,
-                renameTask: Util.GetItemWithIndex(param, this.state.pending),
-            });
-        }
-        // hide modal
-        if (typeof param === 'boolean' && !param) {
-            this.setState({renameModal: false, renameTask: {}});
-        }
-    };
-
-    updateName = newTitle => {
-        // hide modal and update task name
-        const updatedtask = {...this.state.renameTask, title: newTitle};
-        this.setState({
-            pending: update(this.state.pending, {
-                [this.state.renameTask.index]: {$set: updatedtask},
-            }),
-            renameModal: false,
-            renameTask: {},
-        });
-    };
-
     edit = taskId => {
 
         // check if active mode is active
@@ -206,7 +180,7 @@ class App extends React.Component {
             );
             return;
         }
- 
+
         // get task object from id
         const currItem = Util.GetItemWithIndex(taskId, this.state.pending);
 
@@ -223,7 +197,7 @@ class App extends React.Component {
     };
 
     saveEdit = (taskId, data) => {
- 
+
         // get task object from id
         const currItem = Util.GetItemWithIndex(taskId, this.state.pending);
 
@@ -252,7 +226,7 @@ class App extends React.Component {
     };
 
     cancleEdit = taskId => {
-
+        
         // get task object from id
         const currItem = Util.GetItemWithIndex(taskId, this.state.pending);
 
@@ -314,22 +288,17 @@ class App extends React.Component {
     };
 
     render() {
+        const {active, pending, finished} = this.state;
+        const areThereAnyTasks = !(
+            active.length ||
+            finished.length ||
+            pending.length
+        );
         return (
             <div className="App">
-                {this.state.renameModal ? (
-                    <RenameModal
-                        tasks={this.state.pending}
-                        visible={this.state.renameModal}
-                        task={this.state.renameTask}
-                        save={this.updateName}
-                        hide={this.rename}
-                    />
-                ) : (
-                    ''
-                )}
-                <Row style={{marginTop: 40, marginBottom: 25}}>
+                <Row className="main-menu">
                     <Col span={12}>
-                        <Logo />
+                        <img alt="Quick Scheduler" src="logo.png" width={120} />
                     </Col>
                     <Col className="right" span={12}>
                         <Icon type="menu" />
@@ -337,20 +306,22 @@ class App extends React.Component {
                 </Row>
                 <TaskBox save={this.createTask} />
                 <div className="task-wrapper">
-                    <EmptyState {...this.state} />
+                    <EmptyState.TasksPanel visible={areThereAnyTasks}>
+                        <span>No tasks at the moment</span>
+                    </EmptyState.TasksPanel>
                     <Tasks
                         header="Active Tasks"
-                        tasks={this.state.active}
+                        tasks={active}
                         action={this._action}
                     />
                     <Tasks
                         header="Pending"
-                        tasks={this.state.pending}
+                        tasks={pending}
                         action={this._action}
                     />
                     <Tasks
                         header="Completed"
-                        tasks={this.state.finished}
+                        tasks={finished}
                         action={this._action}
                     />
                 </div>
@@ -364,7 +335,6 @@ App.defaultProps = {
     active: [],
     pending: [],
     finished: [],
-    renameModal: false,
     renameTask: {},
     editModeActive: false,
 };
@@ -374,67 +344,8 @@ App.propTypes = {
     active: PropTypes.array,
     pending: PropTypes.array,
     finished: PropTypes.array,
-    renameModal: PropTypes.bool,
     renameTask: PropTypes.object,
     editModeActive: PropTypes.bool,
 };
 
 export default App;
-
-// Todo: Create separate file for this method
-const RenameModal = props => {
-    const [title, setTitle] = useState(props.task.title);
-    const handleInputChange = function(e) {
-        setTitle(e.currentTarget.value);
-    };
-
-    // return if no task is selected for rename
-    if (props.task === {}) return;
-
-    return (
-        <Modal
-            title={'Rename task: ' + props.task.title}
-            centered
-            visible={props.visible}
-            onOk={() => props.save(title)}
-            onCancel={() => props.hide(false)} // hide modal
-        >
-            <p>
-                <Input
-                    placeholder="Task title..."
-                    onChange={handleInputChange}
-                    value={title}
-                />
-            </p>
-        </Modal>
-    );
-};
-
-// Todo: Create separate file for this method
-const EmptyState = props => {
-    if (
-        !props.pending.length &&
-        !props.active.length &&
-        !props.finished.length
-    ) {
-        return (
-            <Empty
-                style={{marginTop: 130}}
-                className="noselect"
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description={<span>No tasks at the moment</span>}
-            />
-        );
-    } else {
-        return null;
-    }
-};
-
-// Todo: Create separate file for this method
-const Logo = () => {
-    return (
-        // <div className="logo">
-        <img alt="Quick Scheduler" src="logo.png" width={120} />
-        // </div>
-    );
-};
