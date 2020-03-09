@@ -35,7 +35,7 @@ class App extends React.Component {
         // check if there is already a state in the localstorage
         if (localStorage.state !== undefined) {
             const state = JSON.parse(localStorage.state);
-            this.setState({state});
+            this.setState(state);
         }
     }
 
