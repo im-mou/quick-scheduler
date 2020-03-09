@@ -27,13 +27,25 @@ class App extends React.Component {
             pending: this.props.pending,
             active: this.props.active,
             finished: this.props.finished,
-            renameTask: this.props.renameTask,
             editModeActive: this.props.editModeActive,
         };
     }
 
+    componentDidMount() {
+        // check if there is already a state in the localstorage
+        if (localStorage.state !== undefined) {
+            const state = JSON.parse(localStorage.state);
+            this.setState({state});
+        }
+    }
+
+    componentDidUpdate() {
+        // save state upon state update
+        localStorage.state = JSON.stringify(this.state);
+    }
+
     _action = ({taskId, actionType, data}) => {
-        this[actionType](taskId, data || {});
+        this[actionType](taskId, data || {});
     };
 
     createTask = task => {
@@ -170,7 +182,6 @@ class App extends React.Component {
     };
 
     edit = taskId => {
-
         // check if active mode is active
         if (this.state.editModeActive) {
             // show notification
@@ -197,7 +208,6 @@ class App extends React.Component {
     };
 
     saveEdit = (taskId, data) => {
-
         // get task object from id
         const currItem = Util.GetItemWithIndex(taskId, this.state.pending);
 
@@ -226,7 +236,6 @@ class App extends React.Component {
     };
 
     cancleEdit = taskId => {
-        
         // get task object from id
         const currItem = Util.GetItemWithIndex(taskId, this.state.pending);
 
@@ -335,7 +344,6 @@ App.defaultProps = {
     active: [],
     pending: [],
     finished: [],
-    renameTask: {},
     editModeActive: false,
 };
 
@@ -344,7 +352,6 @@ App.propTypes = {
     active: PropTypes.array,
     pending: PropTypes.array,
     finished: PropTypes.array,
-    renameTask: PropTypes.object,
     editModeActive: PropTypes.bool,
 };
 

@@ -215,15 +215,15 @@ small.muted {
 }
 
 .new-task .anticon {
-    margin: auto;
+    /* margin: auto; */
 }
 
 .new-task .ant-btn {
-    line-height: 1.5;
+    /* line-height: 1.5; */
 }
 
 .new-task .ant-btn:not(.ant-btn-sm) > .anticon {
-    line-height: 2.5;
+    /* line-height: 2.5; */
 }
 
 /**
