@@ -14,10 +14,23 @@ const Timer = props => {
 
 const Task = props => {
     const {task, action} = props;
+    const inEditMode = task.status === STATUS.EDITING;
 
     return (
-        <div key={task.id} className={'task ' + task.status + ' task_' + task.id}>
-            {task.status !== STATUS.EDITING ? (  // default body
+        <div
+            key={task.id}
+            onDoubleClick={() => {
+                // enable double click only if status is 'pending'
+                if (task.status === STATUS.PENDING) {
+                    props.action({
+                        taskId: task.id,
+                        actionType: TASK_ACTIONS.EDIT,
+                    });
+                }
+            }}
+            className={'task ' + task.status + ' task_' + task.id}
+        >
+            {!inEditMode ? ( // default body
                 <React.Fragment>
                     <TaskBody {...props} />
                     <Progress
@@ -27,7 +40,8 @@ const Task = props => {
                         strokeLinecap="square"
                     />
                 </React.Fragment>
-            ) : ( // edit body
+            ) : (
+                // edit body
                 <TaskBox
                     mode={STATUS.EDITING}
                     expanded={true}

@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ant-design/icons": "^4.0.2",
+    "@ant-design/icons": "^4.0.0",
     "@mojs/core": "^0.288.2",
     "antd": "^3.26.9",
     "framer-motion": "^1.8.4",

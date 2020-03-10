@@ -6,7 +6,7 @@ import {
     TASK_ACTIONS_DESC as ACTION_NAME,
     TASK_ACTIONS_MORE_OPTIONS as MORE_OPTIONS,
 } from '../Utils/Constants';
-import {Tooltip, Button, Menu, Dropdown} from 'antd';
+import {Tooltip, Button, Menu, Dropdown, Icon} from 'antd';
 
 const actionStyles = {fontSize: '20px', color: '#8a8a8a'};
 
@@ -19,9 +19,9 @@ const Controls = function({status, action, taskId}) {
                     placement="top"
                     title={ACTION_NAME[actionType]}
                 >
-                    {actionType === ACTION.MORE ? ( // filter dropdown button
+                    {actionType === ACTION.MORE ? ( // check if button type is a dropdown
                         <DropdownItem
-                            {...{taskId, status, action, actionType}}
+                            {...{taskId, action}}
                             options={MORE_OPTIONS[status]}
                             icon={ICON[actionType]}
                         />
@@ -46,6 +46,7 @@ const DropdownItem = ({taskId, action, options, icon}) => {
             key={key}
             onClick={() => action({taskId: taskId, actionType: _option})}
         >
+            <Icon type={ICON[_option]} theme="outlined" />
             <span>{ACTION_NAME[_option]}</span>
         </Menu.Item>
     ));

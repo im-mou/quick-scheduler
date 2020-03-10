@@ -18,6 +18,7 @@ export const TASK_ACTIONS = {
     EDIT: 'edit',
     SAVE: 'saveEdit',
     CANCLE: 'cancleEdit',
+    RESET: 'reset',
 };
 
 export const TASK_ACTIONS_ICONS = {
@@ -32,6 +33,7 @@ export const TASK_ACTIONS_ICONS = {
     [TASK_ACTIONS.EDIT]: 'highlight',
     [TASK_ACTIONS.SAVE]: 'check',
     [TASK_ACTIONS.CANCLE]: 'close-circle',
+    [TASK_ACTIONS.RESET]: 'step-backward',
 };
 
 export const TASK_ACTIONS_DESC = {
@@ -40,12 +42,13 @@ export const TASK_ACTIONS_DESC = {
     [TASK_ACTIONS.PAUSE]: 'Pause',
     [TASK_ACTIONS.DONE]: 'Mark as completed',
     [TASK_ACTIONS.RESTART]: 'Restart',
-    [TASK_ACTIONS.REMOVE]: 'Remove',
+    [TASK_ACTIONS.REMOVE]: 'Remove permanently',
     [TASK_ACTIONS.RENAME]: 'Rename',
     [TASK_ACTIONS.CREATE]: 'Create',
-    [TASK_ACTIONS.EDIT]: 'Edit',
+    [TASK_ACTIONS.EDIT]: 'Make changes',
     [TASK_ACTIONS.SAVE]: 'Save changes',
     [TASK_ACTIONS.CANCLE]: 'Discard changes',
+    [TASK_ACTIONS.RESET]: 'Reset task',
 };
 
 export const TASK_ACTIONS_LIST = {
@@ -57,6 +60,8 @@ export const TASK_ACTIONS_LIST = {
 export const TASK_ACTIONS_MORE_OPTIONS = {
     [TASK_STATES.PENDING]: [
         TASK_ACTIONS.EDIT,
+        TASK_ACTIONS.DONE,
+        TASK_ACTIONS.RESET,
         TASK_ACTIONS.REMOVE,
     ],
 };
