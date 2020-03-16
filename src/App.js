@@ -8,6 +8,7 @@ import Tasks from './Tasks';
 import Util from './Utils';
 import EmptyState from './EmptyStates';
 import {
+    TASKS_PARAMS,
     TASK_STATES,
     TASK_ACTIONS_ICONS as ICON,
     TASK_ACTIONS as ACTIONS,
@@ -28,6 +29,11 @@ class App extends React.Component {
             active: this.props.active,
             finished: this.props.finished,
             editModeActive: this.props.editModeActive,
+            stacked: {
+                [TASK_STATES.FINISHED]: true,
+                [TASK_STATES.PENDING]: false,
+            },
+            lastActivationTime: Date.now(), // timestamp of the last task activation
         };
     }
 
@@ -65,8 +71,20 @@ class App extends React.Component {
     };
 
     play = taskId => {
-        const currItem = Util.GetItemWithIndex(taskId, this.state.pending);
+        // wait few 1sec before activating a new task
+        if (Date.now() - this.state.lastActivationTime < 1000) return;
 
+        // check if acive task are under the max limit
+        if (this.state.active.length >= TASKS_PARAMS.ACTIVE.MAX) {
+            // show message
+            Util.Notificacion(
+                "You've reach the maximim limit of active tasks",
+                ICON[ACTIONS.PLAY]
+            );
+            return;
+        }
+
+        const currItem = Util.FindItem(taskId, this.state);
         const updatedTask = {
             ...currItem,
             status: TASK_STATES.ACTIVE,
@@ -87,6 +105,7 @@ class App extends React.Component {
                     $splice: [[currItem.index, 1]],
                 }),
                 active: update(this.state.active, {$push: [updatedTask]}),
+                lastActivationTime: Date.now(),
             },
             () => {
                 // callback
@@ -123,18 +142,21 @@ class App extends React.Component {
     };
 
     done = taskId => {
-        // clear interval
-        this.stopTimer(taskId);
+        const currItem = Util.FindItem(taskId, this.state);
+        if (currItem.status === TASK_STATES.ACTIVE) {
+            // clear interval
+            this.stopTimer(taskId);
+        }
 
-        const currItem = Util.GetItemWithIndex(taskId, this.state.active);
+        //const currItem = Util.GetItemWithIndex(taskId, this.state.active);
         const updatedTask = {
             ...currItem,
             status: TASK_STATES.FINISHED,
         };
 
-        // move task from active -> finished
+        // move task from active|pending -> finished
         this.setState({
-            active: update(this.state.active, {
+            [currItem.status]: update(this.state[currItem.status], {
                 $splice: [[currItem.index, 1]],
             }),
             finished: update(this.state.finished, {$push: [updatedTask]}),
@@ -148,20 +170,56 @@ class App extends React.Component {
     };
 
     restart = taskId => {
-        const currItem = Util.GetItemWithIndex(taskId, this.state.finished);
+        this.play(taskId);
+        // const currItem = Util.GetItemWithIndex(taskId, this.state.finished);
+
+        // // move task from finished -> pending
+        // this.setState(
+        //     {
+        //         finished: update(this.state.finished, {
+        //             $splice: [[currItem.index, 1]],
+        //         }),
+        //         pending: update(this.state.pending, {$push: [currItem]}),
+        //     },
+        //     () => {
+        //         this.play(taskId);
+        //     }
+        // );
+    };
+
+    reset = taskId => {
+        const currItem = Util.FindItem(taskId, this.state);
+        const updatedTask = {
+            ...currItem,
+            status: TASK_STATES.PENDING,
+            isPaused: false,
+            startTime: 0,
+            elapsedTime: 0,
+        };
 
         // move task from finished -> pending
-        this.setState(
-            {
-                finished: update(this.state.finished, {
-                    $splice: [[currItem.index, 1]],
+        if (currItem.status === TASK_STATES.FINISHED) {
+            this.setState({
+                [TASK_STATES.FINISHED]: update(
+                    this.state[TASK_STATES.FINISHED],
+                    {
+                        $splice: [[currItem.index, 1]],
+                    }
+                ),
+                pending: update(this.state.pending, {$push: [updatedTask]}),
+            });
+            return;
+        }
+
+        // update task if it's already in pending state
+        this.setState(state => {
+            return {
+                pending: update(state.pending, {
+                    [currItem.index]: {$set: updatedTask},
                 }),
-                pending: update(this.state.pending, {$push: [currItem]}),
-            },
-            () => {
-                this.play(taskId);
-            }
-        );
+                editModeActive: true,
+            };
+        });
     };
 
     remove = taskId => {
@@ -177,6 +235,23 @@ class App extends React.Component {
         // show message
         Util.Notificacion(
             currItem.title + ' has been removed',
+            ICON[ACTIONS.REMOVE]
+        );
+    };
+    removeAll = status => {
+        // remove all tasks
+        this.setState({
+            [status]: [],
+            // diable editMode if pending tasks are removed
+            editModeActive:
+                status === TASK_STATES.PENDING
+                    ? false
+                    : this.state.editModeActive,
+        });
+
+        // show message
+        Util.Notificacion(
+            'All ' + status + ' tasks have been removed',
             ICON[ACTIONS.REMOVE]
         );
     };
@@ -296,13 +371,59 @@ class App extends React.Component {
         });
     };
 
+    toggleStack = (taskState, value) => {
+        // update stack state
+        this.setState(state => {
+            const status =
+                value === undefined ? !state.stacked[taskState] : value;
+            return {
+                stacked: update(state.stacked, {
+                    [taskState]: {$set: status},
+                }),
+            };
+        });
+    };
+
     render() {
-        const {active, pending, finished} = this.state;
+        const {active, pending, finished, stacked} = this.state;
         const areThereAnyTasks = !(
             active.length ||
             finished.length ||
             pending.length
         );
+        const mobile = Util.mobileCheck();
+
+        // tasks header menu parameters
+        const deleteAll = taskState => ({
+            confirm: {
+                value: true,
+                title: 'Are you sure delete all ' + taskState + ' tasks?',
+            },
+            hidden: this.state[taskState].length < 2,
+            icon: ICON[ACTIONS.REMOVE],
+            // hide tooltip if mobile
+            tooltip: mobile ? null : 'Delete All',
+            // if device is mobile, show label
+            value: mobile ? 'Delete All' : null,
+            action: () => this.removeAll(taskState),
+        });
+
+        const collapse = taskState => ({
+            hidden: this.state[taskState].length < 2,
+            icon: this.state.stacked[taskState] ? 'folder-open' : 'folder',
+            tooltip: mobile // hide tooltip if mobile
+                ? null
+                : this.state.stacked[taskState]
+                ? 'Show all'
+                : 'Collapse',
+            value: mobile // if device is mobile, show label
+                ? this.state.stacked[taskState]
+                    ? 'Show all'
+                    : 'Collapse'
+                : null,
+            action: () => this.toggleStack(taskState),
+        });
+
         return (
             <div className="App">
                 <Row className="main-menu">
@@ -325,11 +446,24 @@ class App extends React.Component {
                     />
                     <Tasks
                         header="Pending"
+                        subHeader={pending.length > 3 ? pending.length : null}
+                        menu={
+                            pending.length > 2
+                                ? [deleteAll(TASK_STATES.PENDING)]
+                                : []
+                        }
+                        stacked={stacked[TASK_STATES.PENDING]}
                         tasks={pending}
                         action={this._action}
                     />
                     <Tasks
                         header="Completed"
+                        subHeader={finished.length}
+                        menu={[
+                            deleteAll(TASK_STATES.FINISHED),
+                            collapse(TASK_STATES.FINISHED),
+                        ]}
+                        stacked={stacked[TASK_STATES.FINISHED]}
                         tasks={finished}
                         action={this._action}
                     />
@@ -338,6 +472,7 @@ class App extends React.Component {
         );
     }
 }
+
 
 App.defaultProps = {
     timers: [],

@@ -9,7 +9,9 @@ import {
     TASK_ACTIONS as ACTION,
 } from '../Utils/Constants';
 
-const defaultTimeOptions = [1, 2, 3, 5];
+// Less hours options if mobile
+const mobile = Util.mobileCheck();
+const defaultTimeOptions = mobile ? [1, 2, 3] : [1, 2, 3, 5];
 const actionStyle = {
     default: {
         paddingLeft: 5,
@@ -108,8 +110,7 @@ class TaskBox extends React.Component {
         });
 
         // reset state
-        if(this.state.mode === ACTION.NEW) 
-            this.reset();
+        if (this.state.mode === ACTION.NEW) this.reset();
     };
 
     reset = () => {
@@ -156,12 +157,9 @@ class TaskBox extends React.Component {
                     />
                 </React.Fragment>
                 <Row>
-                    <Col span={16}>
+                    <Col span={mobile ? 12 : 16}>
                         {expanded ? (
-                            <Row
-                                style={{paddingLeft: 13, paddingTop: 7}}
-                                gutter={[8, 8]}
-                            >
+                            <Row style={{paddingTop: 7}} gutter={[8, 8]}>
                                 <Col>
                                     <StepCounter
                                         decDisabled={!hours}
@@ -198,7 +196,7 @@ class TaskBox extends React.Component {
                             </Menu>
                         )}
                     </Col>
-                    <Col span={8} className="right">
+                    <Col span={mobile ? 12 : 8} className="right">
                         {!editmode ? (
                             <Menu mode="horizontal">
                                 <Menu.Item

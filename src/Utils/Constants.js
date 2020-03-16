@@ -1,3 +1,14 @@
+export const TASKS_PARAMS = {
+    ACTIVE: {
+        MAX: 4,
+    },
+    PENDING: {
+        MAX: 4,
+    },
+    FINISHED: {
+        MAX: 4,
+    },
+};
 export const TASK_STATES = {
     ACTIVE: 'active',
     PENDING: 'pending',
@@ -54,7 +65,7 @@ export const TASK_ACTIONS_DESC = {
 export const TASK_ACTIONS_LIST = {
     [TASK_STATES.ACTIVE]: [TASK_ACTIONS.PAUSE, TASK_ACTIONS.DONE],
     [TASK_STATES.PENDING]: [TASK_ACTIONS.MORE, TASK_ACTIONS.PLAY],
-    [TASK_STATES.FINISHED]: [TASK_ACTIONS.RESTART, TASK_ACTIONS.REMOVE],
+    [TASK_STATES.FINISHED]: [TASK_ACTIONS.RESET, TASK_ACTIONS.REMOVE],
 };
 
 export const TASK_ACTIONS_MORE_OPTIONS = {

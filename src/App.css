@@ -61,16 +61,52 @@ small.muted {
     margin-bottom: 10px;
 }
 
+.section .header .menu-item {
+    font-size: 12px;
+    color: #838282;
+}
+.section .header .menu-item .anticon {
+    font-size: 14px;
+}
+.section .header .menu-item:hover {
+    color: #1890ff;
+}
+
+/* animation for tasks */
+@keyframes loadTask {
+    0% {
+        top:-5px;
+        opacity: 0;
+    }
+    100% {
+        top:0;
+        opacity: 1;
+    }
+}
+.tasks {
+}
+
 .tasks .task {
     margin-bottom: 10px;
 }
+.tasks ul {
+    padding:0;
+}
+
 
 .task {
     color: #808080;
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     position: relative;
+    
+    animation: loadTask;
+    animation-duration: 0.2s;
+
     transition: all 0.2s;
+}
+.task.dragging {
+    opacity: 0.7;
 }
 .task:hover {
     border: 1px solid #b4b2b2;
@@ -165,6 +201,19 @@ small.muted {
     color: #c5c5c5;
 }
 
+.task.stacked {
+    box-shadow:
+        /* The second layer */ 0 10px 0 -5px rgb(241, 240, 240),
+        /* The second layer shadow */ 0 10px 1px -4px rgba(0, 0, 0, 0.15),
+        /* The third layer */ 0 20px 0 -10px rgb(247, 247, 247),
+        /* The third layer shadow */ 0 20px 1px -9px rgba(0, 0, 0, 0.15);
+}
+.task.stacked.n2 {
+    box-shadow:
+        /* The second layer */ 0 10px 0 -5px rgb(241, 240, 240),
+        /* The second layer shadow */ 0 10px 1px -4px rgba(0, 0, 0, 0.15) !important;
+}
+
 /**
  * New Task
  *
@@ -215,7 +264,7 @@ small.muted {
 }
 
 .new-task .anticon {
-    /* margin: auto; */
+    margin: auto;
 }
 
 .new-task .ant-btn {
@@ -389,7 +438,7 @@ small.muted {
 }
 
 .step-counter .ant-btn-link:nth-child(1) {
-    padding-left: 5px;
+    padding-left: 13px;
 }
 .step-counter strong {
     margin-right: 3px;
@@ -442,4 +491,20 @@ small.muted {
     .timer-slider .ant-slider-handle:after {
         opacity: 1;
     }
+
+    .step-counter .ant-btn {
+        padding: 0 15px;
+    }
+    .step-counter .ant-btn:nth-child(2) {
+        padding: 0 10px;
+    }
+
+    .section .header .menu-item {
+        margin-left: 10px;
+    }
+
+    .section .header .menu-item .anticon {
+        font-size: 12px;
+    }
+
 }
