@@ -7,6 +7,7 @@ import StepCounter from './StepCounter';
 import {
     TASK_ACTIONS_ICONS as ICON,
     TASK_ACTIONS as ACTION,
+    TASK_STATES as STATE,
 } from '../Utils/Constants';
 
 // Less hours options if mobile
@@ -31,7 +32,7 @@ class TaskBox extends React.Component {
         let initialTitle = '',
             initialTime = {h: 1, m: 15},
             expanded = props.expanded || false,
-            mode = props.mode || ACTION.NEW;
+            mode = props.mode || STATE.NEW;
 
         // check if there is initial data present
         if (props.data) {
@@ -110,7 +111,7 @@ class TaskBox extends React.Component {
         });
 
         // reset state
-        if (this.state.mode === ACTION.NEW) this.reset();
+        if (this.state.mode === STATE.NEW) this.reset();
     };
 
     reset = () => {
@@ -142,7 +143,7 @@ class TaskBox extends React.Component {
 
     render() {
         const {title, hours, minutes, expanded, pop, mode} = this.state;
-        const editmode = mode === ACTION.EDIT;
+        const inEditMode = mode === STATE.EDITING;
 
         return (
             <div className="new-task">
@@ -197,7 +198,7 @@ class TaskBox extends React.Component {
                         )}
                     </Col>
                     <Col span={mobile ? 12 : 8} className="right">
-                        {!editmode ? (
+                        {!inEditMode ? (
                             <Menu mode="horizontal">
                                 <Menu.Item
                                     style={actionStyle.default}

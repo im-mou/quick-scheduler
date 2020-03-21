@@ -24,8 +24,7 @@ const Tasks = function(props) {
             // send length to apply stack layers class
             stacked={{value: _stacked, layers: props.tasks.length}}
             task={task}
-            status={task.status}
-            action={props.action}
+            status={props.status}
         />
     ));
 

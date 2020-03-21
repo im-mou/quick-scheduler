@@ -95,6 +95,32 @@ const mobileCheck = () => {
     return check;
 };
 
+const updateCollection = (collection, object, new_values, sort) => {
+
+    const _sort = sort || true;
+    // filter out the input object from current collection
+    let newCollection = collection.filter(item => {
+        return item.id !== object.id;
+    });
+
+    // update collection if new values are present
+    if (new_values !== undefined) {
+        // update values of the current object
+        const newObj = {...object, ...new_values};
+        newCollection.push(newObj);
+    }
+
+    if(_sort) {
+        // sort collection by id
+        newCollection.sort((a, b) => {
+            return a.id - b.id; /*|| a.name.localeCompare(b.name);*/
+        });
+    }
+
+    return newCollection;
+};
+
+
 const Util = {
     UpdateItem,
     GetItem,
@@ -107,6 +133,7 @@ const Util = {
     getObjOffset,
     getObjSize,
     mobileCheck,
+    updateCollection,
 };
 
 export default Util;

@@ -5,6 +5,13 @@ import PropTypes from 'prop-types';
 import TaskBox from './TaskBox';
 import Tasks from './Tasks';
 
+import Pending from './Tasks/Pending';
+import Completed from './Tasks/Completed';
+import Trash from './Tasks/Trash';
+import Active from './Tasks/Active';
+import Paused from './Tasks/Paused';
+import * as TaskActions from './TaskActions';
+
 import Util from './Utils';
 import EmptyState from './EmptyStates';
 import {
@@ -37,18 +44,6 @@ class App extends React.Component {
         };
     }
 
-    componentDidMount() {
-        // check if there is already a state in the localstorage
-        if (localStorage.state !== undefined) {
-            const state = JSON.parse(localStorage.state);
-            this.setState(state);
-        }
-    }
-
-    componentDidUpdate() {
-        // save state upon state update
-        localStorage.state = JSON.stringify(this.state);
-    }
 
     _action = ({taskId, actionType, data}) => {
         this[actionType](taskId, data || {});
@@ -59,15 +54,11 @@ class App extends React.Component {
         const _task = {
             id: Math.floor(Date.now()),
             ...task, // { title, time : {total:(miliseconds), h:(hours), m:(minutes)} }
-            status: TASK_STATES.PENDING,
             isPaused: false,
             startTime: 0,
             elapsedTime: 0,
         };
-        this.setState(state => {
-            const updatedTasks = [...state.pending, _task];
-            return {pending: updatedTasks};
-        });
+        TaskActions.createTask(_task);
     };
 
     play = taskId => {
@@ -436,6 +427,13 @@ class App extends React.Component {
                 </Row>
                 <TaskBox save={this.createTask} />
                 <div className="task-wrapper">
+                    <Active />
+                    <Paused />
+                    <Pending />
+                    <Completed />
+                    <Trash />
+                </div>
+                {/* <div className="task-wrapper">
                     <EmptyState.TasksPanel visible={areThereAnyTasks}>
                         <span>No tasks at the moment</span>
                     </EmptyState.TasksPanel>
@@ -467,7 +465,7 @@ class App extends React.Component {
                         tasks={finished}
                         action={this._action}
                     />
-                </div>
+                </div> */}
             </div>
         );
     }

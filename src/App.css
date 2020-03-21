@@ -187,7 +187,8 @@ small.muted {
     /* background-color: #ddd; */
 }
 
-.task.finished {
+.task.finished,
+.task.trash {
     background-color: #ffffff;
     color: #c5c5c5;
 }
@@ -199,6 +200,12 @@ small.muted {
 .task.finished .controls {
     background-color: #ffffff;
     color: #c5c5c5;
+}
+
+.task.paused {
+    color: #666;
+    background-color: #fcfbd5;
+    border: none;
 }
 
 .task.stacked {

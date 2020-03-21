@@ -12,7 +12,7 @@ const Timer = props => {
 };
 
 const TaskBody = props => {
-    const {task, action} = props;
+    const {task, status} = props;
     const isActive = task.status === STATUS.ACTIVE;
     const hours = task.time.h // +1 hour if min->60
         ? (task.time.m === 60 ? task.time.h + 1 : task.time.h) + 'h'
@@ -46,9 +46,8 @@ const TaskBody = props => {
                     </Col>
                     <Col span={8} className="right">
                         <Controls
-                            status={task.status}
-                            action={action}
-                            taskId={task.id}
+                            status={status}
+                            task={task}
                         />
                     </Col>
                 </Row>

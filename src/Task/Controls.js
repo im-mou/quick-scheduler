@@ -8,9 +8,11 @@ import {
 } from '../Utils/Constants';
 import {Tooltip, Button, Menu, Dropdown, Icon} from 'antd';
 
+import * as TaskActions from '../TaskActions';
+
 const actionStyles = {fontSize: '20px', color: '#8a8a8a'};
 
-const Controls = function({status, action, taskId}) {
+const Controls = function({status, task}) {
     return (
         <div className="controls">
             {ACTIONS[status].map((actionType, key) => (
@@ -21,7 +23,7 @@ const Controls = function({status, action, taskId}) {
                 >
                     {actionType === ACTION.MORE ? ( // check if button type is a dropdown
                         <DropdownItem
-                            {...{taskId, action}}
+                            {...{task}}
                             options={MORE_OPTIONS[status]}
                             icon={ICON[actionType]}
                         />
@@ -30,7 +32,7 @@ const Controls = function({status, action, taskId}) {
                             type="link"
                             icon={ICON[actionType]}
                             style={actionStyles}
-                            onClick={() => action({taskId, actionType})}
+                            onClick={() => TaskActions[actionType](task)}
                         />
                     )}
                 </Tooltip>
@@ -39,12 +41,12 @@ const Controls = function({status, action, taskId}) {
     );
 };
 
-const DropdownItem = ({taskId, action, options, icon}) => {
+const DropdownItem = ({task, options, icon}) => {
     // generate sub-menu options
     const optionsButtons = options.map((_option, key) => (
         <Menu.Item
             key={key}
-            onClick={() => action({taskId: taskId, actionType: _option})}
+            onClick={() => TaskActions[_option](task)}
         >
             <Icon type={ICON[_option]} theme="outlined" />
             <span>{ACTION_NAME[_option]}</span>

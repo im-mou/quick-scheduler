@@ -1,12 +1,19 @@
 import React from 'react';
-import {TASK_STATES as STATUS, TASK_ACTIONS} from '../Utils/Constants';
+import {TASK_STATES as STATUS} from '../Utils/Constants';
 import {Progress} from 'antd';
 import TaskBody from './TaskBody';
 import TaskBox from '../TaskBox';
 
+import * as TaskActions from '../TaskActions';
+
 const Task = props => {
-    const {task, action} = props;
+    const {task, status} = props;
     const inEditMode = task.status === STATUS.EDITING;
+    // enable edit mode only if status is pending
+    const doubleClickFunc = (status === STATUS.PENDING) ? () => {
+        TaskActions.editTask(task);
+    } : null;
+
     const stacked =
         props.stacked.value || false
             ? ' stacked n' + props.stacked.layers // attach layers class 'nX'
@@ -15,21 +22,15 @@ const Task = props => {
     return (
         <div
             key={task.id}
-            onDoubleClick={() => {
-                // enable double click only if status is 'pending'
-                if (task.status === STATUS.PENDING) {
-                    props.action({
-                        taskId: task.id,
-                        actionType: TASK_ACTIONS.EDIT,
-                    });
-                }
-            }}
-            className={'task ' + task.status + ' task_' + task.id + stacked}
+            onDoubleClick={doubleClickFunc}
+            className={
+                'task ' + (task.status || status) + ' task_' + task.id + stacked
+            }
         >
-            {!inEditMode ? ( 
+            {!inEditMode ? (
                 // default task body
                 <React.Fragment>
-                    <TaskBody {...props} />
+                    <TaskBody task={task} status={status} />
                     <Progress
                         strokeWidth={3}
                         percent={(task.elapsedTime / task.time.total) * 100}
@@ -42,19 +43,8 @@ const Task = props => {
                 <TaskBox
                     mode={STATUS.EDITING}
                     expanded={true}
-                    save={data =>
-                        action({
-                            taskId: task.id,
-                            actionType: TASK_ACTIONS.SAVE,
-                            data: data,
-                        })
-                    }
-                    cancle={() =>
-                        action({
-                            taskId: task.id,
-                            actionType: TASK_ACTIONS.CANCLE,
-                        })
-                    }
+                    save={data => TaskActions.saveEditTask(task, data)}
+                    cancle={() => TaskActions.cancleEditTask(task)}
                     data={task}
                 />
             )}

@@ -14,47 +14,51 @@ export const TASK_STATES = {
     PENDING: 'pending',
     FINISHED: 'finished',
     EDITING: 'edit',
+    TRASH: 'trash',
+    NEW: 'new',
+    PAUSED: 'paused',
 };
 
 export const TASK_ACTIONS = {
-    PLAY: 'play',
+    PLAY: 'playTask',
+    RESUME: 'resumeTask',
     MORE: 'more',
-    PAUSE: 'pause',
-    DONE: 'done',
-    RESTART: 'restart',
-    REMOVE: 'remove',
-    RENAME: 'rename',
-    NEW: 'new',
-    CREATE: 'create',
-    EDIT: 'edit',
-    SAVE: 'saveEdit',
-    CANCLE: 'cancleEdit',
-    RESET: 'reset',
+    PAUSE: 'pauseTask',
+    DONE: 'completeTask',
+    NEW: 'createTask',
+    CREATE: 'createTask',
+    EDIT: 'editTask',
+    SAVE: 'saveEditTask',
+    CANCLE: 'cancleEditTask',
+    TRASH: 'sendToTrashTask',
+    DELETE: 'deleteTask',
+    RESET: 'resetTask',
 };
 
 export const TASK_ACTIONS_ICONS = {
     [TASK_ACTIONS.MORE]: 'ellipsis',
     [TASK_ACTIONS.PLAY]: 'play-circle',
+    [TASK_ACTIONS.RESUME]: 'caret-right',
     [TASK_ACTIONS.PAUSE]: 'pause',
     [TASK_ACTIONS.DONE]: 'check',
-    [TASK_ACTIONS.RESTART]: 'undo',
-    [TASK_ACTIONS.REMOVE]: 'delete',
+    [TASK_ACTIONS.TRASH]: 'eye-invisible',
+    [TASK_ACTIONS.DELETE]: 'delete',
     [TASK_ACTIONS.NEW]: 'download',
     [TASK_ACTIONS.CREATE]: 'download',
     [TASK_ACTIONS.EDIT]: 'highlight',
     [TASK_ACTIONS.SAVE]: 'check',
     [TASK_ACTIONS.CANCLE]: 'close-circle',
-    [TASK_ACTIONS.RESET]: 'step-backward',
+    [TASK_ACTIONS.RESET]: 'undo',
 };
 
 export const TASK_ACTIONS_DESC = {
     [TASK_ACTIONS.MORE]: 'Options',
     [TASK_ACTIONS.PLAY]: 'Start',
+    [TASK_ACTIONS.RESUME]: 'Resume',
     [TASK_ACTIONS.PAUSE]: 'Pause',
     [TASK_ACTIONS.DONE]: 'Mark as completed',
-    [TASK_ACTIONS.RESTART]: 'Restart',
-    [TASK_ACTIONS.REMOVE]: 'Remove permanently',
-    [TASK_ACTIONS.RENAME]: 'Rename',
+    [TASK_ACTIONS.TRASH]: 'Move to trash',
+    [TASK_ACTIONS.DELETE]: 'Delete permanently',
     [TASK_ACTIONS.CREATE]: 'Create',
     [TASK_ACTIONS.EDIT]: 'Make changes',
     [TASK_ACTIONS.SAVE]: 'Save changes',
@@ -65,7 +69,9 @@ export const TASK_ACTIONS_DESC = {
 export const TASK_ACTIONS_LIST = {
     [TASK_STATES.ACTIVE]: [TASK_ACTIONS.PAUSE, TASK_ACTIONS.DONE],
     [TASK_STATES.PENDING]: [TASK_ACTIONS.MORE, TASK_ACTIONS.PLAY],
-    [TASK_STATES.FINISHED]: [TASK_ACTIONS.RESET, TASK_ACTIONS.REMOVE],
+    [TASK_STATES.FINISHED]: [TASK_ACTIONS.RESET, TASK_ACTIONS.TRASH],
+    [TASK_STATES.TRASH]: [TASK_ACTIONS.RESET, TASK_ACTIONS.DELETE],
+    [TASK_STATES.PAUSED]: [TASK_ACTIONS.MORE, TASK_ACTIONS.RESUME],
 };
 
 export const TASK_ACTIONS_MORE_OPTIONS = {
@@ -73,6 +79,11 @@ export const TASK_ACTIONS_MORE_OPTIONS = {
         TASK_ACTIONS.EDIT,
         TASK_ACTIONS.DONE,
         TASK_ACTIONS.RESET,
-        TASK_ACTIONS.REMOVE,
+        TASK_ACTIONS.TRASH,
+    ],
+    [TASK_STATES.PAUSED]: [
+        TASK_ACTIONS.RESET,
+        TASK_ACTIONS.DONE,
+        TASK_ACTIONS.TRASH,
     ],
 };
