@@ -1,24 +1,38 @@
 import EventEmitter from 'events';
 import dispatcher from '../Utils/Dispatcher';
 import {ACTION, BEACON} from '../TaskActions/types';
-import {TASK_STATES} from '../Utils/Constants';
+import {
+    TASK_STATES,
+    TASK_ACTIONS_ICONS as ICON,
+    TASK_ACTIONS as ACTIONS,
+} from '../Utils/Constants';
 import Util from '../Utils';
 
 class CompletedTaskStore extends EventEmitter {
     constructor() {
         super();
         this.tasks = [];
+        this.stacked = false;
 
         // check if there is already a state in the localstorage
-        if (localStorage.completedTasks !== undefined) {
-            this.tasks = JSON.parse(localStorage.completedTasks);
+        if (localStorage.completedStore !== undefined) {
+            const store = JSON.parse(localStorage.completedStore);
+            this.tasks = store.tasks;
+            this.stacked = store.stacked;
         } else {
-            localStorage.completedTasks = JSON.stringify([]);
+            localStorage.completedStore = JSON.stringify({
+                tasks: [],
+                stacked: false,
+            });
         }
     }
 
-    getAll() {
+    getTasks() {
         return this.tasks;
+    }
+
+    getStacked() {
+        return this.stacked;
     }
 
     handleActions(action) {
@@ -26,7 +40,17 @@ class CompletedTaskStore extends EventEmitter {
         let isItMyTask = action.data.status === TASK_STATES.FINISHED;
         switch (action.type) {
             case ACTION.COMPLETE:
+                // show message
+                Util.Notificacion(
+                    action.data.title + ' has been marked as completed',
+                    ICON[ACTIONS.DONE]
+                );
                 this.tasks.push({...action.data, status: TASK_STATES.FINISHED});
+                sendBeacon = true;
+                break;
+            case ACTION.TOGGLE_COLLAPSE:
+                if (action.data !== TASK_STATES.FINISHED) break;
+                this.stacked = !this.stacked;
                 sendBeacon = true;
                 break;
             case ACTION.RESET:
@@ -43,7 +67,8 @@ class CompletedTaskStore extends EventEmitter {
         if (sendBeacon) this.emit(BEACON.COMPLETE);
 
         //save new data to localstorage
-        localStorage.completedTasks = JSON.stringify(this.tasks);
+        const {tasks, stacked} = this;
+        localStorage.completedStore = JSON.stringify({tasks, stacked});
     }
 }
 

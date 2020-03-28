@@ -1,6 +1,6 @@
 import React from 'react';
-import moment from 'moment';
 import {notification, Icon} from 'antd';
+import {TASK_ACTIONS_ICONS as ICON, TASK_ACTIONS as ACTIONS} from './Constants';
 
 const UpdateItem = (id, object, data) => {
     return object.map(item => {
@@ -55,15 +55,8 @@ const Notificacion = (message, icon) => {
     notification.open({
         message: message,
         icon: <Icon type={icon} style={{color: '#108ee9'}} />,
+        // placement:'bottomRight',
     });
-};
-
-const getTime = time => {
-    if (time >= 3600000) {
-        return moment(time - 1).toObject().hours + 'h';
-    } else {
-        return moment(time).toObject().minutes + 'm';
-    }
 };
 
 // calculates dom object position relative to the screen
@@ -96,8 +89,8 @@ const mobileCheck = () => {
 };
 
 const updateCollection = (collection, object, new_values, sort) => {
-
-    const _sort = sort || true;
+    const _sort = (sort === undefined) ? true : sort;
+    
     // filter out the input object from current collection
     let newCollection = collection.filter(item => {
         return item.id !== object.id;
@@ -110,7 +103,7 @@ const updateCollection = (collection, object, new_values, sort) => {
         newCollection.push(newObj);
     }
 
-    if(_sort) {
+    if (_sort) {
         // sort collection by id
         newCollection.sort((a, b) => {
             return a.id - b.id; /*|| a.name.localeCompare(b.name);*/
@@ -120,6 +113,35 @@ const updateCollection = (collection, object, new_values, sort) => {
     return newCollection;
 };
 
+const menuItemDeleteAll = props => ({
+    confirm: {
+        value: true,
+        title: 'Are you sure delete all ' + props.status + ' tasks?',
+    },
+    hidden: props.hidden || false,
+    icon: ICON[ACTIONS.TRASH],
+    // hide tooltip if mobile
+    tooltip: mobileCheck() ? null : 'Delete All',
+    // if device is mobile, show label
+    value: mobileCheck() ? 'Delete All' : null,
+    action: props.action,
+});
+
+const menuItemCollapse = props => ({
+    hidden: props.hidden || false,
+    icon: props.stacked ? 'folder-open' : 'folder',
+    tooltip: mobileCheck() // hide tooltip if mobile
+        ? null
+        : props.stacked
+        ? 'Show all'
+        : 'Collapse',
+    value: mobileCheck() // if device is mobile, show label
+        ? props.stacked
+            ? 'Show all'
+            : 'Collapse'
+        : null,
+    action: props.action,
+});
 
 const Util = {
     UpdateItem,
@@ -129,11 +151,12 @@ const Util = {
     FilterTasks,
     FindItem,
     Notificacion,
-    getTime,
     getObjOffset,
     getObjSize,
     mobileCheck,
     updateCollection,
+    menuItemDeleteAll,
+    menuItemCollapse,
 };
 
 export default Util;

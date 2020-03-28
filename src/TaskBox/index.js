@@ -1,9 +1,9 @@
 import React from 'react';
 import TimeSlider from '../TimeSlider';
-import {Button, Menu, Icon, Input, Row, Col} from 'antd';
+import {Input, Row, Col} from 'antd';
 import Util from '../Utils';
 import Anim from '../Utils/animations';
-import StepCounter from './StepCounter';
+import {TimeDialSelector, DefaultTimeMenu, NewTaskActions} from './Components';
 import {
     TASK_ACTIONS_ICONS as ICON,
     TASK_ACTIONS as ACTION,
@@ -144,9 +144,15 @@ class TaskBox extends React.Component {
     render() {
         const {title, hours, minutes, expanded, pop, mode} = this.state;
         const inEditMode = mode === STATE.EDITING;
+        const newTaskActions = {
+            style: [actionStyle.default, actionStyle.last],
+            expanded: expanded,
+            hours: hours,
+            minutes: minutes,
+        };
 
         return (
-            <div className="new-task">
+            <div className={'new-task ' + mode}>
                 <React.Fragment>
                     <Input
                         size="large"
@@ -159,102 +165,51 @@ class TaskBox extends React.Component {
                 </React.Fragment>
                 <Row>
                     <Col span={mobile ? 12 : 16}>
-                        {expanded ? (
-                            <Row style={{paddingTop: 7}} gutter={[8, 8]}>
-                                <Col>
-                                    <StepCounter
-                                        decDisabled={!hours}
-                                        onInc={() => this.chooseHour(hours + 1)}
-                                        onDec={() => this.chooseHour(hours - 1)}
-                                    >
-                                        <Button shape="round" type="dashed">
-                                            <strong
-                                                className={pop.h ? 'pop' : ''}
-                                            >
-                                                {hours}h
-                                            </strong>
-                                            <span>{minutes}min</span>
-                                        </Button>
-                                    </StepCounter>
-                                </Col>
-                            </Row>
+                        {// toggle default menu and settings menu
+                        !expanded ? (
+                            <DefaultTimeMenu
+                                hours={hours}
+                                menu={defaultTimeOptions}
+                                action={this.chooseHour}
+                            />
                         ) : (
-                            <Menu
-                                className="noselect"
-                                selectedKeys={[hours + 'h']}
-                                mode="horizontal"
-                            >
-                                {defaultTimeOptions.map(item => (
-                                    <Menu.Item
-                                        key={item + 'h'}
-                                        onClick={e =>
-                                            this.chooseHour(item, e.domEvent)
-                                        }
-                                    >
-                                        <span>{item}h</span>
-                                    </Menu.Item>
-                                ))}
-                            </Menu>
+                            <TimeDialSelector
+                                style={{paddingTop: 7}}
+                                hours={hours}
+                                minutes={minutes}
+                                pop={pop}
+                                action={this.chooseHour}
+                            />
                         )}
                     </Col>
+
                     <Col span={mobile ? 12 : 8} className="right">
-                        {!inEditMode ? (
-                            <Menu mode="horizontal">
-                                <Menu.Item
-                                    style={actionStyle.default}
-                                    onClick={this.toggleOptions}
-                                >
-                                    <Button shape="circle" type="dashed">
-                                        <Icon
-                                            type={
-                                                expanded
-                                                    ? ICON[ACTION.CANCLE]
-                                                    : 'setting'
-                                            }
-                                        />
-                                    </Button>
-                                </Menu.Item>
-                                <Menu.Item
-                                    style={actionStyle.last}
-                                    className="mobile-create-button-main"
-                                    onClick={this.saveTask}
-                                >
-                                    <Button
-                                        type="dashed"
-                                        shape="round"
-                                        disabled={!(hours + minutes)}
-                                        icon={ICON[ACTION.CREATE]}
-                                    >
-                                        Create
-                                    </Button>
-                                </Menu.Item>
-                            </Menu>
+                        {// toggle between edit and create actions
+                        !inEditMode ? (
+                            <NewTaskActions
+                                {...newTaskActions}
+                                cancle={this.toggleOptions}
+                                submit={this.saveTask}
+                                submitElClass="mobile-create-button-main"
+                                icons={{
+                                    cancle: expanded
+                                        ? ICON[ACTION.CANCLE]
+                                        : 'setting',
+                                    submit: ICON[ACTION.CREATE],
+                                }}
+                                text="Create"
+                            />
                         ) : (
-                            <Menu mode="horizontal">
-                                <Menu.Item
-                                    style={actionStyle.default}
-                                    onClick={this.props.cancle}
-                                >
-                                    <Button
-                                        shape="circle"
-                                        type="dashed"
-                                        icon={ICON[ACTION.CANCLE]}
-                                    />
-                                </Menu.Item>
-                                <Menu.Item
-                                    style={actionStyle.last}
-                                    onClick={this.saveTask}
-                                >
-                                    <Button
-                                        type="dashed"
-                                        shape="round"
-                                        disabled={!(hours + minutes)}
-                                        icon={ICON[ACTION.SAVE]}
-                                    >
-                                        Save
-                                    </Button>
-                                </Menu.Item>
-                            </Menu>
+                            <NewTaskActions
+                                {...newTaskActions}
+                                cancle={this.props.cancle}
+                                submit={this.saveTask}
+                                icons={{
+                                    cancle: ICON[ACTION.CANCLE],
+                                    submit: ICON[ACTION.SAVE],
+                                }}
+                                text="Save"
+                            />
                         )}
                     </Col>
                 </Row>

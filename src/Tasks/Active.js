@@ -1,11 +1,7 @@
 import React from 'react';
-
 import ActiveTaskStore from '../Stores/ActiveTaskStore';
 import {BEACON} from '../TaskActions/types';
-
 import Tasks from './index';
-import {TASK_STATES} from '../Utils/Constants';
-
 import {Beep1} from '../Assets/Sounds/Beep';
 
 class Active extends React.Component {
@@ -46,17 +42,16 @@ class Active extends React.Component {
     render() {
         const {tasks} = this.state;
 
-        return (
+        return tasks && tasks.length ? ( // continue if count(tasks) > 0
             <Tasks
-                header="Active"
-                status={TASK_STATES.ACTIVE}
+                header="Active Tasks"
                 // menu={[
                 //     deleteAll(TASK_STATES.FINISHED),
                 //     collapse(TASK_STATES.FINISHED),
                 // ]}
                 tasks={tasks}
             />
-        );
+        ) : null;
     }
 }
 

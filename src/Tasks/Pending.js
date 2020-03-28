@@ -6,21 +6,25 @@ import {BEACON} from '../TaskActions/types';
 import Tasks from './index';
 import Util from '../Utils';
 import {TASK_STATES} from '../Utils/Constants';
+import * as TaskActions from '../TaskActions';
 
 class PendingTasks extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            tasks: PendingTaskStore.getAll(),
+            // PENDING and PAUSED tasks reside in the same pool
+            tasks: PendingTaskStore.getTasks(),
             editModeActive: PendingTaskStore.getEditMode(),
+            stacked: PendingTaskStore.getStacked(),
         };
     }
 
     updateEvent = () => {
         this.setState({
-            tasks: PendingTaskStore.getAll(),
+            tasks: PendingTaskStore.getTasks(),
             editModeActive: PendingTaskStore.getEditMode(),
+            stacked: PendingTaskStore.getStacked(),
         });
     };
     editModeEvent = () => {
@@ -31,31 +35,51 @@ class PendingTasks extends React.Component {
     componentDidMount() {
         // listen to collection update
         PendingTaskStore.on(BEACON.PENDING, this.updateEvent);
-        // listen to editmode
-        PendingTaskStore.on(BEACON.EDIT_MODE_ACTIVE, this.editModeEvent);
     }
 
     componentWillUnmount() {
-        console.log('destoryed');
         PendingTaskStore.removeListener(BEACON.PENDING, this.updateEvent);
-        PendingTaskStore.removeListener(
-            BEACON.EDIT_MODE_ACTIVE,
-            this.editModeEvent
-        );
     }
 
     render() {
-        const {tasks} = this.state;
+        const {tasks, stacked} = this.state;
+        return tasks && tasks.length ? ( // continue if count(tasks) > 0
+            <React.Fragment>
+                <Tasks header="Paused" tasks={tasks.filter(v => v.isPaused)} />
+                <Tasks
+                    header="Pending"
+                    subHeader={tasks.length > 3 ? tasks.length : null}
+                    // menu={tasks.length > 2 ? [deleteAll(TASK_STATES.PENDING)] : []}
+                    tasks={tasks.filter(v => !v.isPaused)}
+                    stacked={stacked}
+                    menu={
+                        tasks.length > 2
+                            ? [
+                                  Util.menuItemDeleteAll({
+                                      status: TASK_STATES.PENDING,
+                                      action: () => {
+                                          //   TaskActions.sendAllToTrashTask(
+                                          //       TASK_STATES.PENDING
+                                          //   );
+                                          console.log('move all to trash');
+                                      },
+                                  }),
 
-        return (
-            <Tasks
-                header="Pending"
-                subHeader={tasks.length > 3 ? tasks.length : null}
-                status={TASK_STATES.PENDING}
-                // menu={tasks.length > 2 ? [deleteAll(TASK_STATES.PENDING)] : []}
-                tasks={tasks}
-            />
-        );
+                                  Util.menuItemCollapse({
+                                      stacked: stacked,
+                                      hidden: tasks.length < 2,
+                                      action: () => {
+                                          TaskActions.ToggleCollapse(
+                                              TASK_STATES.PENDING
+                                          );
+                                      },
+                                  }),
+                              ]
+                            : []
+                    }
+                />
+            </React.Fragment>
+        ) : null;
     }
 }
 

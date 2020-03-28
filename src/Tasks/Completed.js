@@ -2,23 +2,26 @@ import React from 'react';
 
 import CompletedTaskStore from '../Stores/CompletedTaskStore';
 import {BEACON} from '../TaskActions/types';
+import * as TaskActions from '../TaskActions';
 
 import Tasks from './index';
 import {TASK_STATES} from '../Utils/Constants';
+import Util from '../Utils';
 
 class CompletedTasks extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            tasks: CompletedTaskStore.getAll(),
-            stacked: false,
+            tasks: CompletedTaskStore.getTasks(),
+            stacked: CompletedTaskStore.getStacked(),
         };
     }
 
     updateEvent = () => {
         this.setState({
-            tasks: CompletedTaskStore.getAll(),
+            tasks: CompletedTaskStore.getTasks(),
+            stacked: CompletedTaskStore.getStacked(),
         });
     };
 
@@ -34,19 +37,29 @@ class CompletedTasks extends React.Component {
     render() {
         const {tasks, stacked} = this.state;
 
-        return (
+        return (tasks && tasks.length) ? ( // continue if count(tasks) > 0
             <Tasks
                 header="Completed"
                 subHeader={tasks.length}
-                status={TASK_STATES.FINISHED}
-                // menu={[
-                //     deleteAll(TASK_STATES.FINISHED),
-                //     collapse(TASK_STATES.FINISHED),
-                // ]}
+                menu={[
+                    Util.menuItemDeleteAll({
+                        status: TASK_STATES.TRASH,
+                        hidden: tasks.length < 2,
+                        action: ()=>{
+                            // TaskActions.sendAllToTrashTask(TASK_STATES.FINISHED)
+                            console.log('move finished to trash')
+                        }
+                    }),
+                    Util.menuItemCollapse({
+                        stacked: stacked,
+                        hidden: tasks.length < 2,
+                        action: ()=>{TaskActions.ToggleCollapse(TASK_STATES.FINISHED)}
+                    }),
+                ]}
                 stacked={stacked}
                 tasks={tasks}
             />
-        );
+        ) : null;
     }
 }
 

@@ -25,6 +25,9 @@ small.muted {
 .right {
     text-align: right;
 }
+.center {
+    text-align: center;
+}
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -42,7 +45,7 @@ small.muted {
 }
 .main-menu {
     margin-bottom: 35px;
-    padding-top: 50px;
+    padding-top: 30px;
 }
 .logo {
     height: 120px;
@@ -50,6 +53,10 @@ small.muted {
 .logo img {
     position: relative;
     top: 45%;
+}
+
+.ant-empty-normal {
+    color: rgba(0, 0, 0, 0.65);
 }
 .section {
     margin-bottom: 50px;
@@ -63,7 +70,7 @@ small.muted {
 
 .section .header .menu-item {
     font-size: 12px;
-    color: #838282;
+    color: #c5c5c5;
 }
 .section .header .menu-item .anticon {
     font-size: 14px;
@@ -72,17 +79,6 @@ small.muted {
     color: #1890ff;
 }
 
-/* animation for tasks */
-@keyframes loadTask {
-    0% {
-        top:-5px;
-        opacity: 0;
-    }
-    100% {
-        top:0;
-        opacity: 1;
-    }
-}
 .tasks {
 }
 
@@ -90,16 +86,15 @@ small.muted {
     margin-bottom: 10px;
 }
 .tasks ul {
-    padding:0;
+    padding: 0;
 }
-
 
 .task {
     color: #808080;
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     position: relative;
-    
+
     animation: loadTask;
     animation-duration: 0.2s;
 
@@ -166,21 +161,11 @@ small.muted {
 
 .task.active {
     color: #666666;
-    background-color: #dbffcb;
     border: none;
-}
-.task.edit .new-task {
-    border: none;
-}
-.task.edit {
-    color: #666666;
-    background-color: rgba(26, 144, 255, 0.096);
-    border-color: rgba(26, 144, 255, 0.199);
-    margin: 20px 0;
-    z-index: 100;
-}
-.task.edit:hover {
-    border-color: rgba(26, 144, 255, 0.26);
+
+    animation: colorPulseActive;
+    animation-iteration-count: infinite;
+    animation-duration: 5.5s;
 }
 
 .task.pending .ant-progress-bg {
@@ -198,14 +183,26 @@ small.muted {
 }
 
 .task.finished .controls {
-    background-color: #ffffff;
     color: #c5c5c5;
 }
 
 .task.paused {
     color: #666;
     background-color: #fcfbd5;
+    border-color: #e6e284;
+}
+
+.task.paused .ant-progress-bg {
+    background-color: #e4de2f;
+}
+
+.task.done {
+    color: #666;
+    background-color: #dbffcb;
     border: none;
+}
+.task.done .ant-progress {
+    /* display: none; */
 }
 
 .task.stacked {
@@ -237,6 +234,7 @@ small.muted {
 }
 
 .new-task .ant-input {
+    font-weight: bold;
     padding-top: 25px;
     padding-bottom: 25px;
     background: none;
@@ -280,6 +278,17 @@ small.muted {
 
 .new-task .ant-btn:not(.ant-btn-sm) > .anticon {
     /* line-height: 2.5; */
+}
+
+.new-task.edit {
+    color: #666666;
+    background-color: rgba(26, 144, 255, 0.096);
+    border-color: rgba(26, 144, 255, 0.199);
+    margin: 20px 0;
+    z-index: 100;
+}
+.new-task.edit:hover {
+    border-color: rgba(26, 144, 255, 0.26);
 }
 
 /**
@@ -513,5 +522,40 @@ small.muted {
     .section .header .menu-item .anticon {
         font-size: 12px;
     }
+}
 
+/* animation for tasks */
+@keyframes loadTask {
+    0% {
+        top: -5px;
+        opacity: 0;
+    }
+    100% {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes colorPulsePaused {
+    0% {
+        background-color: #fcfbd5;
+    }
+    50% {
+        background-color: #fffee8;
+    }
+    100% {
+        background-color: #fcfbd5;
+    }
+}
+
+@keyframes colorPulseActive {
+    0% {
+        background-color: #dbffcb;
+    }
+    50% {
+        background-color: #e9fde0;
+    }
+    100% {
+        background-color: #dbffcb;
+    }
 }

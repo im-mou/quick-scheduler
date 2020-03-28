@@ -15,8 +15,23 @@ const TasksPanel = props => {
     return null;
 };
 
+const TrashDrawerPanel = props => {
+    if (props.visible) {
+        return (
+            <Empty
+                style={{marginTop: "50%"}}
+                className="noselect"
+                image={false}
+                description={props.children}
+            />
+        );
+    };
+    return null;
+};
+
 const EmptyState = {
     TasksPanel,
+    TrashDrawerPanel,
 };
 
 export default EmptyState;
