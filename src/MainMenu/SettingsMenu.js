@@ -63,7 +63,18 @@ const SettingsMenu = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <Icon type="github" /> Github
+                        <Icon type="github" /> Github repo
+                    </a>
+                </span>
+            </List.Item>
+            <List.Item>
+                <span>
+                    <a
+                        href="https://www.buymeacoffee.com/immou"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <Icon type="coffee" /> Buy me a cuppa coffee
                     </a>
                 </span>
             </List.Item>
