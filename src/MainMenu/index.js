@@ -90,7 +90,8 @@ const SettingsMenu = () => {
     }
 
     const [darkmode, setDarkmode] = useState(JSON.parse(localStorage.darkMode));
-    const [sound, setSound] = useState(_sound);
+    // ToDo
+    // const [sound, setSound] = useState(_sound);
     const toggleDarkMode = () => {
         let mode = 1;
         if (darkmode === mode) {
@@ -101,14 +102,15 @@ const SettingsMenu = () => {
         document.body.classList[mode ? 'add' : 'remove']('dark');
     };
 
-    const toggleSound = () => {
-        let _sound = 1;
-        if (sound === _sound) {
-            _sound = 0;
-        }
-        setSound(_sound);
-        localStorage.sound = JSON.stringify(_sound);
-    };
+    // Todo: implement this
+    // const toggleSound = () => {
+    //     let _sound = 1;
+    //     if (sound === _sound) {
+    //         _sound = 0;
+    //     }
+    //     setSound(_sound);
+    //     localStorage.sound = JSON.stringify(_sound);
+    // };
 
     return (
         <List>
@@ -124,7 +126,8 @@ const SettingsMenu = () => {
             <List.Item>
                 <span>More options to come...</span>
             </List.Item>
-            {/* <List.Item>
+            {/* Todo:
+            <List.Item>
                 <span style={{marginRight: 10}}>Beep on completion</span>
                 <Switch
                     checked={!!sound}

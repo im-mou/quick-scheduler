@@ -12,7 +12,7 @@ class TrashTaskStore extends EventEmitter {
     constructor() {
         super();
         this.tasks = new window.FlyJson();
-        this.stacked = true;
+        this.stacked = false;
 
         // check if there is already a state in the localstorage
         if (localStorage.trashStore !== undefined) {
@@ -58,7 +58,17 @@ class TrashTaskStore extends EventEmitter {
                 break;
 
             case ACTION.TRASH_ALL:
-                this.tasks.clean();
+
+                // add tasks into the trash
+                action.data.foreach(task => {
+                    this.tasks.insert({
+                        ...task,
+                        status: TASK_STATES.TRASH,
+                    });
+                });
+                // emit tasks count to decrease total task count
+                this.emit(BEACON.DECREASE_TASKCOUNT, action.data.length);
+
                 sendBeacon = true;
                 break;
 
@@ -76,7 +86,7 @@ class TrashTaskStore extends EventEmitter {
 
             case ACTION.DELETE:
                 if (!isItMyTask) break;
-                this.tasks.delete("id", action.data.id);
+                this.tasks.delete('id', action.data.id);
                 sendBeacon = true;
                 break;
 
@@ -84,7 +94,7 @@ class TrashTaskStore extends EventEmitter {
                 if (!isItMyTask) break;
                 // send beacon to app to increase task count
                 this.emit(BEACON.INCREASE_TASKCOUNT);
-                this.tasks.delete("id", action.data.id);
+                this.tasks.delete('id', action.data.id);
                 sendBeacon = true;
                 break;
 
@@ -102,7 +112,7 @@ class TrashTaskStore extends EventEmitter {
         if (sendBeacon) this.emit(BEACON.TRASH);
 
         //save new data to localstorage
-        const {tasks, stacked} = this
+        const {tasks, stacked} = this;
         const _tasks = tasks.exec();
         localStorage.trashStore = JSON.stringify({tasks: _tasks, stacked});
     }

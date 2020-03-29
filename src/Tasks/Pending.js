@@ -45,38 +45,27 @@ class PendingTasks extends React.Component {
         const {tasks, stacked} = this.state;
         return tasks && tasks.length ? ( // continue if count(tasks) > 0
             <React.Fragment>
-                <Tasks header="Paused" tasks={tasks.filter(v => v.isPaused)} />
+                {/* paused tasks */}
+                <Tasks tasks={tasks.filter(v => v.isPaused)} />
+                {/* pending tasks */}
                 <Tasks
                     header="Pending"
                     subHeader={tasks.length > 3 ? tasks.length : null}
-                    // menu={tasks.length > 2 ? [deleteAll(TASK_STATES.PENDING)] : []}
                     tasks={tasks.filter(v => !v.isPaused)}
                     stacked={stacked}
-                    menu={
-                        tasks.length > 2
-                            ? [
-                                  Util.menuItemDeleteAll({
-                                      status: TASK_STATES.PENDING,
-                                      action: () => {
-                                          //   TaskActions.sendAllToTrashTask(
-                                          //       TASK_STATES.PENDING
-                                          //   );
-                                          console.log('move all to trash');
-                                      },
-                                  }),
-
-                                  Util.menuItemCollapse({
-                                      stacked: stacked,
-                                      hidden: tasks.length < 2,
-                                      action: () => {
-                                          TaskActions.ToggleCollapse(
-                                              TASK_STATES.PENDING
-                                          );
-                                      },
-                                  }),
-                              ]
-                            : []
-                    }
+                    menu={[
+                        Util.menuItemDeleteAll({
+                            status: TASK_STATES.PENDING,
+                            hidden: tasks.length < 2,
+                            action: () => TaskActions.sendAllToTrashTask(tasks),
+                        }),
+                        Util.menuItemCollapse({
+                            stacked: stacked,
+                            hidden: tasks.length < 2,
+                            action: () =>
+                                TaskActions.ToggleCollapse(TASK_STATES.PENDING),
+                        }),
+                    ]}
                 />
             </React.Fragment>
         ) : null;

@@ -14,11 +14,21 @@ const Timer = props => {
 const TaskBody = props => {
     const {task, status} = props;
     const isActive = task.status === STATUS.ACTIVE;
+    const isPaused = task.status === STATUS.PAUSED;
     const hours = task.time.h // +1 hour if min->60
         ? (task.time.m === 60 ? task.time.h + 1 : task.time.h) + 'h'
         : null;
     const minutes =
         task.time.m && task.time.m !== 60 ? task.time.m + 'm' : null;
+
+    let _elapsedTime = new Date(task.time.total - task.elapsedTime);
+    let formattedTime =
+        '0' +
+        String(_elapsedTime.getHours() - 1) +
+        ':' +
+        ('0' + _elapsedTime.getMinutes()).substr(-2) +
+        ':' +
+        ('0' + _elapsedTime.getSeconds()).substr(-2);
 
     return (
         <React.Fragment>
@@ -27,7 +37,9 @@ const TaskBody = props => {
                     <Col span={12}>
                         {hours} {minutes}
                     </Col>
-                    <Col span={12} className=""></Col>
+                    <Col span={12} className="right">
+                        {isPaused ? 'Paused' : ''}
+                    </Col>
                 </Row>
                 <Row>
                     <Col span={isActive ? 24 : 16} className="title">
@@ -44,11 +56,14 @@ const TaskBody = props => {
                             text="remaining..."
                         />
                     </Col>
-                    <Col span={8} className="right">
-                        <Controls
-                            status={status}
-                            task={task}
+                    <Col hidden={!isPaused} span={16} className="timer">
+                        <Statistic
+                            value={formattedTime}
+                            suffix="left..."
                         />
+                    </Col>
+                    <Col span={8} className="right">
+                        <Controls status={status} task={task} />
                     </Col>
                 </Row>
             </div>

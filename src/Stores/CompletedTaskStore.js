@@ -53,6 +53,17 @@ class CompletedTaskStore extends EventEmitter {
                 this.stacked = !this.stacked;
                 sendBeacon = true;
                 break;
+            case ACTION.TRASH_ALL:
+                if (action.data[0].status !== TASK_STATES.FINISHED) break;
+
+                // show message
+                Util.Notificacion(
+                    'All completed tasks moved to trash',
+                    ICON[ACTIONS.TRASH]
+                );
+                this.tasks = [];
+                sendBeacon = true;
+                break;
             case ACTION.RESET:
             case ACTION.TRASH:
                 if (!isItMyTask) break;

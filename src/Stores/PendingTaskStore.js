@@ -163,7 +163,7 @@ class PendingTaskStore extends EventEmitter {
                 break;
 
             case ACTION.TRASH_ALL:
-                if (!action.data === TASK_STATES.PENDING) break;
+                if (action.data[0].status !== TASK_STATES.PENDING) break;
 
                 // show message
                 Util.Notificacion(

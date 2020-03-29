@@ -52,6 +52,7 @@ body.dark {
 .dark .task .timer .ant-statistic-content {
     color: #fff;
 }
+
 .dark .task .timer span[class$='-suffix'] {
     color: rgba(255, 255, 255, 0.678);
 }
@@ -134,9 +135,14 @@ body.dark {
     border-color: transparent;
     color: #fff;
 }
+
 .dark .main-menu .ant-btn:hover:not(.ant-btn-link),
 .dark .new-task .ant-btn:hover:not(.ant-btn-link) {
     background: rgba(255, 255, 255, 0.14);
+}
+
+.dark .new-task .right .ant-menu-item span {
+    color: rgba(255, 255, 255, 0.692);
 }
 
 .dark .ant-drawer-content {

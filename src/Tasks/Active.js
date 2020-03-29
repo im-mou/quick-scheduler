@@ -45,10 +45,6 @@ class Active extends React.Component {
         return tasks && tasks.length ? ( // continue if count(tasks) > 0
             <Tasks
                 header="Active Tasks"
-                // menu={[
-                //     deleteAll(TASK_STATES.FINISHED),
-                //     collapse(TASK_STATES.FINISHED),
-                // ]}
                 tasks={tasks}
             />
         ) : null;

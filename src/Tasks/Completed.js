@@ -1,5 +1,4 @@
 import React from 'react';
-
 import CompletedTaskStore from '../Stores/CompletedTaskStore';
 import {BEACON} from '../TaskActions/types';
 import * as TaskActions from '../TaskActions';
@@ -37,23 +36,21 @@ class CompletedTasks extends React.Component {
     render() {
         const {tasks, stacked} = this.state;
 
-        return (tasks && tasks.length) ? ( // continue if count(tasks) > 0
+        return tasks && tasks.length ? ( // continue if count(tasks) > 0
             <Tasks
                 header="Completed"
                 subHeader={tasks.length}
                 menu={[
                     Util.menuItemDeleteAll({
-                        status: TASK_STATES.TRASH,
+                        status: TASK_STATES.FINISHED,
                         hidden: tasks.length < 2,
-                        action: ()=>{
-                            // TaskActions.sendAllToTrashTask(TASK_STATES.FINISHED)
-                            console.log('move finished to trash')
-                        }
+                        action: () => TaskActions.sendAllToTrashTask(tasks),
                     }),
                     Util.menuItemCollapse({
                         stacked: stacked,
                         hidden: tasks.length < 2,
-                        action: ()=>{TaskActions.ToggleCollapse(TASK_STATES.FINISHED)}
+                        action: () =>
+                            TaskActions.ToggleCollapse(TASK_STATES.FINISHED),
                     }),
                 ]}
                 stacked={stacked}

@@ -35,17 +35,22 @@ class App extends React.Component {
         TrashTaskStore.on(BEACON.INCREASE_TASKCOUNT, () =>
             this.updateEvent(true)
         );
-        TrashTaskStore.on(BEACON.DECREASE_TASKCOUNT, count =>
+        TrashTaskStore.on(BEACON.DECREASE_TASKCOUNT, (count) =>
             this.updateEvent(false, count)
         );
     }
+    componentWillUnmount() {
+        TrashTaskStore.removeListener(BEACON.INCREASE_TASKCOUNT, this.updateEvent);
+        TrashTaskStore.removeListener(BEACON.DECREASE_TASKCOUNT, this.updateEvent);
+    }
 
     updateEvent = (cond, count) => {
+        let diff = count ? count : 1;
         const value = cond
-            ? this.state.taskCount + 1
-            : this.state.taskCount - 1;
+            ? this.state.taskCount + diff
+            : this.state.taskCount - diff;
         // update count
-        this.updateTaskCounter(count || value);
+        this.updateTaskCounter(value);
     };
 
     updateTaskCounter = value => {

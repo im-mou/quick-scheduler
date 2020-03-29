@@ -14,11 +14,12 @@ All tasks can have one of the following status at a time:
 
 
 ### Work to be done
-- Use React hooks instead of classes 
-- Use [`FlyJson`](https://github.com/aalfiann/fly-json-odm) library to handle store data in all stores See [`TrashTaskStore.js`](Stores/TrashTaskStore.js)
+- Use React hooks instead of classes.
+- Use [`FlyJson`](https://github.com/aalfiann/fly-json-odm) library to handle store data in all stores See [`TrashTaskStore.js`](Stores/TrashTaskStore.js).
 - Enable/Disable task completion beep.
 - Add multiple sounds for the task completion beep.
 - Add draggble reordering of pending tasks.
+- Refactor.
 
 ### Dark mode?
 Hell yes!
