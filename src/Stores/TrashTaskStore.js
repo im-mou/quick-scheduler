@@ -60,7 +60,7 @@ class TrashTaskStore extends EventEmitter {
             case ACTION.TRASH_ALL:
 
                 // add tasks into the trash
-                action.data.foreach(task => {
+                action.data.forEach(task => {
                     this.tasks.insert({
                         ...task,
                         status: TASK_STATES.TRASH,
