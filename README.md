@@ -1,65 +1,28 @@
-# Steps to Install
+## Quick Schedule
+Quick schedule is a web app that allows you to create tasks with a timer attached to them. It allows you to play, pause, edit or mark the tasks as completed.
+Currently all data will be saved locally in your device using LocalStorage WebApi so be careful when clearing browser data.
 
-1.  Clone the repository in your system using git clone `https://github.com/im-mou/quick-scheduler.git`
+This app uses React as view layer and [`flux`](https://facebook.github.io/flux/) architecture for data managment.
 
-2.  Enter the directory using the command `cd quick-scheduler`
+### Status
+All tasks can have one of the following status at a time:
+- Active
+- Paused
+- Pending
+- Completed
+- Deleted
 
-3.  Run npm install
+### Dark mode?
+Hell yes!
 
-4.  Once complete run the app using yarn start or npm start
-
-
-
-## Available Scripts
-### `npm start`
-
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### `npm test`
-Launches the test runner in the interactive watch mode.<br />
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### What do now?
+- Use React hooks instead of classes.
+- Use [`FlyJson`](https://github.com/aalfiann/fly-json-odm) library to handle store data in all stores See [`TrashTaskStore.js`](Stores/TrashTaskStore.js).
+- Add draggable reordering of pending tasks.
+- Be able to tag tasks for grouping in the pending list.
+- Enable/Disable task completion beep.
+- Add multiple sounds for the task completion beep.
+- Add date to tasks and nav element for filter by date.
+- Over all Refactor, fix naming conventions.
+- Create multiple sessions/boards.
+- Create an iOS/android app using react-native.

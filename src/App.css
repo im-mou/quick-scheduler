@@ -1,194 +1,568 @@
 .row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
 }
 .col {
-  display: flex;
-  flex-direction: column;
-  flex-basis: 100%;
-  flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
 }
 
-.hidden{
-  display: none;
+.hidden {
+    display: none;
 }
 
 .col.right {
-  align-items: flex-end;
+    align-items: flex-end;
 }
 
 small.muted {
-  color: #aaaaaa;
+    color: #aaaaaa;
 }
 .right {
-  text-align: right;
+    text-align: right;
+}
+.center {
+    text-align: center;
+}
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Opera and Firefox */
 }
 
 .App {
-  max-width: 450px;
-  margin: 0 auto;
-  padding: 0 10px;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+.main-menu {
+    margin-bottom: 35px;
+    padding-top: 30px;
 }
 .logo {
-  height: 120px;
+    height: 120px;
 }
 .logo img {
-  position: relative;
-  top: 45%;
+    position: relative;
+    top: 45%;
+}
+
+.ant-empty-normal {
+    color: rgba(0, 0, 0, 0.65);
 }
 .section {
-  margin-bottom: 50px;
+    margin-bottom: 50px;
 }
 
 .section .header {
-  font-size: 12px;
-  color: #808080;
-  margin-bottom: 10px;
+    font-size: 12px;
+    color: #808080;
+    margin-bottom: 10px;
 }
 
-.items .item {
-  margin-bottom: 10px;
+.section .header .menu-item {
+    font-size: 12px;
+    color: #c5c5c5;
+}
+.section .header .menu-item .anticon {
+    font-size: 14px;
+}
+.section .header .menu-item:hover {
+    color: #1890ff;
 }
 
-.item {
-  color: #808080;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  position: relative;
-}
-.item-content {
-  width: 100%;
-  padding: 10px 15px;
+.tasks {
 }
 
-.item .pre-header {
-  font-size: 12px;
-  text-align: right;
+.tasks .task {
+    margin-bottom: 10px;
+}
+.tasks ul {
+    padding: 0;
 }
 
-.item .title {
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 5px;
-  margin-bottom: 10px;
+.task {
+    color: #808080;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    position: relative;
+
+    animation: loadTask;
+    animation-duration: 0.2s;
+
+    transition: all 0.2s;
+}
+.task.dragging {
+    opacity: 0.7;
+}
+.task:hover {
+    border: 1px solid #b4b2b2;
 }
 
-.item .footer,
-.footer .col{
-  align-self: flex-end;
+.task-content {
+    width: 100%;
+    padding: 10px 15px;
 }
 
-.item .timer {
-  font-size: 20px;
-  font-weight: normal;
-  color: #4d4d4d;
-}
-.item .footer .controls {
-  
+.task .pre-header {
+    font-size: 12px;
+    /* text-align: right; */
 }
 
-
-.item .ant-progress{
-  height: 3px;
+.task .title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
-.item .ant-progress-inner {
-  border-radius: 0px;
-  background-color: transparent;
-  vertical-align: top;
+.task .footer,
+.footer .col {
+    align-self: flex-end;
 }
 
-.item  .ant-progress-bg{
-  border-radius: 0px;
+.task .timer {
+}
+.task .timer span[class$='-suffix'] {
+    color: rgba(0, 0, 0, 0.5);
+    margin-left: 8px;
+    /* font-style: italic; */
+    font-size: 12px;
 }
 
-.item.active .ant-progress-bg{
-  background-color: #56d056;
+.task .footer .controls {
 }
 
-.item.active {
-  color: #666666;
-  background-color: #dbffcb;
-  border: none;
+.task .ant-progress {
+    display: block;
+}
+.task .ant-progress,
+.task .ant-progress + div,
+.task .ant-progress-outer {
+    height: 3px;
 }
 
-.item.pending .ant-progress-bg{
-  /* background-color: #ddd; */
+.task .ant-progress-inner {
+    background-color: transparent;
+    vertical-align: top;
 }
 
-.item.finished {
-  background-color: #ffffff;
-  color: #c5c5c5;
+.task.active .ant-progress-bg {
+    background-color: #56d056;
 }
 
-.item.finished  .ant-progress-bg{
-  background-color: #dedede;
+.task.active {
+    color: #666666;
+    border: none;
+
+    animation: colorPulseActive;
+    animation-iteration-count: infinite;
+    animation-duration: 5.5s;
 }
 
-.item.finished .controls {
-  background-color: #ffffff;
-  color: #c5c5c5;
+.task.pending .ant-progress-bg {
+    /* background-color: #ddd; */
 }
 
-
-
-.control-bar {
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
+.task.finished,
+.task.trash {
+    background-color: #ffffff;
+    color: #c5c5c5;
 }
 
-.control-bar  .ant-input{
-  padding-top: 25px;
-  padding-bottom: 25px;
+.task.finished .ant-progress-bg {
+    background-color: #dedede;
 }
 
-.control-bar  .ant-input,
-.control-bar  .ant-input-number  {
-  border: none;
-  border-radius: 0;
+.task.finished .controls {
+    color: #c5c5c5;
 }
 
-.control-bar  .ant-input-number-input{
-  padding:0 10px !important;
+.task.paused {
+    color: #666;
+    background-color: #fcfbd5;
+    border-color: #e6e284;
 }
 
-.control-bar  .ant-menu-item-selected:not(:last-child){
-  border-bottom: 2px solid transparent;
-  font-weight: bold;
+.task.paused .ant-progress-bg {
+    background-color: #e4de2f;
 }
 
-.control-bar  .ant-menu-item-active:not(:last-child) {
-  border-bottom: 2px solid transparent;
+.task.done {
+    color: #666;
+    background-color: #dbffcb;
+    border: none;
+}
+.task.done .ant-progress {
+    /* display: none; */
 }
 
-.task-wrapper{
-  margin-top: 50px;
+.task.stacked {
+    box-shadow:
+        /* The second layer */ 0 10px 0 -5px rgb(241, 240, 240),
+        /* The second layer shadow */ 0 10px 1px -4px rgba(0, 0, 0, 0.15),
+        /* The third layer */ 0 20px 0 -10px rgb(247, 247, 247),
+        /* The third layer shadow */ 0 20px 1px -9px rgba(0, 0, 0, 0.15);
+}
+.task.stacked.n2 {
+    box-shadow:
+        /* The second layer */ 0 10px 0 -5px rgb(241, 240, 240),
+        /* The second layer shadow */ 0 10px 1px -4px rgba(0, 0, 0, 0.15) !important;
+}
+
+/**
+ * New Task
+ *
+ * Modifies default ant.design css rules to adapt the design to our requirements.
+ */
+.new-task {
+    /* margin-bottom: 5px; */
+    border: 1px solid #ccc;
+    /* border-bottom-right-radius: 25px; */
+}
+.new-task .ant-menu {
+    border-bottom-color: transparent;
+    background: none;
+}
+
+.new-task .ant-input {
+    font-weight: bold;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    background: none;
+}
+
+.new-task .ant-input,
+.new-task .ant-input-number {
+    border: none;
+    border-radius: 0;
+}
+
+.new-task .ant-input-number-input {
+    padding: 0 10px !important;
+}
+
+/* .new-task .ant-menu-item-selected:not(:last-child) */
+.new-task .ant-menu-item-selected {
+    border-bottom: 2px solid transparent;
+    font-weight: bold;
+}
+
+.new-task .ant-menu-item.ant-menu-item-selected.numberInput {
+    border-bottom: 2px solid #1890ff;
+}
+
+/* .new-task .ant-menu-item-active:not(:last-child) {
+    border-bottom: 2px solid transparent;
+} */
+
+.new-task .ant-menu-item:hover {
+    border-bottom: 2px solid transparent;
+}
+
+.new-task .anticon {
+    margin: auto;
+}
+
+.new-task .ant-btn {
+    /* line-height: 1.5; */
+}
+
+.new-task .ant-btn:not(.ant-btn-sm) > .anticon {
+    /* line-height: 2.5; */
+}
+
+.new-task.edit {
+    color: #666666;
+    background-color: rgba(26, 144, 255, 0.096);
+    border-color: rgba(26, 144, 255, 0.199);
+    margin: 20px 0;
+    z-index: 100;
+}
+.new-task.edit:hover {
+    border-color: rgba(26, 144, 255, 0.26);
+}
+
+/**
+ * Time Slider
+ *
+ * Modifies default ant.design css rules to adapt the design to our requirements.
+ */
+
+.timer-slider {
+    height: 28px;
+    position: relative;
+    /* background-color: #efefef; */
+}
+.timer-slider .ant-slider {
+    position: relative;
+    margin-bottom: 0;
+    margin-right: 25px;
+    margin-left: 25px;
+    top: 18px;
+}
+
+.timer-slider .ant-slider-rail {
+    display: none;
+}
+
+.timer-slider .ant-slider-track {
+    height: 6px;
+    border-radius: 0;
+    background-color: #1890ff;
+    opacity: 0.15;
+    transition: all 0.2s;
+}
+
+.timer-slider .ant-slider-step {
+}
+
+.timer-slider .ant-slider-dot {
+    border-radius: 0;
+    border: 0;
+    width: 1px;
+    background-color: transparent;
+    margin: 0;
+}
+.timer-slider .ant-slider-dot-active {
+    background-color: #1890ff !important;
+    opacity: 0.5 !important;
+}
+
+.timer-slider .ant-slider-dot:nth-child(-n + 5) {
+    background-color: #000;
+    opacity: 0.15;
+    width: 1px;
+    height: 12px;
+    top: -6px;
+}
+
+.timer-slider .ant-slider-mark {
+    font-size: 10px;
+    top: -18px;
+}
+.timer-slider .ant-slider-mark-text {
+    color: #000;
+    opacity: 0.35;
+}
+.timer-slider .ant-slider-mark-text-active {
+    opacity: 0.7;
+}
+
+.timer-slider .ant-slider-handle {
+    border-radius: 0;
+    border: 0;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    bottom: -20px;
+    cursor: grab;
+}
+.timer-slider .ant-slider-handle:active {
+    cursor: grabbing;
+}
+.timer-slider .ant-slider-handle:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.timer-slider .ant-slider-handle:after {
+    content: '';
+    position: absolute;
+    opacity: 0;
+    left: 50%;
+    transform: translateX(-47%);
+    width: 19px;
+    height: 5px;
+    background-color: transparent;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    bottom: 12px;
+
+    transition: all 0.2s;
+}
+.timer-slider:hover .ant-slider-handle:after {
+    opacity: 1;
+}
+
+.timer-slider .ant-slider-handle:hover:after {
+    opacity: 1;
+    border: 1px solid rgba(24, 144, 255, 0.6);
+    height: 21px;
+    width: 21px;
+    bottom: 10px;
+}
+.timer-slider .ant-slider-handle:focus:after {
+    border: 1px solid rgba(24, 144, 255, 0.6);
+}
+.timer-slider .ant-slider-handle:active:after {
+    opacity: 1;
+    border: 1px solid rgba(24, 144, 255, 1);
+    /* box-shadow: 0 5px 30px rgba(24, 144, 255, 0.6); */
+}
+
+.timer-slider .ant-slider-handle:before {
+    content: '';
+    position: absolute;
+    opacity: 0;
+
+    left: 30%;
+    width: 5px;
+    height: 5px;
+    background-color: transparent;
+
+    border-radius: 10px;
+    bottom: 5px;
+    transform: scale(1, 1);
+    transition: all 0.2s;
+    border: 0px solid rgba(24, 144, 255, 0.07);
+}
+
+.timer-slider .ant-slider-handle:hover:before {
+    transform: scale(3, 3);
+    border: 7px solid rgba(24, 144, 255, 0.07);
+}
+.timer-slider .ant-slider-handle:active:before {
+    opacity: 1;
+    width: 21px;
+    height: 21px;
+    bottom: 10px;
+}
+
+.pop {
+    /* transform: scale(1.2,1.2); */
+    color: rgba(24, 144, 255, 0.65);
+}
+
+.step-counter .ant-btn-link {
+    transition: all 0.1s !important;
+    color: #aaa;
+}
+.step-counter .ant-btn-link:hover {
+    color: #40a9ff;
+}
+.step-counter .ant-btn-link:active {
+    transform: scale(1.2, 1.2);
+}
+
+.step-counter .ant-btn-link:nth-child(1) {
+    padding-left: 13px;
+}
+.step-counter strong {
+    margin-right: 3px;
+}
+
+.ant-divider-horizontal {
+    margin: 0;
+    border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.task-wrapper {
+    margin-top: 50px;
+    padding-bottom: 30px;
 }
 
 .mobile-create-button {
-  margin: 10px;
+    margin: 10px;
+    float: right;
 }
 
 .hide-on-mobile {
-  display: inherit;
+    display: inherit;
 }
 
 .show-on-mobile {
-  display: none;
+    display: none;
 }
 
-@media only screen and (max-width: 600px){
-  .hide-on-mobile {
-    display: none;
-  }
-  
-  .show-on-mobile {
-    display: inherit;
-  }
+.copyright {
+    font-size: 12px;
+    color: #999;
+}
 
-  .logo {
-    height: 80px;
-  }
+@media only screen and (max-width: 600px) {
+    .hide-on-mobile {
+        display: none;
+    }
+
+    .show-on-mobile {
+        display: inherit;
+    }
+
+    .logo {
+        height: 80px;
+    }
+
+    .hide-on-mobile.mobile-create-button-main {
+        padding-left: 0px !important;
+        display: none;
+    }
+
+    /* .new-task .ant-menu {
+        border-bottom-color: #e8e8e8;
+    } */
+
+    .timer-slider .ant-slider-handle:after {
+        opacity: 1;
+    }
+
+    .step-counter .ant-btn {
+        padding: 0 15px;
+    }
+    .step-counter .ant-btn:nth-child(2) {
+        padding: 0 10px;
+    }
+
+    .section .header .menu-item {
+        margin-left: 10px;
+    }
+
+    .section .header .menu-item .anticon {
+        font-size: 12px;
+    }
+}
+
+
+/* animation for tasks */
+@keyframes loadTask {
+    0% {
+        top: -5px;
+        opacity: 0;
+    }
+    100% {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes colorPulsePaused {
+    0% {
+        background-color: #fcfbd5;
+    }
+    50% {
+        background-color: #fffee8;
+    }
+    100% {
+        background-color: #fcfbd5;
+    }
+}
+
+@keyframes colorPulseActive {
+    0% {
+        background-color: #dbffcb;
+    }
+    50% {
+        background-color: #e9fde0;
+    }
+    100% {
+        background-color: #dbffcb;
+    }
 }
