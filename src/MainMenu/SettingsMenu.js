@@ -63,7 +63,7 @@ const SettingsMenu = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <Icon type="github" /> Github
+                        <Icon type="github" /> Github repo
                     </a>
                 </span>
             </List.Item>
@@ -74,7 +74,7 @@ const SettingsMenu = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <Icon type="github" /> Buy me a cuppa coffee
+                        <Icon type="coffee" /> Buy me a cuppa coffee
                     </a>
                 </span>
             </List.Item>
