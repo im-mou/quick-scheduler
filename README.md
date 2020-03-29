@@ -17,7 +17,7 @@ Hell yes!
 
 ### What do now?
 - Use React hooks instead of classes.
-- Use [`FlyJson`](https://github.com/aalfiann/fly-json-odm) library to handle store data in all stores See [`TrashTaskStore.js`](Stores/TrashTaskStore.js).
+- Use [`FlyJson`](https://github.com/aalfiann/fly-json-odm) library to handle store data in all stores See [`TrashTaskStore.js`](src/Stores/TrashTaskStore.js).
 - Add draggable reordering of pending tasks.
 - Be able to tag tasks for grouping in the pending list.
 - Enable/Disable task completion beep.
