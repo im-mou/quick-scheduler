@@ -1,0 +1,245 @@
+body.dark {
+    color: #ddd;
+    background-color: #121212;
+    animation: changeColor;
+    animation-duration: 0.5s;
+}
+
+@keyframes changeColor {
+    0% {
+        background-color: #fff;
+    }
+    100% {
+        background-color: #121212;
+    }
+}
+
+.dark img.logo-img {
+    filter: brightness(400%);
+}
+
+.dark small.muted {
+    color: #aaaaaa;
+}
+
+.dark .ant-empty-normal {
+    color: rgba(255, 255, 255, 0.233);
+}
+
+.dark .section .header {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.dark .section .header .menu-item {
+    color: rgba(255, 255, 255, 0.3);
+}
+.dark .section .header .menu-item:hover {
+    color: #1890ff;
+}
+
+.dark .task {
+    border-radius: 5px;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.11);
+    border: none;
+}
+
+.dark .task:hover {
+    border: none;
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+.dark .task .timer .ant-statistic-content {
+    color: #fff;
+}
+
+.dark .task .timer span[class$='-suffix'] {
+    color: rgba(255, 255, 255, 0.678);
+}
+
+.dark .task.active .ant-progress-bg {
+    background-color: #56d056;
+}
+
+.dark .task.active {
+    overflow: hidden;
+    color: #fff;
+    animation: none;
+    background-color: rgba(86, 208, 86, 0.205);
+}
+
+.dark .task.finished,
+.dark .task.trash {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.dark .task.finished .ant-progress-bg {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .task.paused {
+    overflow: hidden;
+    color: #fff;
+    background-color: rgba(255, 196, 1, 0.137);
+    border-color: none;
+}
+
+.dark .task.paused .ant-progress-bg {
+    background-color: rgba(255, 196, 1, 0.534);
+}
+
+.dark .task.done {
+    overflow: hidden;
+}
+
+/**
+ * New Task
+ *
+ * Modifies default ant.design css rules to adapt the design to our requirements.
+ */
+.dark .new-task {
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.07);
+    border: none;
+}
+
+.dark .new-task .ant-input {
+    color: #fff;
+}
+
+.dark .new-task .ant-menu-item.ant-menu-item-selected.numberInput {
+    border-bottom: 2px solid #1890ff;
+}
+.dark .new-task .ant-menu-item.ant-menu-item-selected span {
+    color: #1890ff;
+}
+.dark .new-task .ant-menu-item span {
+    color: rgba(255, 255, 255, 0.644);
+}
+.dark .new-task .ant-menu-item:hover span {
+    color: #fff;
+}
+
+.dark .new-task.edit {
+    background-color: rgba(24, 143, 255, 0.11);
+    border: 1px solid rgba(24, 143, 255, 0.11);
+}
+.dark .new-task.edit:hover {
+    border-color: rgba(26, 144, 255, 0.26);
+}
+
+.dark .main-menu .ant-btn,
+.dark .new-task .ant-btn {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: transparent;
+    color: #fff;
+}
+
+.dark .main-menu .ant-btn:hover:not(.ant-btn-link),
+.dark .new-task .ant-btn:hover:not(.ant-btn-link) {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.dark .new-task .right .ant-menu-item span {
+    color: rgba(255, 255, 255, 0.692);
+}
+
+.dark .ant-drawer-content {
+    background: #242424;
+}
+.dark .ant-drawer-header {
+    background: #414141;
+    border-bottom: 0;
+}
+
+.dark .ant-drawer-title,
+.dark .ant-drawer-close,
+.dark .ant-drawer-close:hover {
+    color: #fff;
+}
+
+/**
+ * Time Slider
+ *
+ * Modifies default ant.design css rules to adapt the design to our requirements.
+ */
+
+.dark .timer-slider .ant-slider-track {
+    background-color: #1890ff;
+}
+
+.dark .timer-slider .ant-slider-dot-active {
+    background-color: #1890ff !important;
+}
+
+.dark .timer-slider .ant-slider-dot:nth-child(-n + 5) {
+    background-color: #fff;
+}
+
+.dark .timer-slider .ant-slider-mark-text {
+    color: #fff;
+}
+
+.dark .timer-slider .ant-slider-handle:after {
+    opacity: 1;
+    border: 1px solid rgba(24, 143, 255, 0.452);
+}
+
+.dark .timer-slider .ant-slider-handle:hover:after {
+    border: 1px solid rgb(24, 144, 255);
+}
+
+.dark .timer-slider .ant-slider-handle:active:after {
+    border: 1px solid rgb(24, 144, 255);
+    background-color: #188fff8e;
+}
+
+.dark .pop {
+    color: rgba(24, 144, 255, 0.65);
+}
+
+.dark .step-counter .ant-btn-link {
+    background: none;
+}
+.dark .step-counter .ant-btn-link:hover {
+    color: #40a9ff;
+}
+
+.dark .task.stacked {
+    box-shadow:
+        /* The second layer */ 0 10px 0 -5px rgb(39, 39, 39),
+        /* The second layer shadow */ 0 10px 1px -4px rgba(0, 0, 0, 0.15),
+        /* The third layer */ 0 20px 0 -10px rgb(31, 31, 31),
+        /* The third layer shadow */ 0 20px 1px -9px rgba(0, 0, 0, 0.15);
+}
+.dark .task.stacked.n2 {
+    box-shadow:
+        /* The second layer */ 0 10px 0 -5px rgb(39, 39, 39),
+        /* The second layer shadow */ 0 10px 1px -4px rgba(0, 0, 0, 0.15) !important;
+}
+
+/**
+ * ICONS
+ *
+ */
+.dark .task .anticon {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.dark .task.active .anticon {
+    color: #fff;
+}
+.dark .task.finished .anticon,
+.dark .task.trash .anticon {
+    color: rgba(255, 255, 255, 0.253);
+}
+
+.dark .task.finished:hover .anticon,
+.dark .task.trash:hover .anticon {
+    color: rgba(255, 255, 255, 0.5);
+}
+.dark .task.pending:hover .anticon,
+.dark .task.paused:hover .anticon {
+    color: rgba(255, 255, 255, 0.7);
+}
