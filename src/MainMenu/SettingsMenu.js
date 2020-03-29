@@ -68,6 +68,17 @@ const SettingsMenu = () => {
                 </span>
             </List.Item>
             <List.Item>
+                <span>
+                    <a
+                        href="https://www.buymeacoffee.com/immou"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <Icon type="github" /> Buy me a cuppa coffee
+                    </a>
+                </span>
+            </List.Item>
+            <List.Item>
                 <span className="copyright">© 2020 Mohsin Riaz</span>
             </List.Item>
             {/* Todo:
