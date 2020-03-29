@@ -12,6 +12,8 @@ All tasks can have one of the following status at a time:
 - Completed
 - Deleted
 
+### Dark mode?
+Hell yes!
 
 ### Work to be done
 - Use React hooks instead of classes.
@@ -19,7 +21,8 @@ All tasks can have one of the following status at a time:
 - Enable/Disable task completion beep.
 - Add multiple sounds for the task completion beep.
 - Add draggble reordering of pending tasks.
-- Refactor.
-
-### Dark mode?
-Hell yes!
+- Create multiple sessions with diferent tasks in each.
+- Be able to tag tasks for grouping in the pending list.
+- Add date to tasks and nav element for filter by date.
+- Over all Refactor, fix naming conventions.
+- Create an iOS/android app using react-native.
