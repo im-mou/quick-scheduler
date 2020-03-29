@@ -29,7 +29,7 @@ const MainMenu = () => {
     return (
         <React.Fragment>
             <Row className="main-menu">
-                <Col span={12}>
+                <Col span={12} md={16}>
                     <img
                         className="logo-img"
                         alt="Quick Scheduler"
@@ -37,7 +37,7 @@ const MainMenu = () => {
                         width={120}
                     />
                 </Col>
-                <Col span={12}>
+                <Col span={12} md={8}>
                     <Row className={!Util.mobileCheck() ? 'right' : 'center'}>
                         <Col span={8}></Col>
                         <Col span={8}>
@@ -125,6 +125,16 @@ const SettingsMenu = () => {
             </List.Item>
             <List.Item>
                 <span>More options to come...</span>
+            </List.Item>
+            <List.Item>
+                <span>
+                    <a href="https://github.com/im-mou/quick-scheduler" target="_blank" rel="noopener noreferrer">
+                        <Icon type="github" /> Github
+                    </a>
+                </span>
+            </List.Item>
+            <List.Item>
+                <span className="copyright">© 2020 Mohsin Riaz</span>
             </List.Item>
             {/* Todo:
             <List.Item>

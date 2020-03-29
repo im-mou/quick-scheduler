@@ -2,7 +2,7 @@ import React from 'react';
 import ActiveTaskStore from '../Stores/ActiveTaskStore';
 import {BEACON} from '../TaskActions/types';
 import Tasks from './index';
-import {Beep1} from '../Assets/Sounds/Beep';
+// import {Beep1} from '../Assets/Sounds/Beep';
 
 class Active extends React.Component {
     constructor(props) {
@@ -20,7 +20,7 @@ class Active extends React.Component {
     };
     completeEvent = () => {
         // play sound
-        Beep1.play();
+        // Beep1.play();
     };
 
     componentDidMount() {

@@ -467,6 +467,7 @@ small.muted {
 
 .task-wrapper {
     margin-top: 50px;
+    padding-bottom: 30px;
 }
 
 .mobile-create-button {
@@ -480,6 +481,11 @@ small.muted {
 
 .show-on-mobile {
     display: none;
+}
+
+.copyright {
+    font-size: 12px;
+    color: #999;
 }
 
 @media only screen and (max-width: 600px) {
@@ -523,6 +529,7 @@ small.muted {
         font-size: 12px;
     }
 }
+
 
 /* animation for tasks */
 @keyframes loadTask {

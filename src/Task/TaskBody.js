@@ -21,6 +21,7 @@ const TaskBody = props => {
     const minutes =
         task.time.m && task.time.m !== 60 ? task.time.m + 'm' : null;
 
+    // create the remaining time stting for the paused task
     let _elapsedTime = new Date(task.time.total - task.elapsedTime);
     let formattedTime =
         '0' +
@@ -57,10 +58,7 @@ const TaskBody = props => {
                         />
                     </Col>
                     <Col hidden={!isPaused} span={16} className="timer">
-                        <Statistic
-                            value={formattedTime}
-                            suffix="left..."
-                        />
+                        <Statistic value={formattedTime} suffix="left..." />
                     </Col>
                     <Col span={8} className="right">
                         <Controls status={status} task={task} />
