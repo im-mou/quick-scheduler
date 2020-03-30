@@ -40,12 +40,12 @@ const Tasks = function(props) {
     }
 
     // generate regular tasks
-    tasks = _tasks.map((task, key) => {
+    tasks = _tasks.map(task => {
         switch (task.status) {
             case STATUS.EDITING: // edit body
                 return (
                     <TaskBox
-                        key={key}
+                        key={task.id}
                         className="edit"
                         mode={STATUS.EDITING}
                         expanded={true}
@@ -58,7 +58,7 @@ const Tasks = function(props) {
                 // regular task body
                 return (
                     <Task
-                        key={key}
+                        key={task.id}
                         classes={classNames(
                             {[task.status]: true},
                             {[`stacked n${props.tasks.length}`]: _stacked}
