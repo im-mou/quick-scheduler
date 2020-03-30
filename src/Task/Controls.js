@@ -15,7 +15,7 @@ const actionStyles = {fontSize: '20px', color: '#8a8a8a'};
 const Controls = function({status, task}) {
     return (
         <div className="controls">
-            {ACTIONS[status].map((actionType, key) => (
+            {ACTIONS[status].map((actionType,key) => (
                 <Tooltip
                     key={key}
                     placement="top"
