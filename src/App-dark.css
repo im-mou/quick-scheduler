@@ -98,6 +98,43 @@ body.dark {
  *
  * Modifies default ant.design css rules to adapt the design to our requirements.
  */
+
+.dark .ant-popover-inner {
+    background: #232323;
+}
+
+.dark .ant-popover-placement-bottomRight > .ant-popover-content > .ant-popover-arrow {
+    border-top-color: #232323;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: #232323;
+}
+
+.dark .ant-popover-inner .ant-list,
+.dark .ant-popover-title,
+.dark .ant-popover-message-title,
+.dark .ant-dropdown-menu
+.ant-dropdown-menu-item {
+    color: #fff;
+}
+
+.dark .ant-dropdown-menu {
+    background: #232323;
+}
+
+.dark .ant-dropdown-menu-item:hover, .dark .ant-dropdown-menu-submenu-title:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.dark .ant-notification-notice {
+    background: #232323;
+}
+
+.dark .ant-notification-notice-message, .dark .anticon, .dark .anticon-close, .dark .ant-notification-close-icon > svg {
+    color: #fff;
+    stroke: #fff;
+}
+
 .dark .new-task {
     border-radius: 5px;
     background-color: rgba(255, 255, 255, 0.07);
