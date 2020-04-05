@@ -17,7 +17,7 @@ Hell yes!
 
 ### What do now?
 - Use React hooks instead of classes.
-- Use [easytimer.js](https://github.com/albert-gonzalez/easytimer.js) for the timer in [ActiveTaskStore.js](src/Stores/ActiveTaskStore.js#L49)
+- Use [`easytimer.js`](https://github.com/albert-gonzalez/easytimer.js) for the timer in [`ActiveTaskStore.js`](src/Stores/ActiveTaskStore.js#L49)
 - Use [`FlyJson`](https://github.com/aalfiann/fly-json-odm) library to handle store data in all stores See [`TrashTaskStore.js`](src/Stores/TrashTaskStore.js#L14).
 - Add draggable reordering of pending tasks.
 - Be able to tag tasks for grouping in the pending list.
