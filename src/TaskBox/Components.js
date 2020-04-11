@@ -1,6 +1,7 @@
 import React from 'react';
-import {Button, Icon, Menu, Row, Col} from 'antd';
+import {Button, Icon, Menu, Row, Col, Popover, DatePicker} from 'antd';
 import StepCounter from './StepCounter';
+import moment from 'moment';
 
 // time step selector
 export const TimeDialSelector = props => (
@@ -40,8 +41,45 @@ export const DefaultTimeMenu = props => (
     </Menu>
 );
 
+function disabledDate(current) {
+    // Can not select days before today
+    return current < moment().startOf('day');
+}
+
+const TaskDatePicker = props => (
+    <DatePicker
+        className="newtask-datepicker"
+        bordered={false}
+        format="DD/MM/YYYY"
+        disabledDate={disabledDate}
+        value={props.defaultDate ? moment(props.defaultDate) : null}
+        onChange={props.onDateChange}
+    />
+);
+
 export const NewTaskActions = props => (
     <Menu mode="horizontal">
+        <Menu.Item style={props.style[0]}>
+            <Popover
+                title="Choose Date"
+                content={<TaskDatePicker {...props.date} />}
+                placement="bottom"
+                trigger="click"
+            >
+                <Button
+                    style={
+                        props.date.defaultDate
+                            ? {backgroundColor: '#1890ff'}
+                            : {}
+                    }
+                    shape="circle"
+                    type="dashed"
+                >
+                    <Icon type="calendar" />
+                </Button>
+            </Popover>
+        </Menu.Item>
+
         <Menu.Item style={props.style[0]} onClick={props.cancle}>
             <Button shape="circle" type="dashed">
                 <Icon type={props.icons.cancle} />
@@ -57,7 +95,8 @@ export const NewTaskActions = props => (
                 shape="round"
                 disabled={!(props.hours + props.minutes)}
             >
-                <Icon type={props.icons.submit} />{props.text || null}
+                <Icon type={props.icons.submit} />
+                {props.text || null}
             </Button>
         </Menu.Item>
     </Menu>

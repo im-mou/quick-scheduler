@@ -114,9 +114,10 @@ small.muted {
 
 .task .pre-header {
     font-size: 12px;
-    /* text-align: right; */
 }
-
+.task .pre-header .right{
+    opacity: 0.7;
+}
 .task .title {
     font-size: 16px;
     font-weight: bold;
@@ -233,24 +234,18 @@ small.muted {
     background: none;
 }
 
-.new-task .ant-input {
+.new-task .newtask-input.ant-input {
     font-weight: bold;
     padding-top: 25px;
     padding-bottom: 25px;
     background: none;
 }
 
-.new-task .ant-input,
-.new-task .ant-input-number {
+.new-task .newtask-input.ant-input{
     border: none;
     border-radius: 0;
 }
 
-.new-task .ant-input-number-input {
-    padding: 0 10px !important;
-}
-
-/* .new-task .ant-menu-item-selected:not(:last-child) */
 .new-task .ant-menu-item-selected {
     border-bottom: 2px solid transparent;
     font-weight: bold;
@@ -260,25 +255,15 @@ small.muted {
     border-bottom: 2px solid #1890ff;
 }
 
-/* .new-task .ant-menu-item-active:not(:last-child) {
-    border-bottom: 2px solid transparent;
-} */
 
 .new-task .ant-menu-item:hover {
     border-bottom: 2px solid transparent;
 }
 
-.new-task .anticon {
+.new-task .newtask-actions .anticon {
     margin: auto;
 }
 
-.new-task .ant-btn {
-    /* line-height: 1.5; */
-}
-
-.new-task .ant-btn:not(.ant-btn-sm) > .anticon {
-    /* line-height: 2.5; */
-}
 
 .new-task.edit {
     color: #666666;
@@ -291,6 +276,13 @@ small.muted {
     border-color: rgba(26, 144, 255, 0.26);
 }
 
+.new-task .newtask-datepicker input{
+    border-color: transparent;
+}
+
+.ant-calendar .ant-calendar-input-wrap {
+    display: none;
+}
 /**
  * Time Slider
  *

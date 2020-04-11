@@ -15,11 +15,11 @@ const mobile = Util.mobileCheck();
 const defaultTimeOptions = mobile ? [1, 2, 3] : [1, 2, 3, 5];
 const actionStyle = {
     default: {
-        paddingLeft: 5,
-        paddingRight: 5,
+        paddingLeft: 8,
+        paddingRight: 0,
     },
     last: {
-        paddingLeft: 0,
+        paddingLeft: 8,
         paddingRight: 10,
     },
 };
@@ -32,12 +32,14 @@ class TaskBox extends React.Component {
         let initialTitle = '',
             initialTime = {h: 1, m: 15},
             expanded = props.expanded || false,
-            mode = props.mode || STATE.NEW;
+            mode = props.mode || STATE.NEW,
+            initialDate = undefined;
 
         // check if there is initial data present
         if (props.data) {
             initialTitle = props.data.title;
             initialTime = props.data.time;
+            initialDate = props.data.date;
         }
 
         this.state = {
@@ -47,6 +49,7 @@ class TaskBox extends React.Component {
             expanded: expanded,
             pop: {h: false, m: false},
             mode: mode,
+            date: initialDate,
         };
     }
 
@@ -108,6 +111,7 @@ class TaskBox extends React.Component {
                 h: this.state.hours,
                 m: this.state.expanded ? this.state.minutes : 0, // add minutes if options panel is open
             },
+            date: this.state.date,
         });
 
         // reset state
@@ -141,20 +145,29 @@ class TaskBox extends React.Component {
         }, 200);
     };
 
+    selectDate = dateString => {
+        this.setValue('date', dateString);
+    };
+
     render() {
-        const {title, hours, minutes, expanded, pop, mode} = this.state;
+        const {title, hours, minutes, expanded, pop, mode, date} = this.state;
         const inEditMode = mode === STATE.EDITING;
         const newTaskActions = {
             style: [actionStyle.default, actionStyle.last],
             expanded: expanded,
             hours: hours,
             minutes: minutes,
+            date: {
+                onDateChange:this.selectDate,
+                defaultDate: date,
+            },
         };
 
         return (
             <div className={'new-task ' + mode}>
                 <React.Fragment>
                     <Input
+                        className="newtask-input"
                         size="large"
                         value={title}
                         onChange={this.handleTitleChange}
@@ -164,7 +177,7 @@ class TaskBox extends React.Component {
                     />
                 </React.Fragment>
                 <Row>
-                    <Col span={mobile ? 12 : 16}>
+                    <Col span={mobile ? 12 : expanded ? 10 : 12}>
                         {// toggle default menu and settings menu
                         !expanded ? (
                             <DefaultTimeMenu
@@ -183,7 +196,10 @@ class TaskBox extends React.Component {
                         )}
                     </Col>
 
-                    <Col span={mobile ? 12 : 8} className="right">
+                    <Col
+                        span={mobile ? 12 : expanded ? 14 : 12}
+                        className="newtask-actions right"
+                    >
                         {// toggle between edit and create actions
                         !inEditMode ? (
                             <NewTaskActions
@@ -197,7 +213,7 @@ class TaskBox extends React.Component {
                                         : 'setting',
                                     submit: ICON[ACTION.CREATE],
                                 }}
-                                text="Create"
+                                text={mobile ? null : "Create"}
                             />
                         ) : (
                             <NewTaskActions
@@ -208,7 +224,7 @@ class TaskBox extends React.Component {
                                     cancle: ICON[ACTION.CANCLE],
                                     submit: ICON[ACTION.SAVE],
                                 }}
-                                text="Save"
+                                text={mobile ? null : "Save"}
                             />
                         )}
                     </Col>

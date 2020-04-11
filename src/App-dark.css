@@ -49,6 +49,10 @@ body.dark {
     background-color: rgba(255, 255, 255, 0.14);
 }
 
+.dark .task .pre-header .right{
+    opacity: 0.5;
+}
+
 .dark .task .timer .ant-statistic-content {
     color: #fff;
 }
@@ -94,16 +98,14 @@ body.dark {
 }
 
 /**
- * New Task
- *
- * Modifies default ant.design css rules to adapt the design to our requirements.
+ * Popover
  */
 
 .dark .ant-popover-inner {
     background: #232323;
 }
 
-.dark .ant-popover-placement-bottomRight > .ant-popover-content > .ant-popover-arrow {
+.dark .ant-popover-content > .ant-popover-arrow {
     border-top-color: #232323;
     border-right-color: transparent;
     border-bottom-color: transparent;
@@ -113,16 +115,19 @@ body.dark {
 .dark .ant-popover-inner .ant-list,
 .dark .ant-popover-title,
 .dark .ant-popover-message-title,
-.dark .ant-dropdown-menu
-.ant-dropdown-menu-item {
+.dark .ant-dropdown-menu,
+.dark .ant-dropdown-menu-item,
+.dark .ant-list-item {
     color: #fff;
+    border-color: rgba(255, 255, 255, 0.05);
 }
 
 .dark .ant-dropdown-menu {
     background: #232323;
 }
 
-.dark .ant-dropdown-menu-item:hover, .dark .ant-dropdown-menu-submenu-title:hover {
+.dark .ant-dropdown-menu-item:hover,
+.dark .ant-dropdown-menu-submenu-title:hover {
     background: rgba(255, 255, 255, 0.14);
 }
 
@@ -130,11 +135,17 @@ body.dark {
     background: #232323;
 }
 
-.dark .ant-notification-notice-message, .dark .anticon, .dark .anticon-close, .dark .ant-notification-close-icon > svg {
+.dark .ant-notification-notice-message,
+.dark .anticon,
+.dark .anticon-close,
+.dark .ant-notification-close-icon > svg {
     color: #fff;
     stroke: #fff;
 }
 
+/**
+ * New Task
+ */
 .dark .new-task {
     border-radius: 5px;
     background-color: rgba(255, 255, 255, 0.07);
@@ -158,6 +169,70 @@ body.dark {
     color: #fff;
 }
 
+.dark .newtask-datepicker input {
+    color: #fff;
+    border-color: transparent;
+    background-color: rgba(255, 255, 255, 0.07);
+}
+.dark .newtask-datepicker:hover input {
+    border-color: transparent;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.dark .newtask-datepicker:hover .ant-calendar-picker-clear {
+    background: transparent;
+}
+
+/**
+ * New Task -> calender
+ */
+
+.dark .ant-calendar,
+.dark .ant-calendar-month-panel,
+.dark .ant-calendar-year-panel {
+    color: #fff;
+    border: transparent;
+    background: #333;
+}
+
+.dark .ant-calendar .ant-calendar-input-wrap,
+.dark .ant-calendar .ant-calendar-header,
+.dark .ant-calendar .ant-calendar-footer {
+    border: transparent;
+}
+.dark .ant-calendar .ant-calendar-input-wrap input {
+    background: transparent;
+    color: #fff;
+}
+
+.dark .ant-calendar .ant-calendar-cell div {
+    color: rgba(255, 255, 255, 0.808);
+}
+.dark .ant-calendar .ant-calendar-cell div:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+.dark .ant-calendar .ant-calendar-disabled-cell div {
+    color: rgba(255, 255, 255, 0.247);
+    background: rgba(255, 255, 255, 0.096);
+}
+.dark .ant-calendar .ant-calendar-selected-day div {
+    color: #fff;
+    background: #1890ff;
+    border: transparent;
+}
+.dark .ant-calendar .ant-calendar-next-month-btn-day div {
+    color: rgba(255, 255, 255, 0.247);
+}
+.dark .ant-calendar a {
+    color: rgba(255, 255, 255, 0.671);
+}
+.dark .ant-calendar a:hover {
+    color: #fff;
+}
+
+/**
+ * TaskBox -> editmode
+ */
 .dark .new-task.edit {
     background-color: rgba(24, 143, 255, 0.11);
     border: 1px solid rgba(24, 143, 255, 0.11);
@@ -198,8 +273,6 @@ body.dark {
 
 /**
  * Time Slider
- *
- * Modifies default ant.design css rules to adapt the design to our requirements.
  */
 
 .dark .timer-slider .ant-slider-track {
@@ -258,7 +331,6 @@ body.dark {
 
 /**
  * ICONS
- *
  */
 .dark .task .anticon {
     color: rgba(255, 255, 255, 0.4);
