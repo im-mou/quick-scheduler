@@ -1,7 +1,8 @@
 import React from 'react';
 import Controls from './Controls';
 import {TASK_STATES as STATUS} from '../Utils/Constants';
-import {Statistic, Row, Col} from 'antd';
+import {Statistic, Row, Col, Tooltip} from 'antd';
+import moment from 'moment';
 
 const {Countdown} = Statistic;
 
@@ -15,31 +16,44 @@ const TaskBody = props => {
     const {task, status} = props;
     const isActive = task.status === STATUS.ACTIVE;
     const isPaused = task.status === STATUS.PAUSED;
-    const hours = task.time.h // +1 hour if min->60
-        ? (task.time.m === 60 ? task.time.h + 1 : task.time.h) + 'h'
-        : null;
-    const minutes =
-        task.time.m && task.time.m !== 60 ? task.time.m + 'm' : null;
+
+    let date = null;
+    const totalTime = moment.duration(task.time.total);
+    const hours = totalTime.hours();
+    const minutes = totalTime.minutes();
 
     // create the remaining time stting for the paused task
-    let _elapsedTime = new Date(task.time.total - task.elapsedTime);
-    let formattedTime =
-        '0' +
-        String(_elapsedTime.getHours() - 1) +
-        ':' +
-        ('0' + _elapsedTime.getMinutes()).substr(-2) +
-        ':' +
-        ('0' + _elapsedTime.getSeconds()).substr(-2);
+    let formattedTime = moment(new Date())
+        .startOf('day')
+        .seconds((task.time.total - task.elapsedTime + 1000) / 1000)
+        .format('HH:mm:ss');
+
+    // get task date
+    if (task.date) {
+        let t = moment(task.date);
+
+        date = (
+            <Tooltip // show date on hover
+                placement="left"
+                title={moment(task.date).format('DD/MM/YYYY')}
+            >
+                {t.date() === moment(new Date()).date()
+                    ? (date = 'Today')
+                    : (date = t.format('dddd') + ', ' + t.fromNow())}
+            </Tooltip>
+        );
+    }
 
     return (
         <React.Fragment>
             <div className="task-content">
                 <Row className="pre-header">
                     <Col span={12}>
-                        {hours} {minutes}
+                        {hours ? hours + 'h ' : null}
+                        {minutes ? minutes + 'm' : null}
                     </Col>
                     <Col span={12} className="right">
-                        {isPaused ? 'Paused' : ''}
+                        {isPaused ? 'Paused' : date}
                     </Col>
                 </Row>
                 <Row>

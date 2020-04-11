@@ -75,7 +75,12 @@ const Tasks = function(props) {
 
     return (
         <div className={classNames('section', {hidden: !props.tasks.length})}>
-            <Row hidden={!hasHeader} justify="space-around" align="middle" className={classNames({header:hasHeader})}>
+            <Row
+                hidden={!hasHeader}
+                justify="space-around"
+                align="middle"
+                className={classNames({header: hasHeader})}
+            >
                 <Col span={8}>
                     {props.header +
                         (props.subHeader ? ' · ' + props.subHeader : '')}
