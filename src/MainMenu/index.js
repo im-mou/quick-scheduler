@@ -6,7 +6,7 @@ import Util from '../Utils';
 import {Icon, Row, Col, Button, Tooltip, Drawer, Popover} from 'antd';
 
 const MainMenu = () => {
-    let _darkMode = 0;
+    let _darkMode = 1; // dark mode by default
     const [drawer, setDrawer] = useState(false);
 
     // check if there is already a state in the localstorage
