@@ -11,13 +11,13 @@ import Util from '../Utils';
 class CompletedTaskStore extends EventEmitter {
     constructor() {
         super();
-        this.tasks = [];
+        this.tasks = new window.FlyJson();
         this.stacked = false;
 
         // check if there is already a state in the localstorage
         if (localStorage.completedStore !== undefined) {
             const store = JSON.parse(localStorage.completedStore);
-            this.tasks = store.tasks;
+            this.tasks.set(store.tasks);
             this.stacked = store.stacked;
         } else {
             localStorage.completedStore = JSON.stringify({
@@ -28,7 +28,7 @@ class CompletedTaskStore extends EventEmitter {
     }
 
     getTasks() {
-        return this.tasks;
+        return this.tasks.exec();
     }
 
     getStacked() {
@@ -45,7 +45,12 @@ class CompletedTaskStore extends EventEmitter {
                     action.data.title + ' has been marked as completed',
                     ICON[ACTIONS.DONE]
                 );
-                this.tasks.push({...action.data, status: TASK_STATES.FINISHED});
+
+                this.tasks.insert({
+                    ...action.data,
+                    status: TASK_STATES.FINISHED,
+                });
+
                 sendBeacon = true;
                 break;
             case ACTION.TOGGLE_COLLAPSE:
@@ -56,18 +61,21 @@ class CompletedTaskStore extends EventEmitter {
             case ACTION.TRASH_ALL:
                 if (action.data[0].status !== TASK_STATES.FINISHED) break;
 
+                // send tasks to the trash
+                this.tasks.clean();
+
                 // show message
                 Util.Notificacion(
                     'All completed tasks moved to trash',
                     ICON[ACTIONS.TRASH]
                 );
-                this.tasks = [];
+
                 sendBeacon = true;
                 break;
             case ACTION.RESET:
             case ACTION.TRASH:
                 if (!isItMyTask) break;
-                this.tasks = Util.updateCollection(this.tasks, action.data);
+                this.tasks.delete('id', action.data.id);
                 sendBeacon = true;
                 break;
             default:
@@ -79,7 +87,8 @@ class CompletedTaskStore extends EventEmitter {
 
         //save new data to localstorage
         const {tasks, stacked} = this;
-        localStorage.completedStore = JSON.stringify({tasks, stacked});
+        const _tasks = tasks.exec();
+        localStorage.completedStore = JSON.stringify({tasks: _tasks, stacked});
     }
 }
 

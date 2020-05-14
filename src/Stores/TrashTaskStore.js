@@ -42,8 +42,8 @@ class TrashTaskStore extends EventEmitter {
             case ACTION.TRASH:
                 // show message
                 Util.Notificacion(
-                    // action.data.title + ' has been moved to trash',
-                    'kobe!!',
+                    action.data.title + ' has been moved to trash',
+                    // 'kobe!!',
                     'crown'
                 );
                 this.tasks.insert({
