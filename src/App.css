@@ -280,6 +280,10 @@ small.muted {
     border-color: transparent;
 }
 
+.new-task .calender-button-active {
+    background-color: rgba(26, 144, 255, 0.15) !important;
+}
+
 .ant-calendar .ant-calendar-input-wrap {
     display: none;
 }

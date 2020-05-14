@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, Icon, Menu, Row, Col, Popover, DatePicker} from 'antd';
 import StepCounter from './StepCounter';
 import moment from 'moment';
+import classNames from 'classnames'
 
 // time step selector
 export const TimeDialSelector = props => (
@@ -67,11 +68,7 @@ export const NewTaskActions = props => (
                 trigger="click"
             >
                 <Button
-                    style={
-                        props.date.defaultDate
-                            ? {backgroundColor: '#1890ff'}
-                            : {}
-                    }
+                    className={classNames({ 'calender-button-active': props.date.defaultDate })}
                     shape="circle"
                     type="dashed"
                 >

@@ -169,6 +169,10 @@ body.dark {
     color: #fff;
 }
 
+.dark .new-task .calender-button-active {
+    background-color: rgba(26, 144, 255, 0.45) !important;
+}
+
 .dark .newtask-datepicker input {
     color: #fff;
     border-color: transparent;
