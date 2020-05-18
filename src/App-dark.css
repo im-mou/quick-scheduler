@@ -376,6 +376,6 @@ body.dark {
 .dark .ant-typography.ant-typography-disabled {
     color: rgba(255, 255, 255, 0.315);
 }
-.task-content .tags-container span {
+.dark .task-content .tags-container span {
     border: 1px solid rgba(255, 255, 255,0.3);
 }
