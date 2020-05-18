@@ -1,7 +1,7 @@
 import React from 'react';
 import TimeSlider from '../TimeSlider';
 import Tags from '../Tags';
-import {Input, Row, Col} from 'antd';
+import {Input, Row, Col, Button, Icon} from 'antd';
 import Util from '../Utils';
 import Anim from '../Utils/animations';
 import {TimeDialSelector, DefaultTimeMenu, NewTaskActions} from './Components';
@@ -10,6 +10,7 @@ import {
     TASK_ACTIONS as ACTION,
     TASK_STATES as STATE,
 } from '../Utils/Constants';
+import classNames from 'classnames';
 
 // Less hours options if mobile
 const mobile = Util.mobileCheck();
@@ -51,7 +52,10 @@ class TaskBox extends React.Component {
             pop: {h: false, m: false},
             mode: mode,
             date: initialDate,
+            tags: [],
+            tagsPanelOpen: false,
             inputFocused: false,
+            tagButtonHover: false,
         };
     }
 
@@ -150,8 +154,17 @@ class TaskBox extends React.Component {
     selectDate = dateString => {
         this.setValue('date', dateString);
     };
-    toggleInputFocus = cond => {
-        this.setValue('inputFocused', cond);
+
+    closeTagsPanel = () => {
+        if (this.state.tagsPanelOpen) {
+            this.setValue('inputFocused', false);
+        }
+        this.setValue('tagsPanelOpen', !this.state.tagsPanelOpen);
+    };
+
+    selectTags = tags => {
+        this.setState({tags});
+        console.log(this.state);
     };
 
     render() {
@@ -163,7 +176,9 @@ class TaskBox extends React.Component {
             pop,
             mode,
             date,
+            tagsPanelOpen,
             inputFocused,
+            tagButtonHover,
         } = this.state;
         const inEditMode = mode === STATE.EDITING;
         const newTaskActions = {
@@ -186,13 +201,32 @@ class TaskBox extends React.Component {
                         value={title}
                         onChange={this.handleTitleChange}
                         onKeyDown={this.handleKeyDown}
-                        onFocus={() => this.toggleInputFocus(true)}
-                        onBlur={() => this.toggleInputFocus(false)}
+                        onFocus={() => this.setValue('inputFocused', true)}
+                        onBlur={() =>
+                            this.setValue(
+                                'inputFocused',
+                                tagButtonHover || tagsPanelOpen
+                            )
+                        }
                         type="text"
                         placeholder="Create a new task"
                     />
                 </React.Fragment>
-                <Tags visible={inputFocused} />
+                <Button
+                    hidden={!inputFocused}
+                    shape="circle"
+                    className={classNames('tags-toggle', {open: tagsPanelOpen})}
+                    onClick={this.closeTagsPanel}
+                    onMouseEnter={() => this.setValue('tagButtonHover', true)}
+                    onMouseLeave={() => this.setValue('tagButtonHover', false)}
+                >
+                    {!tagsPanelOpen ? (
+                        <Icon type="tags" />
+                    ) : (
+                        <Icon type="close-circle" />
+                    )}
+                </Button>
+                <Tags visible={tagsPanelOpen} onTagsChange={this.selectTags} />
                 <Row>
                     <Col span={mobile ? 12 : expanded ? 10 : 12}>
                         {// toggle default menu and settings menu

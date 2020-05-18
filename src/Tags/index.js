@@ -1,8 +1,10 @@
 import React from 'react';
-import {Slider, Divider} from 'antd';
-import {Icon, Tag, Input, Tooltip, Row, Col, Button} from 'antd';
-import {PlusOutlined} from '@ant-design/icons';
+import {Tag, Input, Tooltip, Row, Col, Typography} from 'antd';
+import {PlusOutlined, DeleteOutlined} from '@ant-design/icons';
 import {motion, AnimatePresence} from 'framer-motion';
+import classNames from 'classnames';
+
+const {Text} = Typography;
 
 const variants = {
     open: {opacity: 1, height: 'auto'},
@@ -18,19 +20,37 @@ class Tags extends React.Component {
     constructor(props) {
         super(props);
 
+        let tags = [];
+
+        // check if there is already tags in the localstorage
+        if (localStorage.tags !== undefined) {
+            tags = JSON.parse(localStorage.tags);
+        } else {
+            localStorage.tags = JSON.stringify([]);
+        }
+
         this.state = {
-            tags: ['Unremovable', 'Tag 2', 'Tag 3'],
+            tags: tags,
+            selectedTags: [],
             inputVisible: false,
             inputValue: '',
             editInputIndex: -1,
             editInputValue: '',
+            showDelete: false,
         };
     }
 
     handleClose = removedTag => {
         const tags = this.state.tags.filter(tag => tag !== removedTag);
-        console.log(tags);
+        const selectedTags = this.state.selectedTags.filter(
+            tag => tag !== removedTag
+        );
+        localStorage.tags = JSON.stringify(tags);
         this.setState({tags});
+        this.setState({selectedTags});
+
+        // send data to parent component
+        this.props.onTagsChange(selectedTags);
     };
 
     showInput = () => {
@@ -47,12 +67,14 @@ class Tags extends React.Component {
         if (inputValue && tags.indexOf(inputValue) === -1) {
             tags = [...tags, inputValue];
         }
-        console.log(tags);
-        this.setState({
-            tags,
-            inputVisible: false,
-            inputValue: '',
-        });
+        this.setState(
+            {
+                tags,
+                inputVisible: false,
+                inputValue: '',
+            },
+            () => (localStorage.tags = JSON.stringify(tags))
+        );
     };
 
     handleEditInputChange = e => {
@@ -64,12 +86,27 @@ class Tags extends React.Component {
             const newTags = [...tags];
             newTags[editInputIndex] = editInputValue;
 
+            localStorage.tags = JSON.stringify(newTags);
+
             return {
                 tags: newTags,
                 editInputIndex: -1,
                 editInputValue: '',
             };
         });
+    };
+
+    toggleSelect = _tag => {
+        let selectedTags = [];
+        if (this.state.selectedTags.indexOf(_tag) > -1) {
+            selectedTags = this.state.selectedTags.filter(tag => tag !== _tag);
+        } else {
+            selectedTags = [...this.state.selectedTags, _tag];
+        }
+        this.setState({selectedTags});
+
+        // send data to parent component
+        this.props.onTagsChange(selectedTags);
     };
 
     saveInputRef = input => (this.input = input);
@@ -83,11 +120,13 @@ class Tags extends React.Component {
             inputValue,
             editInputIndex,
             editInputValue,
+            selectedTags,
+            showDelete,
         } = this.state;
+
         return (
             <AnimatePresence initial={true}>
-                {/* {this.props.visible && ( */}
-                {true && (
+                {this.props.visible && (
                     <motion.section
                         initial="collapsed"
                         animate="open"
@@ -96,7 +135,21 @@ class Tags extends React.Component {
                         transition={transition}
                     >
                         <Row className="tags-wrapper">
-                            <Col span={22} className="tags-container">
+                            <Col className="tags-container">
+                                {tags.length ? (
+                                    <Tag
+                                        className="site-tag-delete"
+                                        color={showDelete && 'red'}
+                                        onClick={() =>
+                                            this.setState({
+                                                showDelete: !showDelete,
+                                            })
+                                        }
+                                    >
+                                        <DeleteOutlined />
+                                    </Tag>
+                                ) : null}
+
                                 {tags.map((tag, index) => {
                                     if (editInputIndex === index) {
                                         return (
@@ -123,27 +176,32 @@ class Tags extends React.Component {
 
                                     const tagElem = (
                                         <Tag
-                                            className="edit-tag"
+                                            className={classNames('edit-tag')}
+                                            color={
+                                                selectedTags.indexOf(tag) >
+                                                    -1 && 'blue'
+                                            }
                                             key={tag}
-                                            closable={index !== 0}
+                                            closable={showDelete}
+                                            onClick={() =>
+                                                this.toggleSelect(tag)
+                                            }
                                             onClose={() =>
                                                 this.handleClose(tag)
                                             }
                                         >
                                             <span
                                                 onDoubleClick={e => {
-                                                    if (index !== 0) {
-                                                        this.setState(
-                                                            {
-                                                                editInputIndex: index,
-                                                                editInputValue: tag,
-                                                            },
-                                                            () => {
-                                                                this.editInput.focus();
-                                                            }
-                                                        );
-                                                        e.preventDefault();
-                                                    }
+                                                    this.setState(
+                                                        {
+                                                            editInputIndex: index,
+                                                            editInputValue: tag,
+                                                        },
+                                                        () => {
+                                                            this.editInput.focus();
+                                                        }
+                                                    );
+                                                    e.preventDefault();
                                                 }}
                                             >
                                                 {isLongTag
@@ -180,12 +238,7 @@ class Tags extends React.Component {
                                         <PlusOutlined /> New Tag
                                     </Tag>
                                 )}
-                            </Col>
-
-                            <Col span={2} className="tags-close">
-                                <Button
-                                    icon={<Icon type="close-circle" />}
-                                />
+                                <Text disabled>Double click tags to edit</Text>
                             </Col>
                         </Row>
                     </motion.section>

@@ -115,7 +115,7 @@ small.muted {
 .task .pre-header {
     font-size: 12px;
 }
-.task .pre-header .right{
+.task .pre-header .right {
     opacity: 0.7;
 }
 .task .title {
@@ -228,6 +228,7 @@ small.muted {
     /* margin-bottom: 5px; */
     border: 1px solid #ccc;
     /* border-bottom-right-radius: 25px; */
+    position: relative;
 }
 .new-task .ant-menu {
     border-bottom-color: transparent;
@@ -241,7 +242,7 @@ small.muted {
     background: none;
 }
 
-.new-task .newtask-input.ant-input{
+.new-task .newtask-input.ant-input {
     border: none;
     border-radius: 0;
 }
@@ -255,7 +256,6 @@ small.muted {
     border-bottom: 2px solid #1890ff;
 }
 
-
 .new-task .ant-menu-item:hover {
     border-bottom: 2px solid transparent;
 }
@@ -263,7 +263,6 @@ small.muted {
 .new-task .newtask-actions .anticon {
     margin: auto;
 }
-
 
 .new-task.edit {
     color: #666666;
@@ -276,7 +275,7 @@ small.muted {
     border-color: rgba(26, 144, 255, 0.26);
 }
 
-.new-task .newtask-datepicker input{
+.new-task .newtask-datepicker input {
     border-color: transparent;
 }
 
@@ -287,12 +286,12 @@ small.muted {
 .ant-calendar .ant-calendar-input-wrap {
     display: none;
 }
+
 /**
  * Time Slider
  *
  * Modifies default ant.design css rules to adapt the design to our requirements.
  */
-
 .timer-slider {
     height: 28px;
     position: relative;
@@ -433,23 +432,50 @@ small.muted {
     bottom: 10px;
 }
 
-
 /* TAGS */
-.tags-wrapper{
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+.tags-wrapper {
+    background-color: rgba(0, 0, 0, 0.02);
+    /* border-top: 1px solid rgba(0, 0, 0, 0.1); */
+    /* border-bottom: 1px solid rgba(0, 0, 0, 0.1); */
 }
-.tags-container{
+.tags-toggle {
+    position: absolute;
+    left: -50px;
+    margin: 10px;
+    top: 0;
+    transition: top ease-out 0.2s;
+}
+.tags-toggle.open {
+    top: 45px;
+}
+.tags-container {
     padding: 10px 0;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
 }
+.tags-container .ant-tag:first-child{
+    margin-left: 10px;
+}
 
-.tags-close{
+.tags-container .tag-input{
+    max-width:100px;
+    margin-left:10px;
+}
+.edit-tag.checked{
+    background-color: rgba(24, 144, 255, 1);
+    border:none;
+}
+.edit-tag.checked, .edit-tag.checked .anticon {
+    color: #fff;
+}
+
+
+
+.tags-close {
     text-align: center;
     padding: 10px;
-    border-left:1px solid rgba(0, 0, 0, 0.1);
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .pop {
@@ -544,7 +570,6 @@ small.muted {
         font-size: 12px;
     }
 }
-
 
 /* animation for tasks */
 @keyframes loadTask {
