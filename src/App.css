@@ -112,6 +112,17 @@ small.muted {
     padding: 10px 15px;
 }
 
+.task-content .tags-container {
+    font-size: 11px;
+    text-transform: uppercase;
+    margin-right: 5px;
+    color: rgba(24, 144, 255, 0.8);
+    font-weight: bold;
+}
+.task-content .tags-container span {
+    margin-right: 8px;
+}
+
 .task .pre-header {
     font-size: 12px;
 }
@@ -454,23 +465,22 @@ small.muted {
     overflow-y: hidden;
     white-space: nowrap;
 }
-.tags-container .ant-tag:first-child{
+.tags-container .ant-tag:first-child {
     margin-left: 10px;
 }
 
-.tags-container .tag-input{
-    max-width:100px;
-    margin-left:10px;
+.tags-container .tag-input {
+    max-width: 100px;
+    margin-left: 10px;
 }
-.edit-tag.checked{
+.edit-tag.checked {
     background-color: rgba(24, 144, 255, 1);
-    border:none;
+    border: none;
 }
-.edit-tag.checked, .edit-tag.checked .anticon {
+.edit-tag.checked,
+.edit-tag.checked .anticon {
     color: #fff;
 }
-
-
 
 .tags-close {
     text-align: center;

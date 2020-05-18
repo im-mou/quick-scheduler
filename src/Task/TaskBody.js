@@ -1,10 +1,11 @@
 import React from 'react';
 import Controls from './Controls';
 import {TASK_STATES as STATUS} from '../Utils/Constants';
-import {Statistic, Row, Col, Tooltip} from 'antd';
+import {Typography, Statistic, Row, Col, Tooltip} from 'antd';
 import moment from 'moment';
 
 const {Countdown} = Statistic;
+const {Text} = Typography;
 
 const Timer = props => {
     return (
@@ -49,6 +50,13 @@ const TaskBody = props => {
             <div className="task-content">
                 <Row className="pre-header">
                     <Col span={12}>
+                        {task.tags.length ? (
+                            <span className="tags-container">
+                                {task.tags.map((el, k) => (
+                                    <span key={k}>{el}</span>
+                                ))}
+                            </span>
+                        ) : null}
                         {hours ? hours + 'h ' : null}
                         {minutes ? minutes + 'm' : null}
                     </Col>

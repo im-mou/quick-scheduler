@@ -21,6 +21,7 @@ class Tags extends React.Component {
         super(props);
 
         let tags = [];
+        let selectedTags = this.props.selectedTags;
 
         // check if there is already tags in the localstorage
         if (localStorage.tags !== undefined) {
@@ -31,7 +32,7 @@ class Tags extends React.Component {
 
         this.state = {
             tags: tags,
-            selectedTags: [],
+            selectedTags: selectedTags,
             inputVisible: false,
             inputValue: '',
             editInputIndex: -1,

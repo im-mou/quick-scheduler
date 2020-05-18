@@ -35,13 +35,16 @@ class TaskBox extends React.Component {
             initialTime = {h: 1, m: 15},
             expanded = props.expanded || false,
             mode = props.mode || STATE.NEW,
+            selectedTags = [],
             initialDate = undefined;
 
+        // props.data contains the task object if mode=edit
         // check if there is initial data present
         if (props.data) {
             initialTitle = props.data.title;
             initialTime = props.data.time;
             initialDate = props.data.date;
+            selectedTags = props.data.tags;
         }
 
         this.state = {
@@ -56,6 +59,7 @@ class TaskBox extends React.Component {
             tagsPanelOpen: false,
             inputFocused: false,
             tagButtonHover: false,
+            selectedTags: selectedTags,
         };
     }
 
@@ -118,6 +122,7 @@ class TaskBox extends React.Component {
                 m: this.state.expanded ? this.state.minutes : 0, // add minutes if options panel is open
             },
             date: this.state.date,
+            tags: this.state.tags,
         });
 
         // reset state
@@ -164,7 +169,6 @@ class TaskBox extends React.Component {
 
     selectTags = tags => {
         this.setState({tags});
-        console.log(this.state);
     };
 
     render() {
@@ -179,6 +183,7 @@ class TaskBox extends React.Component {
             tagsPanelOpen,
             inputFocused,
             tagButtonHover,
+            selectedTags,
         } = this.state;
         const inEditMode = mode === STATE.EDITING;
         const newTaskActions = {
@@ -226,7 +231,11 @@ class TaskBox extends React.Component {
                         <Icon type="close-circle" />
                     )}
                 </Button>
-                <Tags visible={tagsPanelOpen} onTagsChange={this.selectTags} />
+                <Tags
+                    visible={tagsPanelOpen}
+                    selectedTags={selectedTags}
+                    onTagsChange={this.selectTags}
+                />
                 <Row>
                     <Col span={mobile ? 12 : expanded ? 10 : 12}>
                         {// toggle default menu and settings menu
