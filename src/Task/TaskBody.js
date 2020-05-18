@@ -49,7 +49,7 @@ const TaskBody = props => {
             <div className="task-content">
                 <Row className="pre-header">
                     <Col span={12}>
-                        {task.tags.length ? (
+                        {task.tags ? (
                             <span className="tags-container">
                                 {task.tags.map((el, k) => (
                                     <span key={k}>{el}</span>

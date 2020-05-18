@@ -21,8 +21,7 @@ class Tags extends React.Component {
         super(props);
 
         let tags = [];
-        let selectedTags = this.props.selectedTags;
-        console.log(selectedTags);
+        let selectedTags = this.props.selectedTags || [];
 
         // check if there is already tags in the localstorage
         if (localStorage.tags !== undefined) {
@@ -38,8 +37,6 @@ class Tags extends React.Component {
                 (item, index) => _tags.indexOf(item) === index
             );
         }
-
-        console.log(_tags);
 
         this.state = {
             tags: _tags,

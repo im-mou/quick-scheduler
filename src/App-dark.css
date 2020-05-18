@@ -373,6 +373,6 @@ body.dark {
     color: rgb(24, 144, 255);
 }
 
-.ant-typography.ant-typography-disabled{
+.dark .ant-typography.ant-typography-disabled{
     color: rgba(255, 255, 255, 0.315);
 }

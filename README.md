@@ -19,10 +19,12 @@ Hell yes!
 - Use [`easytimer.js`](https://github.com/albert-gonzalez/easytimer.js) for the timer in [`ActiveTaskStore.js`](src/Stores/ActiveTaskStore.js#L49)
 - ~~Use [`FlyJson`](https://github.com/aalfiann/fly-json-odm) library to handle store data in all stores See [`TrashTaskStore.js`](src/Stores/TrashTaskStore.js#L14).~~
 - Add draggable reordering of pending tasks.
-- Be able to tag tasks for grouping in the pending list.
+- ~~Be able to tag tasks for grouping.~~
+- Grouping in the pending list.
 - Enable/Disable task completion beep.
 - Add multiple sounds for the task completion beep.
-- Add date to tasks and nav element for filter by date.
+- ~~Add date to task.~~
+- Add nav element for filter by date.
 - Over all Refactor, fix naming conventions.
 - Create multiple sessions/boards.
 - Create an iOS/android app using react-native.
