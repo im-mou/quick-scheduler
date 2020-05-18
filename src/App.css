@@ -113,10 +113,9 @@ small.muted {
 }
 
 .task-content .tags-container {
-    font-size: 11px;
     text-transform: uppercase;
     margin-right: 5px;
-    color: rgba(24, 144, 255, 0.8);
+    color: rgba(95, 95, 95, 0.8);
     font-weight: bold;
 }
 .task-content .tags-container span {

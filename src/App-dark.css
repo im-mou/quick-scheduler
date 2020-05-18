@@ -191,6 +191,10 @@ body.dark {
  * New Task -> calender
  */
 
+.dark .task-content .tags-container {
+    color: rgba(255, 255, 255, 0.8)
+}
+
 .dark .ant-calendar,
 .dark .ant-calendar-month-panel,
 .dark .ant-calendar-year-panel {
@@ -359,11 +363,7 @@ body.dark {
 
 /* TAGS */
 
-
-
 /* IMPROVE TAGS STYLING FOR DARK MODE */
-
-
 
 .dark .tags-wrapper {
     background-color: rgba(255, 255, 255, 0.041);
@@ -373,6 +373,6 @@ body.dark {
     color: rgb(24, 144, 255);
 }
 
-.dark .ant-typography.ant-typography-disabled{
+.dark .ant-typography.ant-typography-disabled {
     color: rgba(255, 255, 255, 0.315);
 }
