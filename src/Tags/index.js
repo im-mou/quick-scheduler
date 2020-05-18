@@ -22,6 +22,7 @@ class Tags extends React.Component {
 
         let tags = [];
         let selectedTags = this.props.selectedTags;
+        console.log(selectedTags);
 
         // check if there is already tags in the localstorage
         if (localStorage.tags !== undefined) {
@@ -30,8 +31,18 @@ class Tags extends React.Component {
             localStorage.tags = JSON.stringify([]);
         }
 
+        // remove duplicates
+        let _tags = [...tags, ...selectedTags];
+        if (selectedTags.length) {
+            _tags = _tags.filter(
+                (item, index) => _tags.indexOf(item) === index
+            );
+        }
+
+        console.log(_tags);
+
         this.state = {
-            tags: tags,
+            tags: _tags,
             selectedTags: selectedTags,
             inputVisible: false,
             inputValue: '',

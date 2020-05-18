@@ -49,7 +49,7 @@ body.dark {
     background-color: rgba(255, 255, 255, 0.14);
 }
 
-.dark .task .pre-header .right{
+.dark .task .pre-header .right {
     opacity: 0.5;
 }
 
@@ -136,7 +136,7 @@ body.dark {
 }
 
 .dark .ant-notification-notice-message,
-.dark .anticon,
+/* .dark .anticon, */
 .dark .anticon-close,
 .dark .ant-notification-close-icon > svg {
     color: #fff;
@@ -355,4 +355,13 @@ body.dark {
 .dark .task.pending:hover .anticon,
 .dark .task.paused:hover .anticon {
     color: rgba(255, 255, 255, 0.7);
+}
+
+/* TAGS */
+.dark .tags-wrapper {
+    background-color: rgba(255, 255, 255, 0.041);
+}
+
+.dark .ant-tag .anticon:not(:nth-child(1)) {
+    color: rgb(24, 144, 255);
 }

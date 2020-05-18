@@ -5,7 +5,6 @@ import {Typography, Statistic, Row, Col, Tooltip} from 'antd';
 import moment from 'moment';
 
 const {Countdown} = Statistic;
-const {Text} = Typography;
 
 const Timer = props => {
     return (

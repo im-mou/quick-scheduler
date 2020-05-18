@@ -446,8 +446,6 @@ small.muted {
 /* TAGS */
 .tags-wrapper {
     background-color: rgba(0, 0, 0, 0.02);
-    /* border-top: 1px solid rgba(0, 0, 0, 0.1); */
-    /* border-bottom: 1px solid rgba(0, 0, 0, 0.1); */
 }
 .tags-toggle {
     position: absolute;
@@ -471,7 +469,7 @@ small.muted {
 
 .tags-container .tag-input {
     max-width: 100px;
-    margin-left: 10px;
+    margin-right: 10px;
 }
 .edit-tag.checked {
     background-color: rgba(24, 144, 255, 1);

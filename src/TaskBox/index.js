@@ -122,7 +122,9 @@ class TaskBox extends React.Component {
                 m: this.state.expanded ? this.state.minutes : 0, // add minutes if options panel is open
             },
             date: this.state.date,
-            tags: this.state.tags,
+            tags: !this.state.tags.length // save selected tags if no changes
+                ? this.state.selectedTags
+                : this.state.tags,
         });
 
         // reset state
