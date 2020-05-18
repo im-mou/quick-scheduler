@@ -358,10 +358,21 @@ body.dark {
 }
 
 /* TAGS */
+
+
+
+/* IMPROVE TAGS STYLING FOR DARK MODE */
+
+
+
 .dark .tags-wrapper {
     background-color: rgba(255, 255, 255, 0.041);
 }
 
 .dark .ant-tag .anticon:not(:nth-child(1)) {
     color: rgb(24, 144, 255);
+}
+
+.ant-typography.ant-typography-disabled{
+    color: rgba(255, 255, 255, 0.315);
 }
