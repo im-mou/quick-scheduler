@@ -433,6 +433,25 @@ small.muted {
     bottom: 10px;
 }
 
+
+/* TAGS */
+.tags-wrapper{
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.tags-container{
+    padding: 10px 0;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.tags-close{
+    text-align: center;
+    padding: 10px;
+    border-left:1px solid rgba(0, 0, 0, 0.1);
+}
+
 .pop {
     /* transform: scale(1.2,1.2); */
     color: rgba(24, 144, 255, 0.65);

@@ -1,5 +1,6 @@
 import React from 'react';
 import TimeSlider from '../TimeSlider';
+import Tags from '../Tags';
 import {Input, Row, Col} from 'antd';
 import Util from '../Utils';
 import Anim from '../Utils/animations';
@@ -50,6 +51,7 @@ class TaskBox extends React.Component {
             pop: {h: false, m: false},
             mode: mode,
             date: initialDate,
+            inputFocused: false,
         };
     }
 
@@ -148,9 +150,21 @@ class TaskBox extends React.Component {
     selectDate = dateString => {
         this.setValue('date', dateString);
     };
+    toggleInputFocus = cond => {
+        this.setValue('inputFocused', cond);
+    };
 
     render() {
-        const {title, hours, minutes, expanded, pop, mode, date} = this.state;
+        const {
+            title,
+            hours,
+            minutes,
+            expanded,
+            pop,
+            mode,
+            date,
+            inputFocused,
+        } = this.state;
         const inEditMode = mode === STATE.EDITING;
         const newTaskActions = {
             style: [actionStyle.default, actionStyle.last],
@@ -158,7 +172,7 @@ class TaskBox extends React.Component {
             hours: hours,
             minutes: minutes,
             date: {
-                onDateChange:this.selectDate,
+                onDateChange: this.selectDate,
                 defaultDate: date,
             },
         };
@@ -172,10 +186,13 @@ class TaskBox extends React.Component {
                         value={title}
                         onChange={this.handleTitleChange}
                         onKeyDown={this.handleKeyDown}
+                        onFocus={() => this.toggleInputFocus(true)}
+                        onBlur={() => this.toggleInputFocus(false)}
                         type="text"
                         placeholder="Create a new task"
                     />
                 </React.Fragment>
+                <Tags visible={inputFocused} />
                 <Row>
                     <Col span={mobile ? 12 : expanded ? 10 : 12}>
                         {// toggle default menu and settings menu
@@ -213,7 +230,7 @@ class TaskBox extends React.Component {
                                         : 'setting',
                                     submit: ICON[ACTION.CREATE],
                                 }}
-                                text={mobile ? null : "Create"}
+                                text={mobile ? null : 'Create'}
                             />
                         ) : (
                             <NewTaskActions
@@ -224,7 +241,7 @@ class TaskBox extends React.Component {
                                     cancle: ICON[ACTION.CANCLE],
                                     submit: ICON[ACTION.SAVE],
                                 }}
-                                text={mobile ? null : "Save"}
+                                text={mobile ? null : 'Save'}
                             />
                         )}
                     </Col>
