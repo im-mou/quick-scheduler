@@ -119,10 +119,11 @@ small.muted {
     font-weight: bold;
 }
 .task-content .tags-container span {
-    margin-right: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    margin-right: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
     padding: 1px 4px;
     border-radius: 3px;
+    font-size:10px;
 }
 
 .task .pre-header {
@@ -196,7 +197,8 @@ small.muted {
     background-color: #dedede;
 }
 
-.task.finished .controls {
+.task.finished .controls,
+.task.finished .tags-container {
     color: #c5c5c5;
 }
 

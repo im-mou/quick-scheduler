@@ -1,7 +1,7 @@
 import React from 'react';
 import Controls from './Controls';
 import {TASK_STATES as STATUS} from '../Utils/Constants';
-import {Typography, Statistic, Row, Col, Tooltip} from 'antd';
+import {Statistic, Row, Col, Tooltip} from 'antd';
 import moment from 'moment';
 
 const {Countdown} = Statistic;
